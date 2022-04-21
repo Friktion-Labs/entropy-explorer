@@ -156,7 +156,7 @@ class Context:
         return Token.ensure(instrument)
 
     def fetch_stats(self, url_suffix: str) -> typing.Sequence[typing.Any]:
-        stats_url = f"https://entropy-stats-v3.herokuapp.com/{url_suffix}"
+        stats_url = f"https://stats.entropy.trade/{url_suffix}"
         stats_response = requests.get(stats_url)
         return typing.cast(typing.Sequence[typing.Any], stats_response.json())
 

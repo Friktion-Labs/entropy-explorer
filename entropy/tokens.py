@@ -69,7 +69,6 @@ class Instrument:
         return round(shifted, 0)
 
     def symbol_matches(self, symbol: str) -> bool:
-        print("symbol match", symbol)
         return self.symbol.upper() == symbol.upper()
 
     # Instruments are equal if they have the same normalised symbol.

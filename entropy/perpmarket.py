@@ -397,7 +397,7 @@ class PerpMarket(LoadedMarket):
 
     def fetch_funding(self, context: Context) -> FundingRate:
         stats = context.fetch_stats(
-            f"perp/funding_rate?entropyGroup={self.group.name}&market={self.symbol}"
+            f"perp/funding_rate?mangoGroup={self.group.name}&market={self.symbol}"
         )
         newest_stats = stats[0]
         oldest_stats = stats[-1]
