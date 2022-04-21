@@ -60,13 +60,10 @@ class IdsJsonMarketLookup(MarketLookup):
         quote_symbol: str,
     ) -> Market:
         base_symbol = data["baseSymbol"]
-        print("baseSymbol: ", base_symbol)
-        print("quoteSymbol:", quote_symbol)
 
         base_instrument: typing.Optional[Instrument] = instrument_lookup.find_by_symbol(
             base_symbol
         )
-        print(base_instrument)
         if base_instrument is None:
             raise Exception(
                 f"Could not find base instrument with symbol '{base_symbol}'"

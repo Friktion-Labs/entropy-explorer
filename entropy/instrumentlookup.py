@@ -100,10 +100,10 @@ class CompoundInstrumentLookup(InstrumentLookup):
 
     def find_by_symbol(self, symbol: str) -> typing.Optional[Instrument]:
         for lookup in self.lookups:
-            print(lookup)
+        #     print(lookup)
             result = lookup.find_by_symbol(symbol)
             if result is not None:
-                print("found something", lookup)
+                # print("found something", lookup)
                 return result
         return None
 
@@ -155,7 +155,7 @@ class NonSPLInstrumentLookup(InstrumentLookup):
                 return Instrument(
                     token["symbol"], token["name"], Decimal(token["decimals"])
                 )
-        print("NonSPLInstrumentLookup found nothing")
+        # print("NonSPLInstrumentLookup found nothing")
         return None
 
     def find_by_mint(self, mint: PublicKey) -> typing.Optional[Instrument]:
@@ -195,7 +195,7 @@ class IdsJsonTokenLookup(InstrumentLookup):
                             Decimal(token["decimals"]),
                             PublicKey(token["mintKey"]),
                         )
-        print("IdsJsonTokenLookup find_by_symbol found nothing")
+        # print("IdsJsonTokenLookup find_by_symbol found nothing")
         return None
 
     def find_by_mint(self, mint: PublicKey) -> typing.Optional[Token]:
@@ -254,7 +254,7 @@ class SPLTokenLookup(InstrumentLookup):
                     Decimal(token["decimals"]),
                     PublicKey(token["address"]),
                 )
-        print("SPLTokenLookup found nothing")
+        # print("SPLTokenLookup found nothing")
         return None
 
     def find_by_mint(self, mint: PublicKey) -> typing.Optional[Token]:

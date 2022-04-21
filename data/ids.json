@@ -22,6 +22,13 @@
           "nodeKeys": [
             "2d1T5h2qMv96BFkDwrdhm31WgQjXmr7mVoF5H6UomVHP"
           ]
+        },
+        {
+          "symbol": "MNGO",
+          "mintKey": "MangoCzJ36AjZyKwVj3VnYU4GTonjfVEnJmvvWaxLac",
+          "decimals": 6,
+          "rootKey": "8HjXYFntHMDNJKCJpHFufDaFYXfuAk6c6odfFnWc4xWy",
+          "nodeKeys": ["8XZx15vqdUbt3eVTXsxPfEMS3o2KXJ5sM7G2qXmmkETk"]
         }
       ],
       "oracles": [

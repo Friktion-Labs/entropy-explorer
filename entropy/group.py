@@ -284,13 +284,13 @@ class Group(AddressableAccount):
 
     @property
     def liquidity_incentive_token_bank(self) -> TokenBank:
+        liquidity_incentive_token = "USDC"
         for token_bank in self.tokens:
-            print(self.tokens)
-            if token_bank.token.symbol_matches("MNGO"):
+            if token_bank.token.symbol_matches(liquidity_incentive_token):
                 return token_bank
 
         raise Exception(
-            f"Could not find token info for symbol 'MNGO' in group {self.address}"
+            f"Could not find token info for symbol {liquidity_incentive_token} in group {self.address}"
         )
 
     @property

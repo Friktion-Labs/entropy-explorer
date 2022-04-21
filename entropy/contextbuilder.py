@@ -455,7 +455,7 @@ class ContextBuilder:
             raise Exception(
                 f"Could not find group named '{actual_group_name}' in cluster '{actual_cluster}'."
             )
-        print("foundGroupData", found_group_data)
+        # print("foundGroupData", found_group_data)
         actual_group_address: PublicKey = (
             group_address
             or __public_key_or_none(os.environ.get("GROUP_ADDRESS"))
