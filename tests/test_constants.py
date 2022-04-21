@@ -1,4 +1,4 @@
-from .context import mango
+from .context import entropy
 
 
 # There isn't really a lot to test here that isn't just duplication so instead there are just
@@ -6,10 +6,10 @@ from .context import mango
 
 
 def test_system_program_address() -> None:
-    assert str(mango.SYSTEM_PROGRAM_ADDRESS) == "11111111111111111111111111111111"
+    assert str(entropy.SYSTEM_PROGRAM_ADDRESS) == "11111111111111111111111111111111"
 
 
-def test_mango_constants() -> None:
-    mango_groups = mango.MangoConstants["groups"]
-    assert mango_groups is not None
-    assert len(mango_groups) > 0
+def test_entropy_constants() -> None:
+    entropy_groups = entropy.EntropyConstants["groups"]
+    assert entropy_groups is not None
+    assert len(entropy_groups) > 0

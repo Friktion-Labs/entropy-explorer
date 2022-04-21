@@ -28,5 +28,5 @@ do
     printf "Pausing after SELL for %d seconds.\n" ${PAUSE_FOR}
     sleep ${PAUSE_FOR}
 
-    echo "Last ${MARKET} taker action: $(date)" > /var/tmp/mango_healthcheck_random_taker
+    echo "Last ${MARKET} taker action: $(date)" > /var/tmp/entropy_healthcheck_random_taker
 done

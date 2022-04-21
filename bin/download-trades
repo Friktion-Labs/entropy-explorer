@@ -11,18 +11,18 @@ from solana.publickey import PublicKey
 
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
 parser = argparse.ArgumentParser(
     description="Downloads perp and spot trades for the current wallet. Will perform incremental updates to the given filename instead of re-downloading all trades."
 )
-mango.ContextBuilder.add_command_line_parameters(parser)
-mango.Wallet.add_command_line_parameters(parser)
+entropy.ContextBuilder.add_command_line_parameters(parser)
+entropy.Wallet.add_command_line_parameters(parser)
 parser.add_argument(
     "--address",
     type=PublicKey,
     required=False,
-    help="Address of the Mango account to load (defaults to current wallet's Mango account)",
+    help="Address of the Entropy account to load (defaults to current wallet's Entropy account)",
 )
 parser.add_argument(
     "--filename",
@@ -35,25 +35,27 @@ parser.add_argument(
     type=int,
     help="only retrieve and save the most recent number of hours (e.g. --most-recent-hours 24)",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    accounts: typing.Sequence[mango.Account]
-    group = mango.Group.load(context)
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    accounts: typing.Sequence[entropy.Account]
+    group = entropy.Group.load(context)
     if args.address is not None:
-        account = mango.Account.load(context, args.address, group)
+        account = entropy.Account.load(context, args.address, group)
         accounts = [account]
     else:
-        wallet = mango.Wallet.from_command_line_parameters_or_raise(args)
-        accounts = mango.Account.load_all_for_owner(context, wallet.address, group)
+        wallet = entropy.Wallet.from_command_line_parameters_or_raise(args)
+        accounts = entropy.Account.load_all_for_owner(context, wallet.address, group)
 
     for account in accounts:
         filename: str = args.filename
         if filename is None:
             filename = f"trade-history-{account.address}.csv"
-        history: mango.TradeHistory = mango.TradeHistory()
+        history: entropy.TradeHistory = entropy.TradeHistory()
         if args.most_recent_hours:
-            cutoff: datetime = mango.utc_now() - timedelta(hours=args.most_recent_hours)
+            cutoff: datetime = entropy.utc_now() - timedelta(
+                hours=args.most_recent_hours
+            )
             cutoff = cutoff.replace(tzinfo=timezone(offset=timedelta()))
             history.download_latest(context, account, cutoff)
         else:

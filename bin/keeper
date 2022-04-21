@@ -13,10 +13,10 @@ from datetime import timedelta
 from solana.publickey import PublicKey
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
 #
-# Runs the 'Keeper' instructions for a Mango Group.
+# Runs the 'Keeper' instructions for a Entropy Group.
 #
 # The Keeper is similar to Serum's 'crank' - it runs some on-chain code that needs to be run
 # periodically but that can't be triggered by the chain. For example it refreshes caches, and
@@ -49,12 +49,12 @@ import mango  # nopep8
 # ```
 #
 parser = argparse.ArgumentParser(
-    description="Runs 'Keeper'/crank functionality for a Mango Group."
+    description="Runs 'Keeper'/crank functionality for a Entropy Group."
 )
-mango.ContextBuilder.add_command_line_parameters(
+entropy.ContextBuilder.add_command_line_parameters(
     parser, monitor_transactions_default=True
 )
-mango.Wallet.add_command_line_parameters(parser)
+entropy.Wallet.add_command_line_parameters(parser)
 parser.add_argument(
     "--pulse-interval",
     type=float,
@@ -72,15 +72,15 @@ parser.add_argument(
     default=False,
     help="runs as read-only and does not perform any transactions",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
 
 def build_update_cache_instructions(
-    context: mango.Context,
-    group: mango.Group,
-    perp_markets: typing.Sequence[mango.PerpMarketDetails],
-) -> mango.CombinableInstructions:
-    instructions = mango.CombinableInstructions.empty()
+    context: entropy.Context,
+    group: entropy.Group,
+    perp_markets: typing.Sequence[entropy.PerpMarketDetails],
+) -> entropy.CombinableInstructions:
+    instructions = entropy.CombinableInstructions.empty()
 
     root_banks = [
         group.shared_quote.root_bank_address,
@@ -90,16 +90,16 @@ def build_update_cache_instructions(
             if slot.base_token_bank is not None
         ],
     ]
-    instructions += mango.build_mango_cache_root_banks_instructions(
+    instructions += entropy.build_entropy_cache_root_banks_instructions(
         context, group, root_banks
     )
 
-    instructions += mango.build_mango_cache_prices_instructions(
+    instructions += entropy.build_entropy_cache_prices_instructions(
         context, group, group.oracles
     )
 
     perp_market_addresses = [pm.address for pm in perp_markets]
-    instructions += mango.build_mango_cache_perp_markets_instructions(
+    instructions += entropy.build_entropy_cache_perp_markets_instructions(
         context, group, perp_market_addresses
     )
 
@@ -107,29 +107,29 @@ def build_update_cache_instructions(
 
 
 def build_update_funding_instructions(
-    context: mango.Context,
-    group: mango.Group,
+    context: entropy.Context,
+    group: entropy.Group,
     node_bank_addresses: typing.Dict[str, typing.Sequence[PublicKey]],
-    perp_markets: typing.Sequence[mango.PerpMarketDetails],
-) -> mango.CombinableInstructions:
-    instructions = mango.CombinableInstructions.empty()
+    perp_markets: typing.Sequence[entropy.PerpMarketDetails],
+) -> entropy.CombinableInstructions:
+    instructions = entropy.CombinableInstructions.empty()
 
     for slot in group.slots:
         if slot.base_token_bank is not None:
             base_nodebanks = node_bank_addresses[
                 str(slot.base_token_bank.root_bank_address)
             ]
-            instructions += mango.build_mango_update_root_bank_instructions(
+            instructions += entropy.build_entropy_update_root_bank_instructions(
                 context, group, slot.base_token_bank.root_bank_address, base_nodebanks
             )
 
     quote_nodebanks = node_bank_addresses[str(group.shared_quote.root_bank_address)]
-    instructions += mango.build_mango_update_root_bank_instructions(
+    instructions += entropy.build_entropy_update_root_bank_instructions(
         context, group, group.shared_quote.root_bank_address, quote_nodebanks
     )
 
     for perp_market in perp_markets:
-        instructions += mango.build_mango_update_funding_instructions(
+        instructions += entropy.build_entropy_update_funding_instructions(
             context, group, perp_market
         )
 
@@ -137,12 +137,12 @@ def build_update_funding_instructions(
 
 
 def build_consume_events_instructions(
-    context: mango.Context,
-    group: mango.Group,
-    perp_markets: typing.Sequence[mango.PerpMarketDetails],
-    event_queues: typing.Sequence[mango.PerpEventQueue],
-) -> mango.CombinableInstructions:
-    instructions = mango.CombinableInstructions.empty()
+    context: entropy.Context,
+    group: entropy.Group,
+    perp_markets: typing.Sequence[entropy.PerpMarketDetails],
+    event_queues: typing.Sequence[entropy.PerpEventQueue],
+) -> entropy.CombinableInstructions:
+    instructions = entropy.CombinableInstructions.empty()
 
     for index, perp_market in enumerate(perp_markets):
         event_queue = event_queues[index]
@@ -151,20 +151,20 @@ def build_consume_events_instructions(
                 f"Sequence mismatch - perp market {perp_market.address} should have data for event queue {perp_market.event_queue} but was given event queue {event_queue.address}"
             )
 
-        instructions += mango.build_perp_consume_events_instructions(
+        instructions += entropy.build_perp_consume_events_instructions(
             context, group, perp_market, event_queue.accounts_to_crank
         )
 
     return instructions
 
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    health = mango.HealthCheck()
-    wallet = mango.Wallet.from_command_line_parameters_or_raise(args)
-    signers: mango.CombinableInstructions = mango.CombinableInstructions.from_wallet(
-        wallet
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    health = entropy.HealthCheck()
+    wallet = entropy.Wallet.from_command_line_parameters_or_raise(args)
+    signers: entropy.CombinableInstructions = (
+        entropy.CombinableInstructions.from_wallet(wallet)
     )
-    group = mango.Group.load(context, context.group_address)
+    group = entropy.Group.load(context, context.group_address)
 
     node_bank_addresses: typing.Dict[str, typing.Sequence[PublicKey]] = {}
     quote_rootbank = group.shared_quote.ensure_root_bank(context)
@@ -179,7 +179,7 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
     for slot in group.slots:
         if slot.perp_market is not None:
             perp_market_addresses += [slot.perp_market.address]
-            perp_market = mango.PerpMarketDetails.load(
+            perp_market = entropy.PerpMarketDetails.load(
                 context, slot.perp_market.address, group
             )
             event_queue_addresses += [perp_market.event_queue]
@@ -202,7 +202,7 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
                 # keeper update.
                 run_keeper_update = True
             else:
-                cache = mango.Cache.load(context, group.cache)
+                cache = entropy.Cache.load(context, group.cache)
                 last_update = max(
                     [
                         *[pc.last_update for pc in cache.price_cache if pc is not None],
@@ -219,7 +219,7 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
                     ]
                 )
 
-                now = mango.utc_now()
+                now = entropy.utc_now()
                 threshold = now - timedelta(seconds=args.skip_interval)
                 if last_update < threshold:
                     logging.info(
@@ -234,9 +234,9 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
             # If run_keeper_update is True it's because the Cache data is stale or we just
             # want to run the keeper update every time.
             if run_keeper_update:
-                account_infos = mango.AccountInfo.load_multiple(context, addresses)
+                account_infos = entropy.AccountInfo.load_multiple(context, addresses)
 
-                group = mango.Group.parse(
+                group = entropy.Group.parse(
                     account_infos[0],
                     group.name,
                     context.instrument_lookup,
@@ -246,14 +246,14 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
                 perp_markets = []
                 event_queues = []
                 for index in range(1, 1 + perp_market_count):
-                    perp_market_details = mango.PerpMarketDetails.parse(
+                    perp_market_details = entropy.PerpMarketDetails.parse(
                         account_infos[index], group
                     )
                     perp_markets += [perp_market_details]
                     slot = group.slot_by_perp_market_address(
                         perp_market_details.address
                     )
-                    event_queue = mango.PerpEventQueue.parse(
+                    event_queue = entropy.PerpEventQueue.parse(
                         account_infos[index + perp_market_count],
                         slot.perp_lot_size_converter,
                     )
@@ -279,10 +279,10 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
 
                 if not args.dry_run:
                     signatures = asyncio.run(combined.execute_async(context))
-                    mango.output(signatures)
+                    entropy.output(signatures)
                 else:
-                    mango.output("Dry run - not running instructions:")
-                    mango.output(combined.report(context.client.instruction_reporter))
+                    entropy.output("Dry run - not running instructions:")
+                    entropy.output(combined.report(context.client.instruction_reporter))
             health.ping("keeper")
         except KeyboardInterrupt:
             logging.info("Keeper stopping...")

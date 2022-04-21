@@ -1,4 +1,4 @@
-from .context import mango, disable_logging
+from .context import entropy, disable_logging
 
 from solana.publickey import PublicKey
 
@@ -6,13 +6,13 @@ from .fakes import fake_seeded_public_key
 
 
 def test_market_symbol_matching() -> None:
-    assert mango.Market.symbols_match("BTC/USDC", "BTC/USDC")
-    assert mango.Market.symbols_match("eth/usdc", "eth/usdc")
-    assert mango.Market.symbols_match("btc/usdc", "BTC/USDC")
-    assert mango.Market.symbols_match("ETH/USDC", "eth/usdc")
-    assert mango.Market.symbols_match("serum:ETH/USDC", "serum:eth/usdc")
-    assert not mango.Market.symbols_match("ETH/USDC", "BTC/USDC")
-    assert not mango.Market.symbols_match("serum:ETH/USDC", "spot:eth/usdc")
+    assert entropy.Market.symbols_match("BTC/USDC", "BTC/USDC")
+    assert entropy.Market.symbols_match("eth/usdc", "eth/usdc")
+    assert entropy.Market.symbols_match("btc/usdc", "BTC/USDC")
+    assert entropy.Market.symbols_match("ETH/USDC", "eth/usdc")
+    assert entropy.Market.symbols_match("serum:ETH/USDC", "serum:eth/usdc")
+    assert not entropy.Market.symbols_match("ETH/USDC", "BTC/USDC")
+    assert not entropy.Market.symbols_match("serum:ETH/USDC", "spot:eth/usdc")
 
 
 def test_serum_market_lookup() -> None:
@@ -104,7 +104,7 @@ def test_serum_market_lookup() -> None:
             },
         ]
     }
-    actual = mango.SerumMarketLookup(fake_seeded_public_key("program ID"), data)
+    actual = entropy.SerumMarketLookup(fake_seeded_public_key("program ID"), data)
     assert actual is not None
     eth_usdt = actual.find_by_symbol("ETH/USDT")
     assert eth_usdt is not None
@@ -115,8 +115,8 @@ def test_serum_market_lookup() -> None:
 
 
 def test_serum_market_lookups_with_full_data() -> None:
-    market_lookup = mango.SerumMarketLookup.load(
-        fake_seeded_public_key("program ID"), mango.SPLTokenLookup.DefaultDataFilepath
+    market_lookup = entropy.SerumMarketLookup.load(
+        fake_seeded_public_key("program ID"), entropy.SPLTokenLookup.DefaultDataFilepath
     )
     srm_usdc = market_lookup.find_by_symbol("SRM/USDC")
     assert srm_usdc is not None
@@ -136,8 +136,8 @@ def test_serum_market_lookups_with_full_data() -> None:
 
 
 def test_serum_market_case_insensitive_lookups_with_full_data() -> None:
-    market_lookup = mango.SerumMarketLookup.load(
-        fake_seeded_public_key("program ID"), mango.SPLTokenLookup.DefaultDataFilepath
+    market_lookup = entropy.SerumMarketLookup.load(
+        fake_seeded_public_key("program ID"), entropy.SPLTokenLookup.DefaultDataFilepath
     )
     srm_usdc = market_lookup.find_by_symbol("srm/usdc")
     assert srm_usdc is not None
@@ -147,7 +147,7 @@ def test_serum_market_case_insensitive_lookups_with_full_data() -> None:
 
 
 def test_overrides_with_full_data() -> None:
-    market_lookup = mango.SerumMarketLookup.load(
+    market_lookup = entropy.SerumMarketLookup.load(
         fake_seeded_public_key("program ID"), "./data/overrides.tokenlist.json"
     )
     eth_usdt = market_lookup.find_by_symbol("ETH/USDT")
@@ -168,13 +168,13 @@ def test_overrides_with_full_data() -> None:
 
 
 def test_compound_lookups_with_full_data() -> None:
-    overrides = mango.SerumMarketLookup.load(
+    overrides = entropy.SerumMarketLookup.load(
         fake_seeded_public_key("program ID"), "./data/overrides.tokenlist.json"
     )
-    spl = mango.SerumMarketLookup.load(
-        fake_seeded_public_key("program ID"), mango.SPLTokenLookup.DefaultDataFilepath
+    spl = entropy.SerumMarketLookup.load(
+        fake_seeded_public_key("program ID"), entropy.SPLTokenLookup.DefaultDataFilepath
     )
-    actual = mango.CompoundMarketLookup([overrides, spl])
+    actual = entropy.CompoundMarketLookup([overrides, spl])
     # actual should now find instruments in either overrides or spl
     eth_usdt = actual.find_by_symbol("ETH/USDT")
     assert eth_usdt is not None

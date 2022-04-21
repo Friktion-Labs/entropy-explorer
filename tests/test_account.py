@@ -1,6 +1,6 @@
 import pytest
 
-from .context import mango
+from .context import entropy
 from .data import load_data_from_directory
 from .fakes import (
     fake_account,
@@ -15,13 +15,13 @@ from .fakes import (
 )
 
 from decimal import Decimal
-from mango.layouts import layouts
+from entropy.layouts import layouts
 from solana.publickey import PublicKey
 
 
 def test_construction() -> None:
     account_info = fake_account_info()
-    meta_data = mango.Metadata(layouts.DATA_TYPE.Group, mango.Version.V1, True)
+    meta_data = entropy.Metadata(layouts.DATA_TYPE.Group, entropy.Version.V1, True)
     group = fake_seeded_public_key("group")
     owner = fake_seeded_public_key("owner")
     info = "some name"
@@ -31,7 +31,7 @@ def test_construction() -> None:
     quote_deposit = fake_instrument_value(raw_quote_deposit)
     raw_quote_borrow = Decimal(5)
     quote_borrow = fake_instrument_value(raw_quote_borrow)
-    quote = mango.AccountSlot(
+    quote = entropy.AccountSlot(
         3,
         fake_instrument(),
         fake_token_bank(),
@@ -59,7 +59,7 @@ def test_construction() -> None:
     perp2 = fake_perp_account()
     perp3 = fake_perp_account()
     basket = [
-        mango.AccountSlot(
+        entropy.AccountSlot(
             0,
             fake_instrument(),
             fake_token_bank(),
@@ -71,7 +71,7 @@ def test_construction() -> None:
             fake_seeded_public_key("spot openorders 1"),
             perp1,
         ),
-        mango.AccountSlot(
+        entropy.AccountSlot(
             1,
             fake_instrument(),
             fake_token_bank(),
@@ -83,7 +83,7 @@ def test_construction() -> None:
             fake_seeded_public_key("spot openorders 2"),
             perp2,
         ),
-        mango.AccountSlot(
+        entropy.AccountSlot(
             2,
             fake_instrument(),
             fake_token_bank(),
@@ -103,9 +103,9 @@ def test_construction() -> None:
     not_upgradable = False
     delegate = fake_seeded_public_key("delegate")
 
-    actual = mango.Account(
+    actual = entropy.Account(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         meta_data,
         "Test Group",
         group,
@@ -124,7 +124,7 @@ def test_construction() -> None:
     )
 
     assert actual is not None
-    assert actual.version == mango.Version.V1
+    assert actual.version == entropy.Version.V1
     assert actual.meta_data == meta_data
     assert actual.owner == owner
     assert actual.slot_indices == active_in_basket
@@ -171,14 +171,14 @@ def test_construction() -> None:
 
 def test_slot_lookups() -> None:
     account_info = fake_account_info()
-    meta_data = mango.Metadata(layouts.DATA_TYPE.Group, mango.Version.V1, True)
+    meta_data = entropy.Metadata(layouts.DATA_TYPE.Group, entropy.Version.V1, True)
     group = fake_seeded_public_key("group")
     owner = fake_seeded_public_key("owner")
     info = "some name"
     in_margin_basket = [False, False, False, False, False, False, False]
     active_in_basket = [False, True, False, True, True, False, False]
     zero_value = Decimal(0)
-    quote_slot = mango.AccountSlot(
+    quote_slot = entropy.AccountSlot(
         3,
         fake_token("FAKEQUOTE"),
         fake_token_bank("FAKEQUOTE"),
@@ -193,7 +193,7 @@ def test_slot_lookups() -> None:
     perp2 = fake_perp_account()
     perp3 = fake_perp_account()
     slots = [
-        mango.AccountSlot(
+        entropy.AccountSlot(
             1,
             fake_instrument("slot1"),
             fake_token_bank(),
@@ -205,7 +205,7 @@ def test_slot_lookups() -> None:
             fake_seeded_public_key("spot openorders 1"),
             None,
         ),
-        mango.AccountSlot(
+        entropy.AccountSlot(
             3,
             fake_token("MNGO"),
             fake_token_bank("MNGO"),
@@ -217,7 +217,7 @@ def test_slot_lookups() -> None:
             fake_seeded_public_key("spot openorders 2"),
             perp2,
         ),
-        mango.AccountSlot(
+        entropy.AccountSlot(
             4,
             fake_instrument("slot3"),
             fake_token_bank(),
@@ -237,9 +237,9 @@ def test_slot_lookups() -> None:
     not_upgradable = False
     delegate = fake_seeded_public_key("delegate")
 
-    actual = mango.Account(
+    actual = entropy.Account(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         meta_data,
         "Test Group",
         group,
@@ -437,14 +437,16 @@ def test_loaded_account_slot_lookups() -> None:
 
 def test_derive_referrer_memory_address() -> None:
     context = fake_context(
-        mango_program_address=PublicKey("4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA")
+        entropy_program_address=PublicKey(
+            "4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA"
+        )
     )
     account = fake_account(
         address=PublicKey("FG99s25HS1UKcP1jMx72Gezg6KZCC7DuKXhNW51XC1qi")
     )
     actual = account.derive_referrer_memory_address(context)
 
-    # Value derived using mango-client-v3: 3CMpC1UzdLrAnGz6HZVoBsDLAHpTABkUJr8iPyEHwehr
+    # Value derived using entropy-client-v3: 3CMpC1UzdLrAnGz6HZVoBsDLAHpTABkUJr8iPyEHwehr
     expected = PublicKey("3CMpC1UzdLrAnGz6HZVoBsDLAHpTABkUJr8iPyEHwehr")
 
     assert actual == expected

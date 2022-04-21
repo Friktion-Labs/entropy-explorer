@@ -7,7 +7,7 @@ printf "Running crank on market %s with a limit of %d and a sleep time of %d sec
 while :
 do
     if crank-market --name "Crank ${MARKET}" --market ${MARKET} --limit ${LIMIT} --log-level ERROR; then
-        echo "Last ${MARKET} crank action: $(date)" > /var/tmp/mango_healthcheck_crank_market_service
+        echo "Last ${MARKET} crank action: $(date)" > /var/tmp/entropy_healthcheck_crank_market_service
     fi
 
     printf "Pausing after cranking for %d seconds.\n" ${SLEEP_TIME}

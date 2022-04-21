@@ -10,7 +10,7 @@ set -e
 printf "Balances:\n"
 show-account-balances --log-level ERROR
 
-printf "Ensuring Mango Account...\n"
+printf "Ensuring Entropy Account...\n"
 ensure-account --log-level ERROR
 
 printf "Wrapping SOL...\n"

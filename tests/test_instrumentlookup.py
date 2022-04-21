@@ -1,4 +1,4 @@
-from .context import mango
+from .context import entropy
 
 from solana.publickey import PublicKey
 
@@ -32,7 +32,7 @@ def test_spl_token_lookup() -> None:
             },
         ]
     }
-    actual = mango.SPLTokenLookup("test-filename", data)
+    actual = entropy.SPLTokenLookup("test-filename", data)
     assert actual is not None
     eth = actual.find_by_symbol("ETH")
     assert eth is not None
@@ -46,7 +46,7 @@ def test_spl_token_lookup() -> None:
 
 
 def test_spl_token_lookups_with_full_data() -> None:
-    actual = mango.SPLTokenLookup.load(mango.SPLTokenLookup.DefaultDataFilepath)
+    actual = entropy.SPLTokenLookup.load(entropy.SPLTokenLookup.DefaultDataFilepath)
     btc = actual.find_by_symbol("BTC")
     assert btc is not None
     assert btc.mint == PublicKey("9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E")
@@ -61,7 +61,7 @@ def test_spl_token_lookups_with_full_data() -> None:
 
 
 def test_override_lookups_with_full_data() -> None:
-    actual = mango.SPLTokenLookup.load("./data/overrides.tokenlist.json")
+    actual = entropy.SPLTokenLookup.load("./data/overrides.tokenlist.json")
     eth = actual.find_by_symbol("ETH")
     assert eth is not None
     assert eth.mint == PublicKey("2FPyTwcZLUg1MDrwsyoP4D6s1tM7hAkHYRjkNb5w6Pxk")
@@ -73,27 +73,27 @@ def test_override_lookups_with_full_data() -> None:
 
 
 def test_compound_lookups_with_full_data() -> None:
-    overrides = mango.SPLTokenLookup.load("./data/overrides.tokenlist.json")
-    spl = mango.SPLTokenLookup.load(mango.SPLTokenLookup.DefaultDataFilepath)
-    actual = mango.CompoundInstrumentLookup([overrides, spl])
+    overrides = entropy.SPLTokenLookup.load("./data/overrides.tokenlist.json")
+    spl = entropy.SPLTokenLookup.load(entropy.SPLTokenLookup.DefaultDataFilepath)
+    actual = entropy.CompoundInstrumentLookup([overrides, spl])
     # actual should now find instruments in either overrides or spl
     eth = actual.find_by_symbol("ETH")
     assert eth is not None
-    assert isinstance(eth, mango.Token)
+    assert isinstance(eth, entropy.Token)
     assert eth.mint == PublicKey("2FPyTwcZLUg1MDrwsyoP4D6s1tM7hAkHYRjkNb5w6Pxk")
     btc = actual.find_by_symbol("BTC")
     assert btc is not None
-    assert isinstance(btc, mango.Token)
+    assert isinstance(btc, entropy.Token)
     assert btc.mint == PublicKey("9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E")
     srm = actual.find_by_mint(PublicKey("AKJHspCwDhABucCxNLXUSfEzb7Ny62RqFtC9uNjJi4fq"))
     assert srm is not None
-    assert isinstance(srm, mango.Token)
+    assert isinstance(srm, entropy.Token)
     assert srm.symbol == "SRM-SOL"
     usdt = actual.find_by_mint(
         PublicKey("Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB")
     )
     assert usdt is not None
-    assert isinstance(usdt, mango.Token)
+    assert isinstance(usdt, entropy.Token)
     assert usdt.symbol == "USDT"
 
 
@@ -101,7 +101,7 @@ def test_all_expected_v3_instruments() -> None:
     def check_expected(symbol: str, pubkey: str) -> None:
         token = actual.find_by_symbol(symbol)
         assert token is not None
-        assert isinstance(token, mango.Token)
+        assert isinstance(token, entropy.Token)
         assert token.mint == PublicKey(pubkey)
 
     # Load all token data the same order the ContextBuilder loads them:
@@ -113,16 +113,16 @@ def test_all_expected_v3_instruments() -> None:
     #         mainnet_spl_token_lookup,
     #     ]
     # )
-    idsjson = mango.IdsJsonTokenLookup("mainnet", "mainnet.1")
-    overrides = mango.SPLTokenLookup.load("./data/overrides.tokenlist.json")
-    spl = mango.SPLTokenLookup.load(mango.SPLTokenLookup.DefaultDataFilepath)
-    non_spl = mango.NonSPLInstrumentLookup.load(
-        mango.NonSPLInstrumentLookup.DefaultMainnetDataFilepath
+    idsjson = entropy.IdsJsonTokenLookup("mainnet", "mainnet.1")
+    overrides = entropy.SPLTokenLookup.load("./data/overrides.tokenlist.json")
+    spl = entropy.SPLTokenLookup.load(entropy.SPLTokenLookup.DefaultDataFilepath)
+    non_spl = entropy.NonSPLInstrumentLookup.load(
+        entropy.NonSPLInstrumentLookup.DefaultMainnetDataFilepath
     )
-    actual = mango.CompoundInstrumentLookup([idsjson, overrides, non_spl, spl])
+    actual = entropy.CompoundInstrumentLookup([idsjson, overrides, non_spl, spl])
     # actual should now find instruments in either overrides or spl
     check_expected("USDC", "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v")
-    check_expected("MNGO", "MangoCzJ36AjZyKwVj3VnYU4GTonjfVEnJmvvWaxLac")
+    check_expected("MNGO", "EntropyCzJ36AjZyKwVj3VnYU4GTonjfVEnJmvvWaxLac")
     check_expected("BTC", "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E")
     check_expected("ETH", "2FPyTwcZLUg1MDrwsyoP4D6s1tM7hAkHYRjkNb5w6Pxk")
     check_expected("SOL", "So11111111111111111111111111111111111111112")

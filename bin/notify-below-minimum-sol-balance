@@ -9,12 +9,12 @@ from decimal import Decimal
 from solana.publickey import PublicKey
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
 parser = argparse.ArgumentParser(
     description="Sends a notification if an account's SOL balance is below the '--minimum-sol-balance' parameter threshold."
 )
-mango.ContextBuilder.add_command_line_parameters(parser)
+entropy.ContextBuilder.add_command_line_parameters(parser)
 parser.add_argument(
     "--address", type=PublicKey, required=True, help="address of the account"
 )
@@ -26,20 +26,22 @@ parser.add_argument(
 )
 parser.add_argument(
     "--notify",
-    type=mango.parse_notification_target,
+    type=entropy.parse_notification_target,
     action="append",
     default=[],
     help="The notification target for low balance events",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    account_info = mango.AccountInfo.load(context, args.address)
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    account_info = entropy.AccountInfo.load(context, args.address)
     if account_info is None:
         raise Exception(f"No account at '{args.address}'")
 
     if account_info.sols < args.minimum_sol_balance:
-        notify: mango.NotificationTarget = mango.CompoundNotificationTarget(args.notify)
+        notify: entropy.NotificationTarget = entropy.CompoundNotificationTarget(
+            args.notify
+        )
         report = f'Account "{args.name} [{args.address}]" on {context.client.cluster_name} has only {account_info.sols} SOL, which is below the minimum required balance of {args.minimum_sol_balance} SOL.'
         notify.send(report)
-        mango.output(f"Notification sent: {report}")
+        entropy.output(f"Notification sent: {report}")

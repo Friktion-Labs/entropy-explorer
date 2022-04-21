@@ -14,12 +14,12 @@ import typing
 from solana.publickey import PublicKey
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
 parser = argparse.ArgumentParser(
     description="Run the Transaction Scout to display information about a specific transaction."
 )
-mango.ContextBuilder.add_command_line_parameters(parser)
+entropy.ContextBuilder.add_command_line_parameters(parser)
 parser.add_argument(
     "--since-state-filename",
     type=str,
@@ -28,9 +28,9 @@ parser.add_argument(
 )
 parser.add_argument(
     "--instruction-type",
-    type=lambda ins: mango.InstructionType[ins],
+    type=lambda ins: entropy.InstructionType[ins],
     required=True,
-    choices=list(mango.InstructionType),
+    choices=list(entropy.InstructionType),
     help="The signature of the transaction to look up",
 )
 parser.add_argument(
@@ -40,28 +40,28 @@ parser.add_argument(
 )
 parser.add_argument(
     "--notify-transactions",
-    type=mango.parse_notification_target,
+    type=entropy.parse_notification_target,
     action="append",
     default=[],
     help="The notification target for transaction information",
 )
 parser.add_argument(
     "--notify-successful-transactions",
-    type=mango.parse_notification_target,
+    type=entropy.parse_notification_target,
     action="append",
     default=[],
     help="The notification target for successful transactions",
 )
 parser.add_argument(
     "--notify-failed-transactions",
-    type=mango.parse_notification_target,
+    type=entropy.parse_notification_target,
     action="append",
     default=[],
     help="The notification target for failed transactions",
 )
 parser.add_argument(
     "--notify-errors",
-    type=mango.parse_notification_target,
+    type=entropy.parse_notification_target,
     action="append",
     default=[],
     help="The notification target for errors",
@@ -72,19 +72,19 @@ parser.add_argument(
     default=False,
     help="create a short summary rather than the full TransactionScout details",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
-handler = mango.NotificationHandler(
-    mango.CompoundNotificationTarget(args.notify_errors)
+handler = entropy.NotificationHandler(
+    entropy.CompoundNotificationTarget(args.notify_errors)
 )
 handler.setLevel(logging.ERROR)
 logging.getLogger().addHandler(handler)
 
 
 def summariser(
-    context: mango.Context,
-) -> typing.Callable[[mango.TransactionScout], str]:
-    def summarise(transaction_scout: mango.TransactionScout) -> str:
+    context: entropy.Context,
+) -> typing.Callable[[entropy.TransactionScout], str]:
+    def summarise(transaction_scout: entropy.TransactionScout) -> str:
         instruction_details: typing.List[str] = []
         instruction_targets: typing.List[str] = []
         for ins in transaction_scout.instructions:
@@ -99,7 +99,7 @@ def summariser(
 
         instructions = ", ".join(instruction_details)
         targets = ", ".join(instruction_targets) or "None"
-        changes = mango.OwnedInstrumentValue.changes(
+        changes = entropy.OwnedInstrumentValue.changes(
             transaction_scout.pre_token_balances, transaction_scout.post_token_balances
         )
 
@@ -107,7 +107,7 @@ def summariser(
         for ins in transaction_scout.instructions:
             if ins.token_in_account is not None:
                 in_tokens += [
-                    mango.OwnedInstrumentValue.find_by_owner(
+                    entropy.OwnedInstrumentValue.find_by_owner(
                         changes, ins.token_in_account
                     )
                 ]
@@ -116,7 +116,7 @@ def summariser(
         for ins in transaction_scout.instructions:
             if ins.token_out_account is not None:
                 out_tokens += [
-                    mango.OwnedInstrumentValue.find_by_owner(
+                    entropy.OwnedInstrumentValue.find_by_owner(
                         changes, ins.token_out_account
                     )
                 ]
@@ -149,19 +149,19 @@ sender = args.sender
 logging.info(f"Since signature: {since_signature}")
 logging.info(f"Filter to instruction type: {instruction_type}")
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    first_item_capturer = mango.CaptureFirstItem()
-    signatures = mango.fetch_all_recent_transaction_signatures(context)
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    first_item_capturer = entropy.CaptureFirstItem()
+    signatures = entropy.fetch_all_recent_transaction_signatures(context)
     oldest_first = reversed(
         list(itertools.takewhile(lambda sig: sig != since_signature, signatures))
     )
-    pipeline: rx.core.typing.Observable[mango.TransactionScout] = rx.from_(
+    pipeline: rx.core.typing.Observable[entropy.TransactionScout] = rx.from_(
         oldest_first
     ).pipe(
         rx.operators.map(first_item_capturer.capture_if_first),
         #  rx.operators.map(debug_print_item("Signature:")),
         rx.operators.map(
-            lambda sig: mango.TransactionScout.load_if_available(context, sig)
+            lambda sig: entropy.TransactionScout.load_if_available(context, sig)
         ),
         rx.operators.filter(lambda item: item is not None),
     )
@@ -182,18 +182,18 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
         pipeline = pipeline.pipe(rx.operators.map(summariser(context)))
 
     fan_out: rx.subject.subject.Subject = rx.subject.subject.Subject()
-    fan_out.subscribe(mango.PrintingObserverSubscriber(False))
-    fan_out.subscribe(on_next=mango.CompoundNotificationTarget(args.notify_transactions).send)  # type: ignore[call-arg]
+    fan_out.subscribe(entropy.PrintingObserverSubscriber(False))
+    fan_out.subscribe(on_next=entropy.CompoundNotificationTarget(args.notify_transactions).send)  # type: ignore[call-arg]
 
-    on_success = mango.FilteringNotificationTarget(
-        mango.CompoundNotificationTarget(args.notify_successful_transactions),
-        lambda item: isinstance(item, mango.TransactionScout) and item.succeeded,
+    on_success = entropy.FilteringNotificationTarget(
+        entropy.CompoundNotificationTarget(args.notify_successful_transactions),
+        lambda item: isinstance(item, entropy.TransactionScout) and item.succeeded,
     )
     fan_out.subscribe(on_next=on_success.send)  # type: ignore[call-arg]
 
-    on_failed = mango.FilteringNotificationTarget(
-        mango.CompoundNotificationTarget(args.notify_failed_transactions),
-        lambda item: isinstance(item, mango.TransactionScout) and not item.succeeded,
+    on_failed = entropy.FilteringNotificationTarget(
+        entropy.CompoundNotificationTarget(args.notify_failed_transactions),
+        lambda item: isinstance(item, entropy.TransactionScout) and not item.succeeded,
     )
     fan_out.subscribe(on_next=on_failed.send)  # type: ignore[call-arg]
 

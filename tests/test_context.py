@@ -1,11 +1,11 @@
-from .context import mango
+from .context import entropy
 
 from decimal import Decimal
 from solana.publickey import PublicKey
 
 
-def context_has_default_values(ctx: mango.Context) -> None:
-    assert ctx.mango_program_address == PublicKey(
+def context_has_default_values(ctx: entropy.Context) -> None:
+    assert ctx.entropy_program_address == PublicKey(
         "mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68"
     )
     assert ctx.serum_program_address == PublicKey(
@@ -20,20 +20,20 @@ def context_has_default_values(ctx: mango.Context) -> None:
 
 
 def test_context_default_exists() -> None:
-    assert mango.ContextBuilder.default() is not None
+    assert entropy.ContextBuilder.default() is not None
 
 
 def test_context_default_values() -> None:
-    context_has_default_values(mango.ContextBuilder.default())
+    context_has_default_values(entropy.ContextBuilder.default())
 
 
 def test_new_from_cluster() -> None:
-    context_has_default_values(mango.ContextBuilder.default())
-    derived = mango.ContextBuilder.build(cluster_name="devnet")
+    context_has_default_values(entropy.ContextBuilder.default())
+    derived = entropy.ContextBuilder.build(cluster_name="devnet")
     assert derived.client.cluster_name == "devnet"
-    assert derived.client.cluster_rpc_url == "https://mango.devnet.rpcpool.com"
-    assert derived.client.cluster_ws_url == "wss://mango.devnet.rpcpool.com"
-    assert derived.mango_program_address == PublicKey(
+    assert derived.client.cluster_rpc_url == "https://entropy.devnet.rpcpool.com"
+    assert derived.client.cluster_ws_url == "wss://entropy.devnet.rpcpool.com"
+    assert derived.entropy_program_address == PublicKey(
         "4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA"
     )
     assert derived.serum_program_address == PublicKey(
@@ -43,4 +43,4 @@ def test_new_from_cluster() -> None:
     assert derived.group_address == PublicKey(
         "Ec2enZyoC4nGpEfu2sUNAa2nUGJHWxoUWYSEJ2hNTWTA"
     )
-    context_has_default_values(mango.ContextBuilder.default())
+    context_has_default_values(entropy.ContextBuilder.default())

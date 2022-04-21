@@ -11,13 +11,13 @@ from decimal import Decimal
 from solana.publickey import PublicKey
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
 parser = argparse.ArgumentParser(
-    description="Balance the value of tokens in a Mango Markets group to specific values or percentages."
+    description="Balance the value of tokens in a Entropy Markets group to specific values or percentages."
 )
-mango.ContextBuilder.add_command_line_parameters(parser)
-mango.Wallet.add_command_line_parameters(parser)
+entropy.ContextBuilder.add_command_line_parameters(parser)
+entropy.Wallet.add_command_line_parameters(parser)
 parser.add_argument(
     "--account-address",
     type=PublicKey,
@@ -25,7 +25,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--target",
-    type=mango.parse_fixed_target_balance,
+    type=entropy.parse_fixed_target_balance,
     action="append",
     required=True,
     help="token symbol plus target value, separated by a colon (e.g. 'ETH:2.5')",
@@ -54,42 +54,42 @@ parser.add_argument(
     default=False,
     help="runs as read-only and does not perform any transactions",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    wallet: mango.Wallet = mango.Wallet.from_command_line_parameters_or_raise(args)
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    wallet: entropy.Wallet = entropy.Wallet.from_command_line_parameters_or_raise(args)
     action_threshold: Decimal = args.action_threshold
     adjustment_factor: Decimal = args.adjustment_factor
     action_threshold = args.action_threshold
     max_slippage = args.max_slippage
-    group = mango.Group.load(context, context.group_address)
-    account = mango.Account.load_for_owner_by_address(
+    group = entropy.Group.load(context, context.group_address)
+    account = entropy.Account.load_for_owner_by_address(
         context, wallet.address, group, args.account_address
     )
 
     logging.info(f"Wallet address: {wallet.address}")
 
-    targets: typing.Sequence[mango.FixedTargetBalance] = args.target
+    targets: typing.Sequence[entropy.FixedTargetBalance] = args.target
     logging.info(f"Targets: {targets}")
 
-    quote_token = mango.token(context, args.quote_symbol)
+    quote_token = entropy.token(context, args.quote_symbol)
 
-    prices: typing.List[mango.InstrumentValue] = []
-    oracle_provider: mango.OracleProvider = mango.create_oracle_provider(
+    prices: typing.List[entropy.InstrumentValue] = []
+    oracle_provider: entropy.OracleProvider = entropy.create_oracle_provider(
         context, "market"
     )
     for target in targets:
-        target_token = mango.token(context, target.symbol)
+        target_token = entropy.token(context, target.symbol)
         market_symbol: str = f"serum:{target_token.symbol}/{quote_token.symbol}"
-        market = mango.market(context, market_symbol)
+        market = entropy.market(context, market_symbol)
         oracle = oracle_provider.oracle_for_market(context, market)
         if oracle is None:
             raise Exception(f"Could not find oracle for market {market_symbol}")
         price = oracle.fetch_price(context)
-        prices += [mango.InstrumentValue(target_token, price.mid_price)]
-    prices += [mango.InstrumentValue(quote_token, Decimal(1))]
+        prices += [entropy.InstrumentValue(target_token, price.mid_price)]
+    prices += [entropy.InstrumentValue(quote_token, Decimal(1))]
 
-    wallet_balancer = mango.LiveWalletBalancer(
+    wallet_balancer = entropy.LiveWalletBalancer(
         context,
         wallet,
         account,

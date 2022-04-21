@@ -11,11 +11,11 @@ from solana.publickey import PublicKey
 from spl.token.constants import ACCOUNT_LEN, TOKEN_PROGRAM_ID
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
 parser = argparse.ArgumentParser(description="Sends SPL tokens to a different address.")
-mango.ContextBuilder.add_command_line_parameters(parser)
-mango.Wallet.add_command_line_parameters(parser)
+entropy.ContextBuilder.add_command_line_parameters(parser)
+entropy.Wallet.add_command_line_parameters(parser)
 parser.add_argument(
     "--symbol", type=str, required=True, help="token symbol to send (e.g. ETH)"
 )
@@ -45,21 +45,23 @@ parser.add_argument(
     default=False,
     help="runs as read-only and does not perform any transactions",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
 
 def __quantity_from_wallet_target(
-    context: mango.Context,
-    wallet: mango.Wallet,
-    token: mango.Token,
+    context: entropy.Context,
+    wallet: entropy.Wallet,
+    token: entropy.Token,
     to_keep: typing.Optional[Decimal],
 ) -> typing.Optional[Decimal]:
     if to_keep is None:
         return None
 
     token_accounts: typing.Sequence[
-        mango.TokenAccount
-    ] = mango.TokenAccount.fetch_all_for_owner_and_token(context, wallet.address, token)
+        entropy.TokenAccount
+    ] = entropy.TokenAccount.fetch_all_for_owner_and_token(
+        context, wallet.address, token
+    )
     total = sum(acc.value.value for acc in token_accounts)
     to_deposit = total - to_keep
     if to_deposit < 0:
@@ -67,38 +69,38 @@ def __quantity_from_wallet_target(
             f"Cannot achieve wallet balance target of {to_keep:,.8f} {token.symbol} by sending - wallet only has balance of {total:,.8f} {token.symbol}"
         )
 
-    return token.round(to_deposit, mango.RoundDirection.DOWN)
+    return token.round(to_deposit, entropy.RoundDirection.DOWN)
 
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    wallet = mango.Wallet.from_command_line_parameters_or_raise(args)
-    token: mango.Token = mango.token(context, args.symbol)
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    wallet = entropy.Wallet.from_command_line_parameters_or_raise(args)
+    token: entropy.Token = entropy.token(context, args.symbol)
 
-    source = mango.TokenAccount.fetch_largest_for_owner_and_token(
+    source = entropy.TokenAccount.fetch_largest_for_owner_and_token(
         context, wallet.address, token
     )
     if source is None:
         raise Exception(f"Could not find source token account for {token}.")
 
     # Is the address an actual token account? Or is it the SOL address of the owner?
-    account_info: typing.Optional[mango.AccountInfo] = mango.AccountInfo.load(
+    account_info: typing.Optional[entropy.AccountInfo] = entropy.AccountInfo.load(
         context, args.address
     )
     if account_info is None:
         raise Exception(f"Could not find account at address {args.address}.")
 
-    create_ata = mango.CombinableInstructions.empty()
+    create_ata = entropy.CombinableInstructions.empty()
     destination: PublicKey
-    if account_info.owner == mango.SYSTEM_PROGRAM_ADDRESS:
+    if account_info.owner == entropy.SYSTEM_PROGRAM_ADDRESS:
         # This is a root wallet account - get the token account to use.
-        destination_account = mango.TokenAccount.fetch_largest_for_owner_and_token(
+        destination_account = entropy.TokenAccount.fetch_largest_for_owner_and_token(
             context, account_info.address, token
         )
         if destination_account is None:
             (
                 create_ata,
                 token_account,
-            ) = mango.build_create_associated_instructions_and_account(
+            ) = entropy.build_create_associated_instructions_and_account(
                 context, wallet, account_info.address, token
             )
 
@@ -115,7 +117,7 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
             f"Account {args.address} is neither a root wallet account nor an SPL token account."
         )
 
-    mango.output("Balance:", source.value)
+    entropy.output("Balance:", source.value)
 
     quantity: typing.Optional[Decimal] = args.quantity or __quantity_from_wallet_target(
         context, wallet, token, args.wallet_target
@@ -128,38 +130,38 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
     if quantity < 0:
         raise Exception(f"Cannot send negative quantity {quantity:,.8f} {token.symbol}")
 
-    signers: mango.CombinableInstructions = mango.CombinableInstructions.from_wallet(
-        wallet
+    signers: entropy.CombinableInstructions = (
+        entropy.CombinableInstructions.from_wallet(wallet)
     )
-    transfer = mango.build_spl_transfer_tokens_instructions(
+    transfer = entropy.build_spl_transfer_tokens_instructions(
         context, wallet, token, source.address, destination, quantity
     )
 
     amount = token.shift_to_native(quantity)
     text_amount = f"{amount} {token.name} (@ {token.decimals} decimal places)"
     creating_marker = "" if create_ata.is_empty else " *CREATING*"
-    mango.output(f"Sending {text_amount}")
-    mango.output(f"    From: {source.address}")
-    mango.output(f"      To: {destination}{creating_marker}")
+    entropy.output(f"Sending {text_amount}")
+    entropy.output(f"    From: {source.address}")
+    entropy.output(f"      To: {destination}{creating_marker}")
 
     if args.dry_run:
-        mango.output("Skipping actual transfer - dry run.")
+        entropy.output("Skipping actual transfer - dry run.")
     else:
         signatures = (signers + create_ata + transfer).execute(context)
 
         if args.wait:
-            mango.output("Waiting on transaction signatures:")
-            mango.output(mango.indent_collection_as_str(signatures, 1))
-            results = mango.WebSocketTransactionMonitor.wait_for_all(
+            entropy.output("Waiting on transaction signatures:")
+            entropy.output(entropy.indent_collection_as_str(signatures, 1))
+            results = entropy.WebSocketTransactionMonitor.wait_for_all(
                 context.client.cluster_ws_url, signatures
             )
-            mango.output("Transaction results:")
-            mango.output(mango.indent_collection_as_str(results, 1))
+            entropy.output("Transaction results:")
+            entropy.output(entropy.indent_collection_as_str(results, 1))
 
-            updated = mango.TokenAccount.load(context, source.address)
+            updated = entropy.TokenAccount.load(context, source.address)
             updated_value = updated.value if updated is not None else "Unknown"
-            mango.output(f"{text_amount} sent. Balance now: {updated_value}")
+            entropy.output(f"{text_amount} sent. Balance now: {updated_value}")
         else:
-            mango.output("Transaction signatures:")
-            mango.output(mango.indent_collection_as_str(signatures, 1))
-            mango.output(f"{text_amount} sent.")
+            entropy.output("Transaction signatures:")
+            entropy.output(entropy.indent_collection_as_str(signatures, 1))
+            entropy.output(f"{text_amount} sent.")

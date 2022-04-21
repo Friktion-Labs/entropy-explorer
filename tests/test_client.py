@@ -1,7 +1,7 @@
 import pytest
 import typing
 
-from .context import mango
+from .context import entropy
 
 from solana.rpc.types import RPCMethod, RPCResponse
 
@@ -9,7 +9,7 @@ from solana.rpc.types import RPCMethod, RPCResponse
 __FAKE_RPC_METHOD = RPCMethod("fake")
 
 
-class FakeRPCCaller(mango.RPCCaller):
+class FakeRPCCaller(entropy.RPCCaller):
     def __init__(self) -> None:
         super().__init__(
             "Fake",
@@ -17,8 +17,8 @@ class FakeRPCCaller(mango.RPCCaller):
             "wss://localhost",
             -1,
             [0.1, 0.2],
-            mango.NullSlotHolder(),
-            mango.InstructionReporter(),
+            entropy.NullSlotHolder(),
+            entropy.InstructionReporter(),
         )
         self.called = False
 
@@ -27,7 +27,7 @@ class FakeRPCCaller(mango.RPCCaller):
         return {"jsonrpc": "2.0", "id": 0, "result": {}}
 
 
-class RaisingRPCCaller(mango.RPCCaller):
+class RaisingRPCCaller(entropy.RPCCaller):
     def __init__(self) -> None:
         super().__init__(
             "Fake",
@@ -35,21 +35,21 @@ class RaisingRPCCaller(mango.RPCCaller):
             "wss://localhost",
             -1,
             [0.1, 0.2],
-            mango.NullSlotHolder(),
-            mango.InstructionReporter(),
+            entropy.NullSlotHolder(),
+            entropy.InstructionReporter(),
         )
         self.called = False
 
     def make_request(self, method: RPCMethod, *params: typing.Any) -> RPCResponse:
         self.called = True
-        raise mango.TooManyRequestsRateLimitException(
+        raise entropy.TooManyRequestsRateLimitException(
             "Fake", "fake-name", "https://fake"
         )
 
 
 def test_constructor_sets_correct_values() -> None:
     provider = FakeRPCCaller()
-    actual = mango.CompoundRPCCaller("fake", [provider])
+    actual = entropy.CompoundRPCCaller("fake", [provider])
     assert actual is not None
     assert len(actual.all_providers) == 1
     assert actual.current == provider
@@ -60,7 +60,7 @@ def test_constructor_sets_correct_values_with_three_providers() -> None:
     provider1 = FakeRPCCaller()
     provider2 = FakeRPCCaller()
     provider3 = FakeRPCCaller()
-    actual = mango.CompoundRPCCaller("fake", [provider1, provider2, provider3])
+    actual = entropy.CompoundRPCCaller("fake", [provider1, provider2, provider3])
     assert actual is not None
     assert len(actual.all_providers) == 3
     assert actual.current == provider1
@@ -75,7 +75,7 @@ def test_constructor_sets_correct_values_with_three_providers() -> None:
 
 def test_switching_with_one_provider() -> None:
     provider = FakeRPCCaller()
-    actual = mango.CompoundRPCCaller("fake", [provider])
+    actual = entropy.CompoundRPCCaller("fake", [provider])
 
     assert actual.current == provider
     actual.shift_to_next_provider()
@@ -86,7 +86,7 @@ def test_switching_with_three_providers() -> None:
     provider1 = FakeRPCCaller()
     provider2 = FakeRPCCaller()
     provider3 = FakeRPCCaller()
-    actual = mango.CompoundRPCCaller("fake", [provider1, provider2, provider3])
+    actual = entropy.CompoundRPCCaller("fake", [provider1, provider2, provider3])
 
     assert actual.current == provider1
     actual.shift_to_next_provider()
@@ -97,7 +97,7 @@ def test_switching_with_three_providers_circular() -> None:
     provider1 = FakeRPCCaller()
     provider2 = FakeRPCCaller()
     provider3 = FakeRPCCaller()
-    actual = mango.CompoundRPCCaller("fake", [provider1, provider2, provider3])
+    actual = entropy.CompoundRPCCaller("fake", [provider1, provider2, provider3])
 
     assert actual.current == provider1
 
@@ -115,7 +115,7 @@ def test_successful_calling_does_not_call_second_provider() -> None:
     provider1 = FakeRPCCaller()
     provider2 = FakeRPCCaller()
     provider3 = FakeRPCCaller()
-    actual = mango.CompoundRPCCaller("fake", [provider1, provider2, provider3])
+    actual = entropy.CompoundRPCCaller("fake", [provider1, provider2, provider3])
 
     assert not provider1.called
     assert not provider2.called
@@ -132,7 +132,7 @@ def test_failed_calling_calls_second_provider() -> None:
     provider1 = RaisingRPCCaller()
     provider2 = FakeRPCCaller()
     provider3 = FakeRPCCaller()
-    actual = mango.CompoundRPCCaller("fake", [provider1, provider2, provider3])
+    actual = entropy.CompoundRPCCaller("fake", [provider1, provider2, provider3])
 
     assert not provider1.called
     assert not provider2.called
@@ -149,7 +149,7 @@ def test_failed_calling_updates_current_to_second_provider() -> None:
     provider1 = RaisingRPCCaller()
     provider2 = FakeRPCCaller()
     provider3 = FakeRPCCaller()
-    actual = mango.CompoundRPCCaller("fake", [provider1, provider2, provider3])
+    actual = entropy.CompoundRPCCaller("fake", [provider1, provider2, provider3])
 
     assert actual.current == provider1
 
@@ -162,11 +162,11 @@ def test_all_failing_raises_exception() -> None:
     provider1 = RaisingRPCCaller()
     provider2 = RaisingRPCCaller()
     provider3 = RaisingRPCCaller()
-    actual = mango.CompoundRPCCaller("fake", [provider1, provider2, provider3])
+    actual = entropy.CompoundRPCCaller("fake", [provider1, provider2, provider3])
 
     assert actual.current == provider1
 
-    with pytest.raises(mango.CompoundException):
+    with pytest.raises(entropy.CompoundException):
         actual.make_request(__FAKE_RPC_METHOD, "fake")
 
     assert actual.current == provider1

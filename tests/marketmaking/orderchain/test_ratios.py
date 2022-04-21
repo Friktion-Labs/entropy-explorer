@@ -1,12 +1,12 @@
 import argparse
 
-from ...context import mango
+from ...context import entropy
 from ...fakes import fake_context, fake_model_state, fake_price
 
 from datetime import timedelta
 from decimal import Decimal
 
-from mango.marketmaking.orderchain.ratioselement import RatiosElement
+from entropy.marketmaking.orderchain.ratioselement import RatiosElement
 
 
 model_state = fake_model_state(
@@ -20,11 +20,11 @@ def test_from_args() -> None:
         ratios_position_size=[Decimal("0.27")],
         expire_seconds=Decimal(5),
         match_limit=10,
-        order_type=mango.OrderType.IOC,
+        order_type=entropy.OrderType.IOC,
         ratios_from_bid_ask=True,
     )
     actual: RatiosElement = RatiosElement.from_command_line_parameters(args)
-    assert actual.order_type == mango.OrderType.IOC
+    assert actual.order_type == entropy.OrderType.IOC
     assert actual.spread_ratios == [Decimal("0.7")]
     assert actual.position_size_ratios == [Decimal("0.27")]
     assert actual.from_bid_ask
@@ -36,7 +36,7 @@ def test_uses_specified_order_parameters() -> None:
     context = fake_context()
 
     actual: RatiosElement = RatiosElement(
-        mango.OrderType.POST_ONLY_SLIDE,
+        entropy.OrderType.POST_ONLY_SLIDE,
         Decimal(5),
         15,
         [Decimal("0.1")],
@@ -45,17 +45,17 @@ def test_uses_specified_order_parameters() -> None:
     )
     result = actual.process(context, model_state, [])
 
-    assert result[0].expiration > mango.utc_now() - timedelta(seconds=1)
-    assert result[0].expiration < mango.utc_now() + timedelta(seconds=5)
+    assert result[0].expiration > entropy.utc_now() - timedelta(seconds=1)
+    assert result[0].expiration < entropy.utc_now() + timedelta(seconds=5)
     assert result[0].match_limit == 15
-    assert result[0].order_type == mango.OrderType.POST_ONLY_SLIDE
+    assert result[0].order_type == entropy.OrderType.POST_ONLY_SLIDE
 
 
 def test_uses_specified_spread_ratio() -> None:
     context = fake_context()
 
     actual: RatiosElement = RatiosElement(
-        mango.OrderType.POST_ONLY,
+        entropy.OrderType.POST_ONLY,
         None,
         20,
         [Decimal("0.1")],
@@ -74,7 +74,7 @@ def test_uses_specified_position_size_ratio() -> None:
     context = fake_context()
 
     actual: RatiosElement = RatiosElement(
-        mango.OrderType.POST_ONLY,
+        entropy.OrderType.POST_ONLY,
         None,
         20,
         [Decimal("0.01")],
@@ -93,7 +93,7 @@ def test_uses_specified_spread_and_position_size_ratio() -> None:
     context = fake_context()
 
     actual: RatiosElement = RatiosElement(
-        mango.OrderType.POST_ONLY,
+        entropy.OrderType.POST_ONLY,
         None,
         20,
         [Decimal("0.1")],
@@ -112,7 +112,7 @@ def test_uses_specified_spread_and_position_size_ratio_from_bid_ask() -> None:
     context = fake_context()
 
     actual: RatiosElement = RatiosElement(
-        mango.OrderType.POST_ONLY,
+        entropy.OrderType.POST_ONLY,
         None,
         20,
         [Decimal("0.1")],

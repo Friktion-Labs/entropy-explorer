@@ -1,23 +1,23 @@
-from .context import mango
+from .context import entropy
 from .fakes import fake_token
 
 from decimal import Decimal
 from solana.publickey import PublicKey
 
 
-ETH_TOKEN = mango.Token(
+ETH_TOKEN = entropy.Token(
     "ETH",
     "Wrapped Ethereum (Sollet)",
     Decimal(6),
     PublicKey("2FPyTwcZLUg1MDrwsyoP4D6s1tM7hAkHYRjkNb5w6Pxk"),
 )
-BTC_TOKEN = mango.Token(
+BTC_TOKEN = entropy.Token(
     "BTC",
     "Wrapped Bitcoin (Sollet)",
     Decimal(6),
     PublicKey("9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E"),
 )
-USDT_TOKEN = mango.Token(
+USDT_TOKEN = entropy.Token(
     "USDT",
     "USDT",
     Decimal(6),
@@ -28,7 +28,7 @@ USDT_TOKEN = mango.Token(
 def test_target_balance_constructor() -> None:
     succeeded = False
     try:
-        mango.TargetBalance("ETH:20")  # type: ignore[abstract]
+        entropy.TargetBalance("ETH:20")  # type: ignore[abstract]
     except TypeError:
         # Can't instantiate the abstract base class.
         succeeded = True
@@ -38,7 +38,7 @@ def test_target_balance_constructor() -> None:
 def test_fixed_target_balance_constructor() -> None:
     token = fake_token()
     value = Decimal(23)
-    actual = mango.FixedTargetBalance(token.symbol, value)
+    actual = entropy.FixedTargetBalance(token.symbol, value)
     assert actual is not None
     assert actual.symbol == token.symbol
     assert actual.value == value
@@ -47,7 +47,7 @@ def test_fixed_target_balance_constructor() -> None:
 def test_percentage_target_balance_constructor() -> None:
     token = fake_token()
     value = Decimal(5)
-    actual = mango.PercentageTargetBalance(token.symbol, value)
+    actual = entropy.PercentageTargetBalance(token.symbol, value)
     assert actual is not None
     assert actual.symbol == token.symbol
     assert actual.target_fraction == Decimal(
@@ -57,16 +57,16 @@ def test_percentage_target_balance_constructor() -> None:
 
 def test_calculate_required_balance_changes() -> None:
     current_balances = [
-        mango.InstrumentValue(ETH_TOKEN, Decimal("0.5")),
-        mango.InstrumentValue(BTC_TOKEN, Decimal("0.2")),
-        mango.InstrumentValue(USDT_TOKEN, Decimal("10000")),
+        entropy.InstrumentValue(ETH_TOKEN, Decimal("0.5")),
+        entropy.InstrumentValue(BTC_TOKEN, Decimal("0.2")),
+        entropy.InstrumentValue(USDT_TOKEN, Decimal("10000")),
     ]
     desired_balances = [
-        mango.InstrumentValue(ETH_TOKEN, Decimal("1")),
-        mango.InstrumentValue(BTC_TOKEN, Decimal("0.1")),
+        entropy.InstrumentValue(ETH_TOKEN, Decimal("1")),
+        entropy.InstrumentValue(BTC_TOKEN, Decimal("0.1")),
     ]
 
-    changes = mango.calculate_required_balance_changes(
+    changes = entropy.calculate_required_balance_changes(
         current_balances, desired_balances
     )
 
@@ -78,7 +78,7 @@ def test_calculate_required_balance_changes() -> None:
 
 def test_percentage_target_balance() -> None:
     token = fake_token()
-    percentage_parsed_balance_change = mango.PercentageTargetBalance(
+    percentage_parsed_balance_change = entropy.PercentageTargetBalance(
         token.symbol, Decimal(33)
     )
     assert percentage_parsed_balance_change.symbol == token.symbol
@@ -97,8 +97,8 @@ def test_percentage_target_balance() -> None:
 
 
 def test_target_balance_parser_fixedvalue() -> None:
-    parsed = mango.parse_target_balance("eth:70")
-    assert isinstance(parsed, mango.FixedTargetBalance)
+    parsed = entropy.parse_target_balance("eth:70")
+    assert isinstance(parsed, entropy.FixedTargetBalance)
     assert (
         parsed.symbol == "eth"
     )  # Case is preserved but comparisons should be case-insensitive
@@ -106,8 +106,8 @@ def test_target_balance_parser_fixedvalue() -> None:
 
 
 def test_target_balance_parser_percentagevalue() -> None:
-    parsed = mango.parse_target_balance("btc:10%")
-    assert isinstance(parsed, mango.PercentageTargetBalance)
+    parsed = entropy.parse_target_balance("btc:10%")
+    assert isinstance(parsed, entropy.PercentageTargetBalance)
     assert (
         parsed.symbol == "btc"
     )  # Case is preserved but comparisons should be case-insensitive
@@ -116,14 +116,14 @@ def test_target_balance_parser_percentagevalue() -> None:
 
 def test_filter_small_changes_constructor() -> None:
     current_prices = [
-        mango.InstrumentValue(ETH_TOKEN, Decimal("4000")),
-        mango.InstrumentValue(BTC_TOKEN, Decimal("60000")),
-        mango.InstrumentValue(USDT_TOKEN, Decimal("1")),
+        entropy.InstrumentValue(ETH_TOKEN, Decimal("4000")),
+        entropy.InstrumentValue(BTC_TOKEN, Decimal("60000")),
+        entropy.InstrumentValue(USDT_TOKEN, Decimal("1")),
     ]
     current_balances = [
-        mango.InstrumentValue(ETH_TOKEN, Decimal("0.5")),
-        mango.InstrumentValue(BTC_TOKEN, Decimal("0.2")),
-        mango.InstrumentValue(USDT_TOKEN, Decimal("10000")),
+        entropy.InstrumentValue(ETH_TOKEN, Decimal("0.5")),
+        entropy.InstrumentValue(BTC_TOKEN, Decimal("0.2")),
+        entropy.InstrumentValue(USDT_TOKEN, Decimal("10000")),
     ]
     action_threshold = Decimal(
         "0.01"
@@ -137,7 +137,7 @@ def test_filter_small_changes_constructor() -> None:
     expected_action_threshold_value = (
         expected_total_balance / 100
     )  # Action threshold is 0.01
-    actual = mango.FilterSmallChanges(
+    actual = entropy.FilterSmallChanges(
         action_threshold, current_balances, current_prices
     )
     assert actual is not None
@@ -148,33 +148,33 @@ def test_filter_small_changes_constructor() -> None:
 
 def test_filtering_small_changes() -> None:
     current_prices = [
-        mango.InstrumentValue(ETH_TOKEN, Decimal("4000")),
-        mango.InstrumentValue(BTC_TOKEN, Decimal("60000")),
-        mango.InstrumentValue(USDT_TOKEN, Decimal("1")),
+        entropy.InstrumentValue(ETH_TOKEN, Decimal("4000")),
+        entropy.InstrumentValue(BTC_TOKEN, Decimal("60000")),
+        entropy.InstrumentValue(USDT_TOKEN, Decimal("1")),
     ]
     current_balances = [
-        mango.InstrumentValue(ETH_TOKEN, Decimal("0.5")),
-        mango.InstrumentValue(BTC_TOKEN, Decimal("0.2")),
-        mango.InstrumentValue(USDT_TOKEN, Decimal("10000")),
+        entropy.InstrumentValue(ETH_TOKEN, Decimal("0.5")),
+        entropy.InstrumentValue(BTC_TOKEN, Decimal("0.2")),
+        entropy.InstrumentValue(USDT_TOKEN, Decimal("10000")),
     ]
     action_threshold = Decimal(
         "0.01"
     )  # Don't bother if it's less than 1% of the total value (24,000)
-    actual = mango.FilterSmallChanges(
+    actual = entropy.FilterSmallChanges(
         action_threshold, current_balances, current_prices
     )
 
     # 0.05 ETH is worth $200 at our test prices, which is less than our $240 threshold
-    assert not actual.allow(mango.InstrumentValue(ETH_TOKEN, Decimal("0.05")))
+    assert not actual.allow(entropy.InstrumentValue(ETH_TOKEN, Decimal("0.05")))
 
     # 0.05 BTC is worth $3,000 at our test prices, which is much more than our $240 threshold
-    assert actual.allow(mango.InstrumentValue(BTC_TOKEN, Decimal("0.05")))
+    assert actual.allow(entropy.InstrumentValue(BTC_TOKEN, Decimal("0.05")))
 
 
 def test_sort_changes_for_trades() -> None:
-    eth_buy = mango.InstrumentValue(ETH_TOKEN, Decimal("5"))
-    btc_sell = mango.InstrumentValue(BTC_TOKEN, Decimal("-1"))
-    sorted_changes = mango.sort_changes_for_trades([eth_buy, btc_sell])
+    eth_buy = entropy.InstrumentValue(ETH_TOKEN, Decimal("5"))
+    btc_sell = entropy.InstrumentValue(BTC_TOKEN, Decimal("-1"))
+    sorted_changes = entropy.sort_changes_for_trades([eth_buy, btc_sell])
 
     assert sorted_changes[0] == btc_sell
     assert sorted_changes[1] == eth_buy

@@ -9,11 +9,11 @@ import typing
 from solana.publickey import PublicKey
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
-parser = argparse.ArgumentParser(description="Shows Mango open orders accounts.")
-mango.ContextBuilder.add_command_line_parameters(parser)
-mango.Wallet.add_command_line_parameters(parser)
+parser = argparse.ArgumentParser(description="Shows Entropy open orders accounts.")
+entropy.ContextBuilder.add_command_line_parameters(parser)
+entropy.Wallet.add_command_line_parameters(parser)
 parser.add_argument(
     "--address",
     type=PublicKey,
@@ -24,16 +24,16 @@ parser.add_argument(
     type=PublicKey,
     help="address of the specific account to use, if more than one available",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
 address: typing.Optional[PublicKey] = args.address
 if address is None:
-    wallet = mango.Wallet.from_command_line_parameters_or_raise(args)
+    wallet = entropy.Wallet.from_command_line_parameters_or_raise(args)
     address = wallet.address
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    group = mango.Group.load(context)
-    account = mango.Account.load_for_owner_by_address(
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    group = entropy.Group.load(context)
+    account = entropy.Account.load_for_owner_by_address(
         context, wallet.address, group, args.account_address
     )
 
@@ -45,15 +45,15 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
                 raise Exception(
                     f"No base token available for token {slot.base_instrument}."
                 )
-            open_orders = mango.OpenOrders.load(
+            open_orders = entropy.OpenOrders.load(
                 context,
                 slot.spot_open_orders,
                 slot.base_token_bank.token,
                 slot.quote_token_bank.token,
             )
-            mango.output(slot.base_instrument)
-            mango.output(open_orders)
+            entropy.output(slot.base_instrument)
+            entropy.output(open_orders)
             at_least_one_open_orders_account = True
 
     if not at_least_one_open_orders_account:
-        mango.output(f"No OpenOrders accounts for {address}[{args.account_index}]")
+        entropy.output(f"No OpenOrders accounts for {address}[{args.account_index}]")

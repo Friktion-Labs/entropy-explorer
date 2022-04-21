@@ -8,12 +8,12 @@ import sys
 from solana.publickey import PublicKey
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
-import mango.marketmaking  # nopep8
+import entropy  # nopep8
+import entropy.marketmaking  # nopep8
 
 parser = argparse.ArgumentParser(description="Shows all properties of a given market.")
-mango.ContextBuilder.add_command_line_parameters(parser)
-mango.Wallet.add_command_line_parameters(parser)
+entropy.ContextBuilder.add_command_line_parameters(parser)
+entropy.Wallet.add_command_line_parameters(parser)
 parser.add_argument(
     "--market",
     type=str,
@@ -31,20 +31,20 @@ parser.add_argument(
     type=PublicKey,
     help="address of the specific account to use, if more than one available",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
-with mango.ContextBuilder.from_command_line_parameters(
+with entropy.ContextBuilder.from_command_line_parameters(
     args
-) as context, mango.Disposable() as disposer:
-    wallet = mango.Wallet.from_command_line_parameters_or_raise(args)
-    group = mango.Group.load(context, context.group_address)
-    account = mango.Account.load_for_owner_by_address(
+) as context, entropy.Disposable() as disposer:
+    wallet = entropy.Wallet.from_command_line_parameters_or_raise(args)
+    group = entropy.Group.load(context, context.group_address)
+    account = entropy.Account.load_for_owner_by_address(
         context, wallet.address, group, args.account_address
     )
 
-    market = mango.market(context, args.market)
+    market = entropy.market(context, args.market)
 
-    oracle_provider: mango.OracleProvider = mango.create_oracle_provider(
+    oracle_provider: entropy.OracleProvider = entropy.create_oracle_provider(
         context, args.oracle_provider
     )
     oracle = oracle_provider.oracle_for_market(context, market)
@@ -53,14 +53,14 @@ with mango.ContextBuilder.from_command_line_parameters(
             f"Could not find oracle for market {market.fully_qualified_symbol} from provider {args.oracle_provider}."
         )
 
-    health_check = mango.HealthCheck()
+    health_check = entropy.HealthCheck()
     disposer.add_disposable(health_check)
-    manager = mango.IndividualWebSocketSubscriptionManager(
+    manager = entropy.IndividualWebSocketSubscriptionManager(
         context
     )  # Should never be used
-    model_state_builder: mango.marketmaking.ModelStateBuilder = (
-        mango.marketmaking.model_state_builder_factory(
-            mango.marketmaking.ModelUpdateMode.POLL,
+    model_state_builder: entropy.marketmaking.ModelStateBuilder = (
+        entropy.marketmaking.model_state_builder_factory(
+            entropy.marketmaking.ModelUpdateMode.POLL,
             context,
             disposer,
             manager,
@@ -74,4 +74,4 @@ with mango.ContextBuilder.from_command_line_parameters(
     )
 
     model_state = model_state_builder.build(context)
-    mango.output(model_state)
+    entropy.output(model_state)

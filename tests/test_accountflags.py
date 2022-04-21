@@ -1,4 +1,4 @@
-from .context import mango
+from .context import entropy
 
 
 def test_constructor() -> None:
@@ -10,8 +10,8 @@ def test_constructor() -> None:
     bids: bool = True
     asks: bool = True
     disabled: bool = True
-    actual = mango.AccountFlags(
-        mango.Version.V1,
+    actual = entropy.AccountFlags(
+        entropy.Version.V1,
         initialized,
         market,
         open_orders,
@@ -22,7 +22,7 @@ def test_constructor() -> None:
         disabled,
     )
     assert actual is not None
-    assert actual.version == mango.Version.V1
+    assert actual.version == entropy.Version.V1
     assert actual.initialized == initialized
     assert actual.market == market
     assert actual.open_orders == open_orders
@@ -32,8 +32,8 @@ def test_constructor() -> None:
     assert actual.asks == asks
     assert actual.disabled == disabled
 
-    actual2 = mango.AccountFlags(
-        mango.Version.V2,
+    actual2 = entropy.AccountFlags(
+        entropy.Version.V2,
         not initialized,
         not market,
         not open_orders,
@@ -44,7 +44,7 @@ def test_constructor() -> None:
         not disabled,
     )
     assert actual2 is not None
-    assert actual2.version == mango.Version.V2
+    assert actual2.version == entropy.Version.V2
     assert actual2.initialized == (not initialized)
     assert actual2.market == (not market)
     assert actual2.open_orders == (not open_orders)

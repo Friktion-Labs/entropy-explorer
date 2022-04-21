@@ -1,16 +1,14 @@
-# 🥭 Mango Explorer
-
+# 🥭 Entropy Explorer
 
 # 🔥‍ Hedging Risk
 
 The [Marketmaking Introduction](MarketmakingIntroduction.md) talks a bit about marketmaking generally but here we're going to focus specifically on hedging to reduce risk.
 
-Marketmakers can profit in a number of ways. If they fill a succession of nicely balanced SELLs and BUYs, marketmakers may profit by keeping the spread between the BUY and SELL prices. If the market supports liquidity incentives (like Mango perp markets), marketmakers may profit by earning the liquidity incentives even if no orders are filled.
+Marketmakers can profit in a number of ways. If they fill a succession of nicely balanced SELLs and BUYs, marketmakers may profit by keeping the spread between the BUY and SELL prices. If the market supports liquidity incentives (like Entropy perp markets), marketmakers may profit by earning the liquidity incentives even if no orders are filled.
 
 Unfortunately, SELLs and BUYs don't usually come to the market in a balanced fashion. Often, when the market has a substantial move, marketmakers end up on the worse side of every trade. This can lead to marketmakers building up a sizable, costly position in an asset actively moving against them.
 
 One strategy to mitigate the risk of maintaining a position when the price may move against you is to 'hedge' that risk.
-
 
 # 🤔 Naive Hedging Implementation
 
@@ -30,7 +28,6 @@ Hedging is never perfect, the values of perps and spot should move in sync but d
 
 Hedging can reduce some of the risks, but it doesn't remove all risk.
 
-
 # 🎽 In Practice
 
 The current hedging functionality only works for a marketmaking on a perp market, hedging to a spot market.
@@ -45,10 +42,9 @@ If these figures (rounded to the spot market's lot sizes) are not exactly correc
 
 If it needs to buy or sell on spot, it will place the appropriate Immediate Or Cancel (IOC) order (with a slippage tolerance) to trade to the correct balance.
 
-If the trade is too big for the market (the threshold is manually configured rather than automatically derived), it is 'chunked' across multiple pulses to give the market (and the spot marketmakers) time to adjust and place fresh orders. 
+If the trade is too big for the market (the threshold is manually configured rather than automatically derived), it is 'chunked' across multiple pulses to give the market (and the spot marketmakers) time to adjust and place fresh orders.
 
 The aim is that most of the time the perp position and the spot balance will be mostly mirrored.
-
 
 # 📖 Parameter Reference
 
@@ -60,7 +56,6 @@ This parameter is used to specify the market used for hedging. Currently only sp
 
 Specifying the hedging market 'switches on' the hedging functionality. If no hedging market is specified, no hedging will take place. (This is the default.)
 
-
 > Parameter: `--hedging-max-price-slippage-factor`
 
 > Example Usage: `--hedging-max-price-slippage-factor 0.005`
@@ -70,7 +65,6 @@ This parameter is used to calculate the worst price that will be paid (from the 
 For example, `--hedging-max-price-slippage-factor 0.05` means the hedger will pay up to 5% extra (from the oracle mid price) to trade the hedge asset.
 
 (All hedge orders are IOC.)
-
 
 > Parameter: `--hedging-max-chunk-quantity`
 
@@ -84,21 +78,19 @@ For example, if the marketmaker wants to hedge 50 SOL, it might be better to spr
 
 Using this may give a better overall price than a single order, or it may introduce a new timing risk as the market moves further away while some of the position is unhedged.
 
-
 > Parameter: `--hedging-target-balance`
 
 > Example Usage: `--hedging-target-balance BTC:2.5`
 
 Sometimes when hedging, it's preferable to have a specific balance to hedge from rather than purely zero.
 
-For example, you might want to add 2.5 BTC to your Mango account, earn interest on it, and use it for collateral for your marketmaking. You wouln't want the hedging functionality to immediately sell it to aim for a neutral position.
+For example, you might want to add 2.5 BTC to your Entropy account, earn interest on it, and use it for collateral for your marketmaking. You wouln't want the hedging functionality to immediately sell it to aim for a neutral position.
 
 Instead you'd want your 2.4 BTC to be your neutral position. If you sold 0.5 BTC-PERP short, instead of the hedger aiming for 0.5 BTC you'd want it to take your 2.5 BTC into account and aim for 3 BTC.
 
 The `--hedging-target-balance` parameter allows you to specify what the target (neutral) position should be. The hedging functionality will then aim to achieve that target, with perp positions and spot balances adding and subtracting from it instead of 0.
 
 The format for the parameter is the same format as target balances for the `balance-account` and `balance-wallet` commands: it's the symbol, followed by a colon, followed by a fixed number. Percentage target balances aren't supported for this parameter, and the symbol must match the symbol of the base token on the `--hedging-market`.
-
 
 > Parameter: `--hedging-action-threshold`
 

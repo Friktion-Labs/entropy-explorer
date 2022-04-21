@@ -1,7 +1,7 @@
 import pytest
 import typing
 
-from .context import mango
+from .context import entropy
 from .data import load_group
 from .fakes import (
     fake_account_info,
@@ -13,17 +13,17 @@ from .fakes import (
 )
 
 from decimal import Decimal
-from mango.layouts import layouts
+from entropy.layouts import layouts
 from solana.publickey import PublicKey
 
 
 def test_construction() -> None:
     account_info = fake_account_info()
     name = "FAKE_GROUP"
-    meta_data = mango.Metadata(layouts.DATA_TYPE.Group, mango.Version.V1, True)
+    meta_data = entropy.Metadata(layouts.DATA_TYPE.Group, entropy.Version.V1, True)
     shared_quote_token = fake_token_bank()
     in_basket: typing.Sequence[bool] = []
-    slots: typing.Sequence[mango.GroupSlot] = []
+    slots: typing.Sequence[entropy.GroupSlot] = []
     signer_nonce = Decimal(1)
     signer_key = fake_seeded_public_key("signer key")
     admin_key = fake_seeded_public_key("admin key")
@@ -34,15 +34,15 @@ def test_construction() -> None:
     srm_vault = fake_seeded_public_key("SRM vault")
     msrm_vault = fake_seeded_public_key("MSRM vault")
     fees_vault = fake_seeded_public_key("fees vault")
-    max_mango_accounts = Decimal(50)
-    num_mango_accounts = Decimal(49)
+    max_entropy_accounts = Decimal(50)
+    num_entropy_accounts = Decimal(49)
     referral_surcharge_centibps = Decimal(7)
     referral_share_centibps = Decimal(8)
     referral_mngo_required = Decimal(9)
 
-    actual = mango.Group(
+    actual = entropy.Group(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         name,
         meta_data,
         shared_quote_token,
@@ -58,8 +58,8 @@ def test_construction() -> None:
         srm_vault,
         msrm_vault,
         fees_vault,
-        max_mango_accounts,
-        num_mango_accounts,
+        max_entropy_accounts,
+        num_entropy_accounts,
         referral_surcharge_centibps,
         referral_share_centibps,
         referral_mngo_required,
@@ -82,15 +82,15 @@ def test_construction() -> None:
     assert actual.srm_vault == srm_vault
     assert actual.msrm_vault == msrm_vault
     assert actual.fees_vault == fees_vault
-    assert actual.max_mango_accounts == max_mango_accounts
-    assert actual.num_mango_accounts == num_mango_accounts
+    assert actual.max_entropy_accounts == max_entropy_accounts
+    assert actual.num_entropy_accounts == num_entropy_accounts
 
 
 def test_slot_lookups() -> None:
     # This bit is mostly prologue.
     account_info = fake_account_info()
     name = "FAKE_GROUP"
-    meta_data = mango.Metadata(layouts.DATA_TYPE.Group, mango.Version.V1, True)
+    meta_data = entropy.Metadata(layouts.DATA_TYPE.Group, entropy.Version.V1, True)
     signer_nonce = Decimal(1)
     signer_key = fake_seeded_public_key("signer key")
     admin_key = fake_seeded_public_key("admin key")
@@ -101,8 +101,8 @@ def test_slot_lookups() -> None:
     srm_vault = fake_seeded_public_key("SRM vault")
     msrm_vault = fake_seeded_public_key("MSRM vault")
     fees_vault = fake_seeded_public_key("fees vault")
-    max_mango_accounts = Decimal(30)
-    num_mango_accounts = Decimal(4)
+    max_entropy_accounts = Decimal(30)
+    num_entropy_accounts = Decimal(4)
     referral_surcharge_centibps = Decimal(7)
     referral_share_centibps = Decimal(8)
     referral_mngo_required = Decimal(9)
@@ -122,21 +122,21 @@ def test_slot_lookups() -> None:
         True,
         False,
     ]
-    spot_market1 = mango.GroupSlotSpotMarket(
+    spot_market1 = entropy.GroupSlotSpotMarket(
         fake_seeded_public_key("spot market 1"),
         Decimal(0),
         Decimal(0),
         Decimal(0),
         Decimal(0),
     )
-    spot_market2 = mango.GroupSlotSpotMarket(
+    spot_market2 = entropy.GroupSlotSpotMarket(
         fake_seeded_public_key("spot market 2"),
         Decimal(0),
         Decimal(0),
         Decimal(0),
         Decimal(0),
     )
-    perp_market2 = mango.GroupSlotPerpMarket(
+    perp_market2 = entropy.GroupSlotPerpMarket(
         fake_seeded_public_key("perp market 2"),
         Decimal(0),
         Decimal(0),
@@ -146,7 +146,7 @@ def test_slot_lookups() -> None:
         Decimal(0),
         Decimal(0),
     )
-    perp_market3 = mango.GroupSlotPerpMarket(
+    perp_market3 = entropy.GroupSlotPerpMarket(
         fake_seeded_public_key("perp market 3"),
         Decimal(0),
         Decimal(0),
@@ -156,42 +156,42 @@ def test_slot_lookups() -> None:
         Decimal(0),
         Decimal(0),
     )
-    slot1 = mango.GroupSlot(
+    slot1 = entropy.GroupSlot(
         1,
         slot1_token_bank.token,
         slot1_token_bank,
         shared_quote_token_bank,
         spot_market1,
         None,
-        mango.NullLotSizeConverter(),
+        entropy.NullLotSizeConverter(),
         fake_seeded_public_key("oracle 1"),
     )
     # MNGO is a special case since that's the current name used for liquidity tokens.
-    slot2 = mango.GroupSlot(
+    slot2 = entropy.GroupSlot(
         4,
         mngo_token_bank.token,
         mngo_token_bank,
         shared_quote_token_bank,
         spot_market2,
         perp_market2,
-        mango.NullLotSizeConverter(),
+        entropy.NullLotSizeConverter(),
         fake_seeded_public_key("oracle 2"),
     )
-    slot3 = mango.GroupSlot(
+    slot3 = entropy.GroupSlot(
         6,
         slot3_instrument,
         None,
         shared_quote_token_bank,
         None,
         perp_market3,
-        mango.NullLotSizeConverter(),
+        entropy.NullLotSizeConverter(),
         fake_seeded_public_key("oracle 3"),
     )
-    slots: typing.Sequence[mango.GroupSlot] = [slot1, slot2, slot3]
+    slots: typing.Sequence[entropy.GroupSlot] = [slot1, slot2, slot3]
 
-    actual = mango.Group(
+    actual = entropy.Group(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         name,
         meta_data,
         shared_quote_token_bank,
@@ -207,8 +207,8 @@ def test_slot_lookups() -> None:
         srm_vault,
         msrm_vault,
         fees_vault,
-        max_mango_accounts,
-        num_mango_accounts,
+        max_entropy_accounts,
+        num_entropy_accounts,
         referral_surcharge_centibps,
         referral_share_centibps,
         referral_mngo_required,
@@ -394,22 +394,24 @@ def test_loaded_group_slot_lookups() -> None:
 
 def test_derive_referrer_record_address() -> None:
     context = fake_context(
-        mango_program_address=PublicKey("4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA")
+        entropy_program_address=PublicKey(
+            "4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA"
+        )
     )
     group = fake_group(
         address=PublicKey("Ec2enZyoC4nGpEfu2sUNAa2nUGJHWxoUWYSEJ2hNTWTA")
     )
     actual = group.derive_referrer_record_address(context, "Test")
 
-    # Value derived using mango-client-v3: 2rZyTeG2K45oLWiGHBZKdcsWig5PL5c3yUa9Fc35mY48
+    # Value derived using entropy-client-v3: 2rZyTeG2K45oLWiGHBZKdcsWig5PL5c3yUa9Fc35mY48
     expected = PublicKey("7bPLkq9kmFACvpEps1sUjqY1a6ormFxa9LctD1RWnzDd")
 
     assert actual == expected
 
-    # 'daffy' is the referrer ID used in example/registerRefId.ts in mango-client-v3
+    # 'daffy' is the referrer ID used in example/registerRefId.ts in entropy-client-v3
     actual_daffy = group.derive_referrer_record_address(context, "daffy")
 
-    # Value derived using mango-client-v3: 6T3vGwbLcS87vuthXomRv5W1TYe82rttNC8kWoDC93JD
+    # Value derived using entropy-client-v3: 6T3vGwbLcS87vuthXomRv5W1TYe82rttNC8kWoDC93JD
     expected_daffy = PublicKey("6T3vGwbLcS87vuthXomRv5W1TYe82rttNC8kWoDC93JD")
 
     assert actual_daffy == expected_daffy

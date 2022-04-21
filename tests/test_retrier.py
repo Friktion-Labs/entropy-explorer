@@ -1,4 +1,4 @@
-from .context import mango
+from .context import entropy
 
 from decimal import Decimal
 
@@ -9,7 +9,7 @@ def test_constructor() -> None:
     name: str = "Test"
     func: typing.Callable[[], int] = lambda: 1
     pauses: typing.Sequence[Decimal] = [Decimal(2)]
-    actual = mango.RetryWithPauses(name, func, pauses)
+    actual = entropy.RetryWithPauses(name, func, pauses)
     assert actual is not None
     assert actual.name == name
     assert actual.func == func
@@ -30,7 +30,7 @@ def test_0_retry() -> None:
         FuncScope.called += 1
         raise Exception("Test")
 
-    actual = mango.RetryWithPauses(name, func, pauses)
+    actual = entropy.RetryWithPauses(name, func, pauses)
     try:
         actual.run()
     except Exception:
@@ -54,7 +54,7 @@ def test_1_retry() -> None:
         FuncScope.called += 1
         raise Exception("Test")
 
-    actual = mango.RetryWithPauses(name, func, pauses)
+    actual = entropy.RetryWithPauses(name, func, pauses)
     try:
         actual.run()
     except Exception:
@@ -78,7 +78,7 @@ def test_3_retries() -> None:
         FuncScope.called += 1
         raise Exception("Test")
 
-    actual = mango.RetryWithPauses(name, func, pauses)
+    actual = entropy.RetryWithPauses(name, func, pauses)
     try:
         actual.run()
     except Exception:
@@ -103,7 +103,7 @@ def test_with_context() -> None:
         raise Exception("Test")
 
     try:
-        with mango.retry_context(name, func, pauses) as retrier:
+        with entropy.retry_context(name, func, pauses) as retrier:
             retrier.run()
     except Exception:
         pass

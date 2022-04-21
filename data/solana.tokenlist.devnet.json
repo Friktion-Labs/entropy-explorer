@@ -1,10 +1,7 @@
 {
   "name": "Solana Devnet Token List",
   "logoURI": "https://cdn.jsdelivr.net/gh/trustwallet/assets@master/blockchains/solana/info/logo.png",
-  "keywords": [
-    "solana",
-    "spl"
-  ],
+  "keywords": ["solana", "spl"],
   "tags": {
     "stablecoin": {
       "name": "stablecoin",
@@ -74,9 +71,7 @@
       "name": "USD Coin",
       "decimals": 6,
       "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png",
-      "tags": [
-        "stablecoin"
-      ],
+      "tags": ["stablecoin"],
       "extensions": {
         "website": "https://www.centre.io/",
         "coingeckoId": "usd-coin"
@@ -89,10 +84,7 @@
       "name": "Wrapped Bitcoin (Sollet)",
       "decimals": 6,
       "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E/logo.png",
-      "tags": [
-        "wrapped-sollet",
-        "ethereum"
-      ],
+      "tags": ["wrapped-sollet", "ethereum"],
       "extensions": {
         "coingeckoId": "bitcoin",
         "bridgeContract": "https://etherscan.io/address/0xeae57ce9cc1984f202e15e038b964bb8bdf7229a",
@@ -106,10 +98,7 @@
       "name": "Wrapped Ethereum (Sollet)",
       "decimals": 6,
       "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/2FPyTwcZLUg1MDrwsyoP4D6s1tM7hAkHYRjkNb5w6Pxk/logo.png",
-      "tags": [
-        "wrapped-sollet",
-        "ethereum"
-      ],
+      "tags": ["wrapped-sollet", "ethereum"],
       "extensions": {
         "coingeckoId": "ethereum",
         "bridgeContract": "https://etherscan.io/address/0xeae57ce9cc1984f202e15e038b964bb8bdf7229a",
@@ -147,13 +136,13 @@
       "chainId": 901,
       "address": "Bb9bsTQa1bGEtQ5KagGkvSHyuLqDWumFUcRqFusFNJWC",
       "symbol": "MNGO",
-      "name": "Mango",
+      "name": "Entropy",
       "decimals": 6,
-      "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/MangoCzJ36AjZyKwVj3VnYU4GTonjfVEnJmvvWaxLac/token.png",
+      "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EntropyCzJ36AjZyKwVj3VnYU4GTonjfVEnJmvvWaxLac/token.png",
       "tags": [],
       "extensions": {
-        "coingeckoId": "mango-markets",
-        "website": "https://mango.markets/",
+        "coingeckoId": "entropy-markets",
+        "website": "https://entropy.markets/",
         "serumV3Usdc": "8W8Hrj16TZhM4RrFzHBuyWGbh396ig3hJtLPJRGmxPVG"
       }
     },

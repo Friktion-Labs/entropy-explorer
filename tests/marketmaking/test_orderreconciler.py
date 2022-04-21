@@ -1,8 +1,8 @@
-import mango
+import entropy
 
 from decimal import Decimal
 
-from mango.marketmaking.orderreconciler import (
+from entropy.marketmaking.orderreconciler import (
     NullOrderReconciler,
     AlwaysReplaceOrderReconciler,
 )
@@ -12,15 +12,19 @@ from ..fakes import fake_model_state
 
 def test_nulloperation() -> None:
     existing = [
-        mango.Order.from_values(mango.Side.BUY, price=Decimal(1), quantity=Decimal(10)),
-        mango.Order.from_values(
-            mango.Side.SELL, price=Decimal(2), quantity=Decimal(20)
+        entropy.Order.from_values(
+            entropy.Side.BUY, price=Decimal(1), quantity=Decimal(10)
+        ),
+        entropy.Order.from_values(
+            entropy.Side.SELL, price=Decimal(2), quantity=Decimal(20)
         ),
     ]
     desired = [
-        mango.Order.from_values(mango.Side.BUY, price=Decimal(3), quantity=Decimal(30)),
-        mango.Order.from_values(
-            mango.Side.SELL, price=Decimal(4), quantity=Decimal(40)
+        entropy.Order.from_values(
+            entropy.Side.BUY, price=Decimal(3), quantity=Decimal(30)
+        ),
+        entropy.Order.from_values(
+            entropy.Side.SELL, price=Decimal(4), quantity=Decimal(40)
         ),
     ]
 
@@ -38,15 +42,19 @@ def test_nulloperation() -> None:
 
 def test_alwaysreplace() -> None:
     existing = [
-        mango.Order.from_values(mango.Side.BUY, price=Decimal(1), quantity=Decimal(10)),
-        mango.Order.from_values(
-            mango.Side.SELL, price=Decimal(2), quantity=Decimal(20)
+        entropy.Order.from_values(
+            entropy.Side.BUY, price=Decimal(1), quantity=Decimal(10)
+        ),
+        entropy.Order.from_values(
+            entropy.Side.SELL, price=Decimal(2), quantity=Decimal(20)
         ),
     ]
     desired = [
-        mango.Order.from_values(mango.Side.BUY, price=Decimal(3), quantity=Decimal(30)),
-        mango.Order.from_values(
-            mango.Side.SELL, price=Decimal(4), quantity=Decimal(40)
+        entropy.Order.from_values(
+            entropy.Side.BUY, price=Decimal(3), quantity=Decimal(30)
+        ),
+        entropy.Order.from_values(
+            entropy.Side.SELL, price=Decimal(4), quantity=Decimal(40)
         ),
     ]
 

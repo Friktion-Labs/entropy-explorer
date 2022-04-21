@@ -1,7 +1,7 @@
 import argparse
 import typing
 
-from ...context import mango
+from ...context import entropy
 from ...fakes import (
     fake_context,
     fake_model_state,
@@ -13,15 +13,15 @@ from ...fakes import (
 from dataclasses import dataclass
 from decimal import Decimal
 
-from mango.marketmaking.orderchain.biasquantityonpositionelement import (
+from entropy.marketmaking.orderchain.biasquantityonpositionelement import (
     BiasQuantityOnPositionElement,
 )
 
 
 @dataclass()
 class BQOPInput:
-    buy: mango.Order
-    sell: mango.Order
+    buy: entropy.Order
+    sell: entropy.Order
     current: Decimal
     target: Decimal
     maximum: Decimal
@@ -91,8 +91,8 @@ def test_table_target_zero() -> None:
     # 10	10	    -40	        50	            0	        18          	2
     # 10	10	    -50	        50	            0	        20          	0
     # 10	10	    -60	        50	            0	        20          	0
-    buy: mango.Order = fake_order(quantity=Decimal(10), side=mango.Side.BUY)
-    sell: mango.Order = fake_order(quantity=Decimal(10), side=mango.Side.SELL)
+    buy: entropy.Order = fake_order(quantity=Decimal(10), side=entropy.Side.BUY)
+    sell: entropy.Order = fake_order(quantity=Decimal(10), side=entropy.Side.SELL)
     target: Decimal = Decimal(0)
     positions: typing.Sequence[int] = [
         0,
@@ -139,8 +139,8 @@ def test_table_fractional_target_zero() -> None:
     # BUY	SELL	POSITION	MAX POSITION	TARGET	ADJUSTED BUY	ADJUSTED SELL
     # 0.25	0.25    	2       	4           	0   	0.125       	0.375
     # 0.25	0.25    	-2      	4           	0   	0.375       	0.125
-    buy: mango.Order = fake_order(quantity=Decimal("0.25"), side=mango.Side.BUY)
-    sell: mango.Order = fake_order(quantity=Decimal("0.25"), side=mango.Side.SELL)
+    buy: entropy.Order = fake_order(quantity=Decimal("0.25"), side=entropy.Side.BUY)
+    sell: entropy.Order = fake_order(quantity=Decimal("0.25"), side=entropy.Side.SELL)
     target: Decimal = Decimal(0)
     positions: typing.Sequence[int] = [2, -2]
     adjusted_buys: typing.Sequence[Decimal] = [Decimal("0.125"), Decimal("0.375")]
@@ -170,8 +170,8 @@ def test_table_negative_target() -> None:
     # 10	10      	-40     	50      	-10     	16          	4
     # 10	10      	-50     	50      	-10     	18          	2
     # 10	10      	-60     	50      	-10     	20          	0
-    buy: mango.Order = fake_order(quantity=Decimal(10), side=mango.Side.BUY)
-    sell: mango.Order = fake_order(quantity=Decimal(10), side=mango.Side.SELL)
+    buy: entropy.Order = fake_order(quantity=Decimal(10), side=entropy.Side.BUY)
+    sell: entropy.Order = fake_order(quantity=Decimal(10), side=entropy.Side.SELL)
     target: Decimal = Decimal(-10)
     positions: typing.Sequence[int] = [
         0,
@@ -225,8 +225,8 @@ def test_table_fractional_negative_target() -> None:
     # 0.25	0.25    	-2      	4           	-2  	0.25	        0.25
     # 0.25	0.25    	-3      	4           	-2  	0.3125	        0.1875
     # 0.25	0.25    	-4      	4           	-2  	0.375	        0.125
-    buy: mango.Order = fake_order(quantity=Decimal("0.25"), side=mango.Side.BUY)
-    sell: mango.Order = fake_order(quantity=Decimal("0.25"), side=mango.Side.SELL)
+    buy: entropy.Order = fake_order(quantity=Decimal("0.25"), side=entropy.Side.BUY)
+    sell: entropy.Order = fake_order(quantity=Decimal("0.25"), side=entropy.Side.SELL)
     target: Decimal = Decimal(-2)
     positions: typing.Sequence[int] = [0, 1, 2, 3, 4, -1, -2, -3, -4]
     adjusted_buys: typing.Sequence[Decimal] = [
@@ -272,8 +272,8 @@ def test_table_fractional_positive_target() -> None:
     # 0.25	0.25    	-2      	4           	2   	0.5     	    0
     # 0.25	0.25    	-3      	4           	2   	0.5     	    0
     # 0.25	0.25    	-4      	4           	2   	0.5     	    0
-    buy: mango.Order = fake_order(quantity=Decimal("0.25"), side=mango.Side.BUY)
-    sell: mango.Order = fake_order(quantity=Decimal("0.25"), side=mango.Side.SELL)
+    buy: entropy.Order = fake_order(quantity=Decimal("0.25"), side=entropy.Side.BUY)
+    sell: entropy.Order = fake_order(quantity=Decimal("0.25"), side=entropy.Side.SELL)
     target: Decimal = Decimal(2)
     positions: typing.Sequence[int] = [0, 1, 2, 3, 4, -1, -2, -3, -4]
     adjusted_buys: typing.Sequence[Decimal] = [

@@ -1,12 +1,8 @@
 {
-  "name": "Mango Overrides Token List",
+  "name": "Entropy Overrides Token List",
   "description": "This file contains token details for specific tokens where we can't use the main SPL token registry. This is often the result of the SPL token registry changing symbols (e.g. ETH -> soETH) which will confuse lookups.",
-  "logoURI": "https://trade.mango.markets/assets/icons/logo.svg",
-  "keywords": [
-    "mango",
-    "solana",
-    "spl"
-  ],
+  "logoURI": "https://trade.entropy.markets/assets/icons/logo.svg",
+  "keywords": ["entropy", "solana", "spl"],
   "tags": {
     "symbol-change": {
       "name": "symbol-change",
@@ -42,11 +38,7 @@
       "name": "Wrapped Ethereum (Sollet)",
       "decimals": 6,
       "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/2FPyTwcZLUg1MDrwsyoP4D6s1tM7hAkHYRjkNb5w6Pxk/logo.png",
-      "tags": [
-        "symbol-change",
-        "wrapped-sollet",
-        "ethereum"
-      ],
+      "tags": ["symbol-change", "wrapped-sollet", "ethereum"],
       "extensions": {
         "bridgeContract": "https://etherscan.io/address/0xeae57ce9cc1984f202e15e038b964bb8bdf7229a",
         "serumV3Usdc": "4tSvZvnbyzHXLMTiFonMyxZoHmFqau1XArcRCVHLZ5gX",
@@ -61,9 +53,7 @@
       "name": "Wrapped SOL",
       "decimals": 9,
       "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
-      "tags": [
-        "symbol-change"
-      ],
+      "tags": ["symbol-change"],
       "extensions": {
         "website": "https://solana.com/",
         "serumV3Usdc": "9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT",
@@ -78,11 +68,7 @@
       "name": "Wrapped FTT (Sollet)",
       "decimals": 6,
       "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/AGFEad2et2ZJif9jaGpdMixQqvW5i81aBdvKe7PHNfz3/logo.png",
-      "tags": [
-        "symbol-change",
-        "wrapped-sollet",
-        "ethereum"
-      ],
+      "tags": ["symbol-change", "wrapped-sollet", "ethereum"],
       "extensions": {
         "bridgeContract": "https://etherscan.io/address/0xeae57ce9cc1984f202e15e038b964bb8bdf7229a",
         "assetContract": "https://etherscan.io/address/0x50d1c9771902476076ecfc8b2a83ad6b9355a4c9",
@@ -99,14 +85,37 @@
       "name": "USD Coin",
       "decimals": 6,
       "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png",
-      "tags": [
-        "needed-for-market",
-        "stablecoin"
-      ],
+      "tags": ["needed-for-market", "stablecoin"],
       "extensions": {
         "coingeckoId": "usd-coin",
         "serumV3Usdt": "77quYg4MGneUdjgXCunt9GgM1usmrxKY31twEy3WHwcS",
         "website": "https://www.centre.io/"
+      }
+    },
+    {
+      "chainId": 101,
+      "address": "4Yi8HN43u57tbbmX2PU7Sz77uH1b5ZwGmDKvary9ApD3",
+      "symbol": "BTC^2",
+      "name": "BTC Squared",
+      "decimals": 6,
+      "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E/logo.png",
+      "tags": ["symbol-change"],
+      "extensions": {
+        "coingeckoId": "usd-coin",
+        "serumV3Usdt": "77quYg4MGneUdjgXCunt9GgM1usmrxKY31twEy3WHwcS"
+      }
+    },
+    {
+      "chainId": 101,
+      "address": "5CzFkazo1iWqLFMoDSw2RSo6u5Z1fqPDwdsGMczoGBQ6",
+      "symbol": "BTC_1D_IV",
+      "name": "BTC 1-Day Implied Volatility",
+      "decimals": 9,
+      "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E/logo.png",
+      "tags": ["symbol-change"],
+      "extensions": {
+        "coingeckoId": "usd-coin",
+        "serumV3Usdt": "77quYg4MGneUdjgXCunt9GgM1usmrxKY31twEy3WHwcS"
       }
     },
     {
@@ -116,10 +125,7 @@
       "name": "USDT",
       "decimals": 6,
       "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB/logo.svg",
-      "tags": [
-        "needed-for-market",
-        "stablecoin"
-      ],
+      "tags": ["needed-for-market", "stablecoin"],
       "extensions": {
         "coingeckoId": "tether",
         "serumV3Usdc": "77quYg4MGneUdjgXCunt9GgM1usmrxKY31twEy3WHwcS",

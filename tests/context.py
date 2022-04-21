@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 import logging
-import mango as mango
+import entropy as entropy
 import os
 import sys
 import typing

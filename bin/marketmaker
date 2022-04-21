@@ -16,19 +16,19 @@ from decimal import Decimal
 from solana.publickey import PublicKey
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
-import mango.hedging  # nopep8
-import mango.marketmaking  # nopep8
-from mango.marketmaking.orderchain import chain  # nopep8
-from mango.marketmaking.orderchain import chainbuilder  # nopep8
+import entropy  # nopep8
+import entropy.hedging  # nopep8
+import entropy.marketmaking  # nopep8
+from entropy.marketmaking.orderchain import chain  # nopep8
+from entropy.marketmaking.orderchain import chainbuilder  # nopep8
 
 parser = argparse.ArgumentParser(
     description="Runs a marketmaker against a particular market."
 )
-mango.ContextBuilder.add_command_line_parameters(
+entropy.ContextBuilder.add_command_line_parameters(
     parser, monitor_transactions_default=True
 )
-mango.Wallet.add_command_line_parameters(parser)
+entropy.Wallet.add_command_line_parameters(parser)
 chainbuilder.ChainBuilder.add_command_line_parameters(parser)
 parser.add_argument(
     "--market",
@@ -38,9 +38,9 @@ parser.add_argument(
 )
 parser.add_argument(
     "--update-mode",
-    type=mango.marketmaking.ModelUpdateMode,
-    default=mango.marketmaking.ModelUpdateMode.POLL,
-    choices=list(mango.marketmaking.ModelUpdateMode),
+    type=entropy.marketmaking.ModelUpdateMode,
+    default=entropy.marketmaking.ModelUpdateMode.POLL,
+    choices=list(entropy.marketmaking.ModelUpdateMode),
     help="Update mode for model data - can be POLL (default) or WEBSOCKET",
 )
 parser.add_argument(
@@ -56,9 +56,9 @@ parser.add_argument(
 )
 parser.add_argument(
     "--order-type",
-    type=mango.OrderType,
-    default=mango.OrderType.POST_ONLY,
-    choices=list(mango.OrderType),
+    type=entropy.OrderType,
+    default=entropy.OrderType.POST_ONLY,
+    choices=list(entropy.OrderType),
     help="Order type: LIMIT, IOC, POST_ONLY, or (perp-only) POST_ONLY_SLIDE",
 )
 parser.add_argument(
@@ -130,7 +130,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--hedging-target-balance",
-    type=mango.parse_fixed_target_balance,
+    type=entropy.parse_fixed_target_balance,
     required=False,
     help="hedged balance to maintain - format is a token symbol plus target value, separated by a colon (e.g. 'ETH:2.5')",
 )
@@ -153,7 +153,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--notify-errors",
-    type=mango.parse_notification_target,
+    type=entropy.parse_notification_target,
     action="append",
     default=[],
     help="The notification target for error events",
@@ -164,31 +164,31 @@ parser.add_argument(
     default=False,
     help="runs as read-only and does not perform any transactions",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
-handler = mango.NotificationHandler(
-    mango.CompoundNotificationTarget(args.notify_errors)
+handler = entropy.NotificationHandler(
+    entropy.CompoundNotificationTarget(args.notify_errors)
 )
 handler.setLevel(logging.ERROR)
 logging.getLogger().addHandler(handler)
 
 
 def cleanup(
-    context: mango.Context,
-    wallet: mango.Wallet,
-    account: mango.Account,
-    market: mango.Market,
+    context: entropy.Context,
+    wallet: entropy.Wallet,
+    account: entropy.Account,
+    market: entropy.Market,
     dry_run: bool,
 ) -> None:
-    market_operations: mango.MarketOperations = mango.operations(
+    market_operations: entropy.MarketOperations = entropy.operations(
         context, wallet, account, market.fully_qualified_symbol, dry_run
     )
-    market_instruction_builder: mango.MarketInstructionBuilder = (
-        mango.instruction_builder(
+    market_instruction_builder: entropy.MarketInstructionBuilder = (
+        entropy.instruction_builder(
             context, wallet, account, market.fully_qualified_symbol, dry_run
         )
     )
-    cancels: mango.CombinableInstructions = mango.CombinableInstructions.empty()
+    cancels: entropy.CombinableInstructions = entropy.CombinableInstructions.empty()
     orders = market_operations.load_my_orders(cutoff=None)
     for order in orders:
         cancels += market_instruction_builder.build_cancel_order_instructions(
@@ -197,28 +197,28 @@ def cleanup(
 
     if len(cancels.instructions) > 0:
         logging.info(f"Cleaning up {len(cancels.instructions)} order(s).")
-        signer: mango.CombinableInstructions = mango.CombinableInstructions.from_wallet(
-            wallet
+        signer: entropy.CombinableInstructions = (
+            entropy.CombinableInstructions.from_wallet(wallet)
         )
         (signer + cancels).execute(context)
         market_operations.crank()
         market_operations.settle()
 
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    disposer = mango.Disposable()
-    manager = mango.IndividualWebSocketSubscriptionManager(context)
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    disposer = entropy.Disposable()
+    manager = entropy.IndividualWebSocketSubscriptionManager(context)
     disposer.add_disposable(manager)
-    health_check = mango.HealthCheck()
+    health_check = entropy.HealthCheck()
     disposer.add_disposable(health_check)
 
-    wallet = mango.Wallet.from_command_line_parameters_or_raise(args)
-    group = mango.Group.load(context, context.group_address)
-    account = mango.Account.load_for_owner_by_address(
+    wallet = entropy.Wallet.from_command_line_parameters_or_raise(args)
+    group = entropy.Group.load(context, context.group_address)
+    account = entropy.Account.load_for_owner_by_address(
         context, wallet.address, group, args.account_address
     )
 
-    market = mango.market(context, args.market)
+    market = entropy.market(context, args.market)
 
     # The market index is also the index of the base token in the group's token list.
     if market.quote != group.shared_quote_token:
@@ -228,19 +228,19 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
 
     cleanup(context, wallet, account, market, args.dry_run)
 
-    hedger: mango.hedging.Hedger = mango.hedging.NullHedger()
+    hedger: entropy.hedging.Hedger = entropy.hedging.NullHedger()
     if args.hedging_market is not None:
-        if not mango.PerpMarket.isa(market):
+        if not entropy.PerpMarket.isa(market):
             raise Exception(
                 f"Cannot hedge - market {market.fully_qualified_symbol} is not a perp market."
             )
 
-        underlying_market = mango.PerpMarket.ensure(market)
+        underlying_market = entropy.PerpMarket.ensure(market)
 
-        hedging_ops = mango.operations(
+        hedging_ops = entropy.operations(
             context, wallet, account, args.hedging_market, args.dry_run
         )
-        if not isinstance(hedging_ops, mango.SpotMarketOperations):
+        if not isinstance(hedging_ops, entropy.SpotMarketOperations):
             raise Exception(
                 f"MarketOperations for {args.hedging_market} is not a SpotMarketOperations."
             )
@@ -248,16 +248,16 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
         logging.info(f"Hedging on {hedging_ops.market.fully_qualified_symbol}")
 
         target_balance: typing.Optional[
-            mango.TargetBalance
+            entropy.TargetBalance
         ] = args.hedging_target_balance
         if target_balance is None:
-            target_balance = mango.FixedTargetBalance(
+            target_balance = entropy.FixedTargetBalance(
                 hedging_ops.market.base.symbol, Decimal(0)
             )
-        hedger = mango.hedging.PerpToSpotHedger(
+        hedger = entropy.hedging.PerpToSpotHedger(
             group,
             underlying_market,
-            mango.SpotMarket.ensure(hedging_ops.market),
+            entropy.SpotMarket.ensure(hedging_ops.market),
             hedging_ops,
             args.hedging_max_price_slippage_factor,
             args.hedging_max_chunk_quantity,
@@ -266,9 +266,9 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
             args.hedging_pulse_pause_count,
         )
 
-    order_reconciler: mango.marketmaking.OrderReconciler
+    order_reconciler: entropy.marketmaking.OrderReconciler
     if args.existing_order_tolerance < 0:
-        order_reconciler = mango.marketmaking.AlwaysReplaceOrderReconciler()
+        order_reconciler = entropy.marketmaking.AlwaysReplaceOrderReconciler()
     else:
         price_tolerance = (
             args.existing_order_price_tolerance or args.existing_order_tolerance
@@ -279,7 +279,7 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
         time_in_force_tolerance = timedelta(
             seconds=float(args.existing_order_time_in_force_tolerance)
         )
-        order_reconciler = mango.marketmaking.ToleranceOrderReconciler(
+        order_reconciler = entropy.marketmaking.ToleranceOrderReconciler(
             price_tolerance, quantity_tolerance, time_in_force_tolerance
         )
 
@@ -288,13 +288,13 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
     )
     logging.info(f"Desired orders chain: {desired_orders_chain}")
 
-    market_instruction_builder: mango.MarketInstructionBuilder = (
-        mango.instruction_builder(
+    market_instruction_builder: entropy.MarketInstructionBuilder = (
+        entropy.instruction_builder(
             context, wallet, account, market.fully_qualified_symbol, args.dry_run
         )
     )
 
-    market_maker = mango.marketmaking.MarketMaker(
+    market_maker = entropy.marketmaking.MarketMaker(
         wallet,
         market,
         market_instruction_builder,
@@ -303,13 +303,13 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
         args.redeem_threshold,
     )
 
-    oracle_provider: mango.OracleProvider = mango.create_oracle_provider(
+    oracle_provider: entropy.OracleProvider = entropy.create_oracle_provider(
         context, args.oracle_provider
     )
-    oracle_market: mango.LoadedMarket = (
+    oracle_market: entropy.LoadedMarket = (
         market
         if args.oracle_market is None
-        else mango.market(context, args.oracle_market)
+        else entropy.market(context, args.oracle_market)
     )
     oracle = oracle_provider.oracle_for_market(context, oracle_market)
     if oracle is None:
@@ -317,8 +317,8 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
             f"Could not find oracle for market {oracle_market.fully_qualified_symbol} from provider {args.oracle_provider}."
         )
 
-    model_state_builder: mango.marketmaking.ModelStateBuilder = (
-        mango.marketmaking.model_state_builder_factory(
+    model_state_builder: entropy.marketmaking.ModelStateBuilder = (
+        entropy.marketmaking.model_state_builder_factory(
             args.update_mode,
             context,
             disposer,
@@ -337,7 +337,7 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
     logging.info(
         f"Current assets in account {account.address} (owner: {account.owner}):"
     )
-    mango.InstrumentValue.report(
+    entropy.InstrumentValue.report(
         [asset for asset in account.net_values if asset is not None], logging.info
     )
 
@@ -346,7 +346,7 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
     def combined_pulse_action(_: int) -> None:
         try:
             context.client.require_data_from_fresh_slot()
-            model_state: mango.ModelState = model_state_builder.build(context)
+            model_state: entropy.ModelState = model_state_builder.build(context)
             market_maker.pulse(context, model_state)
             hedger.pulse(context, model_state)
         except Exception:
@@ -355,21 +355,21 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
     def marketmaking_pulse_action(_: int) -> None:
         try:
             context.client.require_data_from_fresh_slot()
-            model_state: mango.ModelState = model_state_builder.build(context)
+            model_state: entropy.ModelState = model_state_builder.build(context)
             market_maker.pulse(context, model_state)
         except Exception:
             logging.error(f"Pulse action failed: {traceback.format_exc()}")
 
     def hedging_pulse_action(_: int) -> None:
         try:
-            model_state: mango.ModelState = model_state_builder.build(context)
+            model_state: entropy.ModelState = model_state_builder.build(context)
             hedger.pulse(context, model_state)
         except Exception:
             logging.error(f"Pulse action failed: {traceback.format_exc()}")
 
     hedging_pulse_interval: float = args.hedging_pulse_interval or args.pulse_interval
     separate_hedge_pulse = False
-    if isinstance(hedger, mango.hedging.NullHedger):
+    if isinstance(hedger, entropy.hedging.NullHedger):
         logging.info(
             f"Using a pulse action with an interval of {args.pulse_interval} seconds."
         )
@@ -389,12 +389,13 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
             .pipe(
                 rx.operators.observe_on(context.create_thread_pool_scheduler()),
                 rx.operators.start_with(-1),
-                rx.operators.catch(mango.observable_pipeline_error_reporter),
+                rx.operators.catch(entropy.observable_pipeline_error_reporter),
                 rx.operators.retry(),
             )
             .subscribe(
-                mango.create_backpressure_skipping_observer(
-                    on_next=hedging_pulse_action, on_error=mango.log_subscription_error
+                entropy.create_backpressure_skipping_observer(
+                    on_next=hedging_pulse_action,
+                    on_error=entropy.log_subscription_error,
                 )
             )
         )
@@ -405,12 +406,12 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
         .pipe(
             rx.operators.observe_on(context.create_thread_pool_scheduler()),
             rx.operators.start_with(-1),
-            rx.operators.catch(mango.observable_pipeline_error_reporter),
+            rx.operators.catch(entropy.observable_pipeline_error_reporter),
             rx.operators.retry(),
         )
         .subscribe(
-            mango.create_backpressure_skipping_observer(
-                on_next=pulse_action, on_error=mango.log_subscription_error
+            entropy.create_backpressure_skipping_observer(
+                on_next=pulse_action, on_error=entropy.log_subscription_error
             )
         )
     )

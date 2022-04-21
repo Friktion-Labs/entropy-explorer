@@ -1,13 +1,15 @@
 import argparse
 
-from ...context import mango
+from ...context import entropy
 from ...fakes import fake_context, fake_model_state, fake_order
 
-from mango.marketmaking.orderchain.quotesinglesideelement import QuoteSingleSideElement
+from entropy.marketmaking.orderchain.quotesinglesideelement import (
+    QuoteSingleSideElement,
+)
 
 
 def test_from_args() -> None:
-    args: argparse.Namespace = argparse.Namespace(quotesingleside_side=mango.Side.BUY)
+    args: argparse.Namespace = argparse.Namespace(quotesingleside_side=entropy.Side.BUY)
     actual: QuoteSingleSideElement = (
         QuoteSingleSideElement.from_command_line_parameters(args)
     )
@@ -18,9 +20,9 @@ def test_from_args() -> None:
 def test_allow_single_buy() -> None:
     context = fake_context()
     model_state = fake_model_state()
-    order: mango.Order = fake_order(side=mango.Side.BUY)
+    order: entropy.Order = fake_order(side=entropy.Side.BUY)
 
-    actual: QuoteSingleSideElement = QuoteSingleSideElement(mango.Side.BUY)
+    actual: QuoteSingleSideElement = QuoteSingleSideElement(entropy.Side.BUY)
     result = actual.process(context, model_state, [order])
 
     assert result == [order]
@@ -29,9 +31,9 @@ def test_allow_single_buy() -> None:
 def test_prevent_single_buy() -> None:
     context = fake_context()
     model_state = fake_model_state()
-    order: mango.Order = fake_order(side=mango.Side.BUY)
+    order: entropy.Order = fake_order(side=entropy.Side.BUY)
 
-    actual: QuoteSingleSideElement = QuoteSingleSideElement(mango.Side.SELL)
+    actual: QuoteSingleSideElement = QuoteSingleSideElement(entropy.Side.SELL)
     result = actual.process(context, model_state, [order])
 
     assert result == []
@@ -41,15 +43,15 @@ def test_allow_all_buys_and_no_sells() -> None:
     context = fake_context()
     model_state = fake_model_state()
     orders = [
-        fake_order(side=mango.Side.BUY),
-        fake_order(side=mango.Side.SELL),
-        fake_order(side=mango.Side.BUY),
-        fake_order(side=mango.Side.SELL),
-        fake_order(side=mango.Side.BUY),
-        fake_order(side=mango.Side.SELL),
+        fake_order(side=entropy.Side.BUY),
+        fake_order(side=entropy.Side.SELL),
+        fake_order(side=entropy.Side.BUY),
+        fake_order(side=entropy.Side.SELL),
+        fake_order(side=entropy.Side.BUY),
+        fake_order(side=entropy.Side.SELL),
     ]
 
-    actual: QuoteSingleSideElement = QuoteSingleSideElement(mango.Side.BUY)
+    actual: QuoteSingleSideElement = QuoteSingleSideElement(entropy.Side.BUY)
     result = actual.process(context, model_state, orders)
 
     assert len(result) == 3
@@ -60,15 +62,15 @@ def test_allow_all_sells_and_no_buys() -> None:
     context = fake_context()
     model_state = fake_model_state()
     orders = [
-        fake_order(side=mango.Side.BUY),
-        fake_order(side=mango.Side.SELL),
-        fake_order(side=mango.Side.BUY),
-        fake_order(side=mango.Side.SELL),
-        fake_order(side=mango.Side.BUY),
-        fake_order(side=mango.Side.SELL),
+        fake_order(side=entropy.Side.BUY),
+        fake_order(side=entropy.Side.SELL),
+        fake_order(side=entropy.Side.BUY),
+        fake_order(side=entropy.Side.SELL),
+        fake_order(side=entropy.Side.BUY),
+        fake_order(side=entropy.Side.SELL),
     ]
 
-    actual: QuoteSingleSideElement = QuoteSingleSideElement(mango.Side.SELL)
+    actual: QuoteSingleSideElement = QuoteSingleSideElement(entropy.Side.SELL)
     result = actual.process(context, model_state, orders)
 
     assert len(result) == 3
@@ -80,15 +82,15 @@ def test_allow_all_buys_and_no_sells_different_pattern() -> None:
     context = fake_context()
     model_state = fake_model_state()
     orders = [
-        fake_order(side=mango.Side.BUY),
-        fake_order(side=mango.Side.BUY),
-        fake_order(side=mango.Side.SELL),
-        fake_order(side=mango.Side.SELL),
-        fake_order(side=mango.Side.SELL),
-        fake_order(side=mango.Side.BUY),
+        fake_order(side=entropy.Side.BUY),
+        fake_order(side=entropy.Side.BUY),
+        fake_order(side=entropy.Side.SELL),
+        fake_order(side=entropy.Side.SELL),
+        fake_order(side=entropy.Side.SELL),
+        fake_order(side=entropy.Side.BUY),
     ]
 
-    actual: QuoteSingleSideElement = QuoteSingleSideElement(mango.Side.BUY)
+    actual: QuoteSingleSideElement = QuoteSingleSideElement(entropy.Side.BUY)
     result = actual.process(context, model_state, orders)
 
     assert len(result) == 3

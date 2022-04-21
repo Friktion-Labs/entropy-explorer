@@ -1,6 +1,6 @@
 import argparse
 
-from ...context import mango
+from ...context import entropy
 from ...fakes import (
     fake_context,
     fake_inventory,
@@ -11,7 +11,7 @@ from ...fakes import (
 
 from decimal import Decimal
 
-from mango.marketmaking.orderchain.biasquoteonpositionelement import (
+from entropy.marketmaking.orderchain.biasquoteonpositionelement import (
     BiasQuoteOnPositionElement,
 )
 
@@ -28,8 +28,8 @@ def test_from_args() -> None:
 
 def test_no_bias_results_in_no_change() -> None:
     actual: BiasQuoteOnPositionElement = BiasQuoteOnPositionElement([])
-    order: mango.Order = mango.Order.from_values(
-        mango.Side.BUY, price=Decimal(1), quantity=Decimal(10)
+    order: entropy.Order = entropy.Order.from_values(
+        entropy.Side.BUY, price=Decimal(1), quantity=Decimal(10)
     )
 
     result = actual.bias_order(order, Decimal(0), Decimal(100))
@@ -41,8 +41,8 @@ def test_bias_with_positive_inventory() -> None:
     quantity: Decimal = Decimal(10)
     inventory: Decimal = Decimal(100)
     actual: BiasQuoteOnPositionElement = BiasQuoteOnPositionElement([])
-    order: mango.Order = mango.Order.from_values(
-        mango.Side.BUY, price=Decimal(1000), quantity=quantity
+    order: entropy.Order = entropy.Order.from_values(
+        entropy.Side.BUY, price=Decimal(1000), quantity=quantity
     )
     bias: Decimal = Decimal("0.001")
     result = actual.bias_order(order, bias, inventory)
@@ -59,8 +59,8 @@ def test_bias_with_negative_inventory() -> None:
     quantity: Decimal = Decimal(10)
     inventory: Decimal = Decimal(-100)
     actual: BiasQuoteOnPositionElement = BiasQuoteOnPositionElement([])
-    order: mango.Order = mango.Order.from_values(
-        mango.Side.BUY, price=Decimal(1000), quantity=quantity
+    order: entropy.Order = entropy.Order.from_values(
+        entropy.Side.BUY, price=Decimal(1000), quantity=quantity
     )
     bias: Decimal = Decimal("0.001")
     result = actual.bias_order(order, bias, inventory)
@@ -86,8 +86,8 @@ def test_from_daffys_original_note() -> None:
     quantity: Decimal = Decimal("0.0002")
     inventory: Decimal = Decimal("0.0010")
     actual: BiasQuoteOnPositionElement = BiasQuoteOnPositionElement([])
-    order: mango.Order = mango.Order.from_values(
-        mango.Side.BUY, price=Decimal(50000), quantity=quantity
+    order: entropy.Order = entropy.Order.from_values(
+        entropy.Side.BUY, price=Decimal(50000), quantity=quantity
     )
     bias: Decimal = Decimal("0.0001")
     result = actual.bias_order(order, bias, inventory)
@@ -104,17 +104,17 @@ def test_single_bias_two_order_pairs() -> None:
         price=fake_price(price=Decimal(100)), inventory=fake_inventory()
     )
     actual: BiasQuoteOnPositionElement = BiasQuoteOnPositionElement([Decimal("0.001")])
-    buy1: mango.Order = fake_order(
-        price=Decimal(80), quantity=Decimal(1), side=mango.Side.BUY
+    buy1: entropy.Order = fake_order(
+        price=Decimal(80), quantity=Decimal(1), side=entropy.Side.BUY
     )
-    buy2: mango.Order = fake_order(
-        price=Decimal(90), quantity=Decimal(2), side=mango.Side.BUY
+    buy2: entropy.Order = fake_order(
+        price=Decimal(90), quantity=Decimal(2), side=entropy.Side.BUY
     )
-    sell1: mango.Order = fake_order(
-        price=Decimal(110), quantity=Decimal(2), side=mango.Side.SELL
+    sell1: entropy.Order = fake_order(
+        price=Decimal(110), quantity=Decimal(2), side=entropy.Side.SELL
     )
-    sell2: mango.Order = fake_order(
-        price=Decimal(120), quantity=Decimal(1), side=mango.Side.SELL
+    sell2: entropy.Order = fake_order(
+        price=Decimal(120), quantity=Decimal(1), side=entropy.Side.SELL
     )
 
     result = actual.process(context, model_state, [buy1, buy2, sell1, sell2])
@@ -138,23 +138,23 @@ def test_three_biases_three_order_pairs() -> None:
     actual: BiasQuoteOnPositionElement = BiasQuoteOnPositionElement(
         [Decimal("0.001"), Decimal("0.002"), Decimal("0.003")]
     )
-    buy1: mango.Order = fake_order(
-        price=Decimal(70), quantity=Decimal(1), side=mango.Side.BUY
+    buy1: entropy.Order = fake_order(
+        price=Decimal(70), quantity=Decimal(1), side=entropy.Side.BUY
     )
-    buy2: mango.Order = fake_order(
-        price=Decimal(80), quantity=Decimal(2), side=mango.Side.BUY
+    buy2: entropy.Order = fake_order(
+        price=Decimal(80), quantity=Decimal(2), side=entropy.Side.BUY
     )
-    buy3: mango.Order = fake_order(
-        price=Decimal(90), quantity=Decimal(3), side=mango.Side.BUY
+    buy3: entropy.Order = fake_order(
+        price=Decimal(90), quantity=Decimal(3), side=entropy.Side.BUY
     )
-    sell1: mango.Order = fake_order(
-        price=Decimal(110), quantity=Decimal(3), side=mango.Side.SELL
+    sell1: entropy.Order = fake_order(
+        price=Decimal(110), quantity=Decimal(3), side=entropy.Side.SELL
     )
-    sell2: mango.Order = fake_order(
-        price=Decimal(120), quantity=Decimal(2), side=mango.Side.SELL
+    sell2: entropy.Order = fake_order(
+        price=Decimal(120), quantity=Decimal(2), side=entropy.Side.SELL
     )
-    sell3: mango.Order = fake_order(
-        price=Decimal(130), quantity=Decimal(1), side=mango.Side.SELL
+    sell3: entropy.Order = fake_order(
+        price=Decimal(130), quantity=Decimal(1), side=entropy.Side.SELL
     )
 
     result = actual.process(

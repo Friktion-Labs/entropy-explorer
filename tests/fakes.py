@@ -1,6 +1,6 @@
 import construct
-import mango
-import mango.marketmaking
+import entropy
+import entropy.marketmaking
 import typing
 
 from decimal import Decimal
@@ -29,18 +29,18 @@ class MockCompatibleClient(Client):
         return RPCResponse(result=27)
 
 
-class MockClient(mango.BetterClient):
+class MockClient(entropy.BetterClient):
     def __init__(self) -> None:
-        rpc = mango.RPCCaller(
+        rpc = entropy.RPCCaller(
             "fake",
             "http://localhost",
             "ws://localhost",
             -1,
             [],
-            mango.NullSlotHolder(),
-            mango.InstructionReporter(),
+            entropy.NullSlotHolder(),
+            entropy.InstructionReporter(),
         )
-        compound = mango.CompoundRPCCaller("fake", [rpc])
+        compound = entropy.CompoundRPCCaller("fake", [rpc])
         super().__init__(
             MockCompatibleClient(),
             "test",
@@ -67,14 +67,14 @@ def fake_seeded_public_key(seed: str) -> PublicKey:
 
 
 def fake_context(
-    mango_program_address: typing.Optional[PublicKey] = None,
-) -> mango.Context:
-    context = mango.Context(
-        name="Mango Test",
+    entropy_program_address: typing.Optional[PublicKey] = None,
+) -> entropy.Context:
+    context = entropy.Context(
+        name="Entropy Test",
         cluster_name="test",
         cluster_urls=[
-            mango.ClusterUrlData(rpc="http://localhost"),
-            mango.ClusterUrlData(rpc="http://localhost"),
+            entropy.ClusterUrlData(rpc="http://localhost"),
+            entropy.ClusterUrlData(rpc="http://localhost"),
         ],
         skip_preflight=False,
         tpu_retransmissions=-1,
@@ -83,16 +83,16 @@ def fake_context(
         blockhash_cache_duration=0,
         http_request_timeout=-1,
         stale_data_pauses_before_retry=[],
-        mango_program_address=mango_program_address
-        or fake_seeded_public_key("Mango program address"),
+        entropy_program_address=entropy_program_address
+        or fake_seeded_public_key("Entropy program address"),
         serum_program_address=fake_seeded_public_key("Serum program address"),
         group_name="TEST_GROUP",
         group_address=fake_seeded_public_key("group ID"),
         gma_chunk_size=Decimal(20),
         gma_chunk_pause=Decimal(25),
         reflink=None,
-        instrument_lookup=mango.IdsJsonTokenLookup("devnet", "devnet.2"),
-        market_lookup=mango.NullMarketLookup(),
+        instrument_lookup=entropy.IdsJsonTokenLookup("devnet", "devnet.2"),
+        market_lookup=entropy.NullMarketLookup(),
     )
     context.client = MockClient()
     return context
@@ -105,18 +105,18 @@ def fake_account_info(
     owner: PublicKey = fake_public_key(),
     rent_epoch: Decimal = Decimal(0),
     data: bytes = bytes([0]),
-) -> mango.AccountInfo:
+) -> entropy.AccountInfo:
     if address is None:
         address = fake_public_key()
-    return mango.AccountInfo(address, executable, lamports, owner, rent_epoch, data)
+    return entropy.AccountInfo(address, executable, lamports, owner, rent_epoch, data)
 
 
-def fake_instrument(symbol: str = "FAKE", decimals: int = 6) -> mango.Instrument:
-    return mango.Instrument(symbol, f"Fake Instrument ({symbol})", Decimal(decimals))
+def fake_instrument(symbol: str = "FAKE", decimals: int = 6) -> entropy.Instrument:
+    return entropy.Instrument(symbol, f"Fake Instrument ({symbol})", Decimal(decimals))
 
 
-def fake_token(symbol: str = "FAKE", decimals: int = 6) -> mango.Token:
-    return mango.Token(
+def fake_token(symbol: str = "FAKE", decimals: int = 6) -> entropy.Token:
+    return entropy.Token(
         symbol,
         f"Fake Token ({symbol})",
         Decimal(decimals),
@@ -124,8 +124,8 @@ def fake_token(symbol: str = "FAKE", decimals: int = 6) -> mango.Token:
     )
 
 
-def fake_perp_account() -> mango.PerpAccount:
-    return mango.PerpAccount(
+def fake_perp_account() -> entropy.PerpAccount:
+    return entropy.PerpAccount(
         Decimal(0),
         Decimal(0),
         Decimal(0),
@@ -135,16 +135,16 @@ def fake_perp_account() -> mango.PerpAccount:
         Decimal(0),
         Decimal(0),
         fake_instrument_value(),
-        mango.PerpOpenOrders([]),
-        mango.NullLotSizeConverter(),
+        entropy.PerpOpenOrders([]),
+        entropy.NullLotSizeConverter(),
         fake_instrument_value(),
         Decimal(0),
         Decimal(0),
     )
 
 
-def fake_token_bank(symbol: str = "FAKE") -> mango.TokenBank:
-    return mango.TokenBank(fake_token(symbol), fake_seeded_public_key("root bank"))
+def fake_token_bank(symbol: str = "FAKE") -> entropy.TokenBank:
+    return entropy.TokenBank(fake_token(symbol), fake_seeded_public_key("root bank"))
 
 
 def fake_market() -> PySerumMarket:
@@ -169,8 +169,8 @@ def fake_market() -> PySerumMarket:
     return PySerumMarket(MockCompatibleClient(), state)
 
 
-def fake_spot_market_stub() -> mango.SpotMarketStub:
-    return mango.SpotMarketStub(
+def fake_spot_market_stub() -> entropy.SpotMarketStub:
+    return entropy.SpotMarketStub(
         fake_seeded_public_key("program ID"),
         fake_seeded_public_key("spot market"),
         fake_token("BASE"),
@@ -181,8 +181,8 @@ def fake_spot_market_stub() -> mango.SpotMarketStub:
 
 def fake_loaded_market(
     base_lot_size: Decimal = Decimal(1), quote_lot_size: Decimal = Decimal(1)
-) -> mango.LoadedMarket:
-    class FakeLoadedMarket(mango.LoadedMarket):
+) -> entropy.LoadedMarket:
+    class FakeLoadedMarket(entropy.LoadedMarket):
         @property
         def fully_qualified_symbol(self) -> str:
             return "full:MARKET/SYMBOL"
@@ -201,52 +201,54 @@ def fake_loaded_market(
 
         def on_fill(
             self,
-            context: mango.Context,
-            handler: typing.Callable[[mango.FillEvent], None],
-        ) -> mango.Disposable:
-            return mango.Disposable()
+            context: entropy.Context,
+            handler: typing.Callable[[entropy.FillEvent], None],
+        ) -> entropy.Disposable:
+            return entropy.Disposable()
 
         def on_event(
-            self, context: mango.Context, handler: typing.Callable[[mango.Event], None]
-        ) -> mango.Disposable:
-            return mango.Disposable()
+            self,
+            context: entropy.Context,
+            handler: typing.Callable[[entropy.Event], None],
+        ) -> entropy.Disposable:
+            return entropy.Disposable()
 
         def parse_account_info_to_orders(
-            self, account_info: mango.AccountInfo
-        ) -> typing.Sequence[mango.Order]:
+            self, account_info: entropy.AccountInfo
+        ) -> typing.Sequence[entropy.Order]:
             return []
 
     base = fake_token("BASE")
     quote = fake_token("QUOTE")
     return FakeLoadedMarket(
-        mango.MarketType.PERP,
+        entropy.MarketType.PERP,
         fake_seeded_public_key("program ID"),
         fake_seeded_public_key("perp market"),
-        mango.InventorySource.ACCOUNT,
+        entropy.InventorySource.ACCOUNT,
         base,
         quote,
-        mango.LotSizeConverter(base, base_lot_size, quote, quote_lot_size),
+        entropy.LotSizeConverter(base, base_lot_size, quote, quote_lot_size),
     )
 
 
-def fake_token_account() -> mango.TokenAccount:
+def fake_token_account() -> entropy.TokenAccount:
     token_account_info = fake_account_info()
     token = fake_token()
-    token_value = mango.InstrumentValue(token, Decimal("100"))
-    return mango.TokenAccount(
+    token_value = entropy.InstrumentValue(token, Decimal("100"))
+    return entropy.TokenAccount(
         token_account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         fake_seeded_public_key("owner"),
         token_value,
     )
 
 
-def fake_instrument_value(value: Decimal = Decimal(100)) -> mango.InstrumentValue:
-    return mango.InstrumentValue(fake_token(), value)
+def fake_instrument_value(value: Decimal = Decimal(100)) -> entropy.InstrumentValue:
+    return entropy.InstrumentValue(fake_token(), value)
 
 
-def fake_wallet() -> mango.Wallet:
-    wallet = mango.Wallet(bytes([1] * 64))
+def fake_wallet() -> entropy.Wallet:
+    wallet = entropy.Wallet(bytes([1] * 64))
     wallet.keypair = Keypair()
     return wallet
 
@@ -254,10 +256,10 @@ def fake_wallet() -> mango.Wallet:
 def fake_order(
     price: Decimal = Decimal(1),
     quantity: Decimal = Decimal(1),
-    side: mango.Side = mango.Side.BUY,
-    order_type: mango.OrderType = mango.OrderType.LIMIT,
-) -> mango.Order:
-    return mango.Order.from_values(
+    side: entropy.Side = entropy.Side.BUY,
+    order_type: entropy.OrderType = entropy.OrderType.LIMIT,
+) -> entropy.Order:
+    return entropy.Order.from_values(
         side=side, price=price, quantity=quantity, order_type=order_type
     )
 
@@ -265,7 +267,7 @@ def fake_order(
 # serum ID structure - 16-byte 'int': low 8 bytes is a sequence number, high 8 bytes is price
 def fake_order_id(index: int, price: int) -> int:
     # price needs to be max of 64bit/8bytes, considering signed int is not permitted
-    if index > (2**64) - 1 or price > (2**64) - 1:
+    if index > (2 ** 64) - 1 or price > (2 ** 64) - 1:
         raise ValueError(
             f"Provided index '{index}' or price '{price}' is bigger than 8 bytes int"
         )
@@ -275,16 +277,16 @@ def fake_order_id(index: int, price: int) -> int:
 
 
 def fake_price(
-    market: mango.LoadedMarket = fake_loaded_market(),
+    market: entropy.LoadedMarket = fake_loaded_market(),
     price: Decimal = Decimal(100),
     bid: Decimal = Decimal(99),
     ask: Decimal = Decimal(101),
-) -> mango.Price:
-    return mango.Price(
-        mango.OracleSource(
-            "test", "test", mango.SupportedOracleFeature.TOP_BID_AND_OFFER, market
+) -> entropy.Price:
+    return entropy.Price(
+        entropy.OracleSource(
+            "test", "test", entropy.SupportedOracleFeature.TOP_BID_AND_OFFER, market
         ),
-        mango.utc_now(),
+        entropy.utc_now(),
         market,
         bid,
         price,
@@ -293,8 +295,8 @@ def fake_price(
     )
 
 
-def fake_placed_orders_container() -> mango.PlacedOrdersContainer:
-    return mango.PerpOpenOrders([])
+def fake_placed_orders_container() -> entropy.PlacedOrdersContainer:
+    return entropy.PerpOpenOrders([])
 
 
 def fake_inventory(
@@ -302,9 +304,9 @@ def fake_inventory(
     available: Decimal = Decimal(100),
     base: Decimal = Decimal(10),
     quote: Decimal = Decimal(10),
-) -> mango.Inventory:
-    return mango.Inventory(
-        mango.InventorySource.SPL_TOKENS,
+) -> entropy.Inventory:
+    return entropy.Inventory(
+        entropy.InventorySource.SPL_TOKENS,
         fake_instrument_value(incentives),
         fake_instrument_value(available),
         fake_instrument_value(base),
@@ -312,16 +314,16 @@ def fake_inventory(
     )
 
 
-def fake_bids() -> typing.Sequence[mango.Order]:
+def fake_bids() -> typing.Sequence[entropy.Order]:
     return []
 
 
-def fake_asks() -> typing.Sequence[mango.Order]:
+def fake_asks() -> typing.Sequence[entropy.Order]:
     return []
 
 
-def fake_account_slot() -> mango.AccountSlot:
-    return mango.AccountSlot(
+def fake_account_slot() -> entropy.AccountSlot:
+    return entropy.AccountSlot(
         1,
         fake_instrument(),
         fake_token_bank(),
@@ -335,12 +337,14 @@ def fake_account_slot() -> mango.AccountSlot:
     )
 
 
-def fake_account(address: typing.Optional[PublicKey] = None) -> mango.Account:
-    meta_data = mango.Metadata(mango.layouts.DATA_TYPE.Account, mango.Version.V1, True)
+def fake_account(address: typing.Optional[PublicKey] = None) -> entropy.Account:
+    meta_data = entropy.Metadata(
+        entropy.layouts.DATA_TYPE.Account, entropy.Version.V1, True
+    )
     quote = fake_account_slot()
-    return mango.Account(
+    return entropy.Account(
         fake_account_info(address=address),
-        mango.Version.V1,
+        entropy.Version.V1,
         meta_data,
         "GROUPNAME",
         fake_seeded_public_key("group"),
@@ -359,11 +363,13 @@ def fake_account(address: typing.Optional[PublicKey] = None) -> mango.Account:
     )
 
 
-def fake_root_bank() -> mango.RootBank:
-    meta_data = mango.Metadata(mango.layouts.DATA_TYPE.RootBank, mango.Version.V1, True)
-    return mango.RootBank(
+def fake_root_bank() -> entropy.RootBank:
+    meta_data = entropy.Metadata(
+        entropy.layouts.DATA_TYPE.RootBank, entropy.Version.V1, True
+    )
+    return entropy.RootBank(
         fake_account_info(),
-        mango.Version.V1,
+        entropy.Version.V1,
         meta_data,
         Decimal(0),
         Decimal(0),
@@ -371,30 +377,34 @@ def fake_root_bank() -> mango.RootBank:
         [],
         Decimal(0),
         Decimal(0),
-        mango.utc_now(),
+        entropy.utc_now(),
     )
 
 
-def fake_cache() -> mango.Cache:
-    meta_data = mango.Metadata(mango.layouts.DATA_TYPE.RootBank, mango.Version.V1, True)
-    return mango.Cache(fake_account_info(), mango.Version.V1, meta_data, [], [], [])
+def fake_cache() -> entropy.Cache:
+    meta_data = entropy.Metadata(
+        entropy.layouts.DATA_TYPE.RootBank, entropy.Version.V1, True
+    )
+    return entropy.Cache(fake_account_info(), entropy.Version.V1, meta_data, [], [], [])
 
 
-def fake_root_bank_cache() -> mango.RootBankCache:
-    return mango.RootBankCache(
+def fake_root_bank_cache() -> entropy.RootBankCache:
+    return entropy.RootBankCache(
         Decimal(1),
         Decimal(2),
-        mango.utc_now(),
+        entropy.utc_now(),
     )
 
 
-def fake_group(address: typing.Optional[PublicKey] = None) -> mango.Group:
+def fake_group(address: typing.Optional[PublicKey] = None) -> entropy.Group:
     account_info = fake_account_info(address=address)
     name = "FAKE_GROUP"
-    meta_data = mango.Metadata(mango.layouts.DATA_TYPE.Group, mango.Version.V1, True)
+    meta_data = entropy.Metadata(
+        entropy.layouts.DATA_TYPE.Group, entropy.Version.V1, True
+    )
     instrument_lookup = fake_context().instrument_lookup
-    usdc = mango.Token.ensure(instrument_lookup.find_by_symbol_or_raise("usdc"))
-    quote_info = mango.TokenBank(usdc, fake_seeded_public_key("root bank"))
+    usdc = entropy.Token.ensure(instrument_lookup.find_by_symbol_or_raise("usdc"))
+    quote_info = entropy.TokenBank(usdc, fake_seeded_public_key("root bank"))
     signer_nonce = Decimal(1)
     signer_key = fake_seeded_public_key("signer key")
     admin_key = fake_seeded_public_key("admin key")
@@ -405,15 +415,15 @@ def fake_group(address: typing.Optional[PublicKey] = None) -> mango.Group:
     srm_vault = fake_seeded_public_key("srm vault")
     msrm_vault = fake_seeded_public_key("msrm vault")
     fees_vault = fake_seeded_public_key("fees vault")
-    max_mango_accounts = Decimal(1000000)
-    num_mango_accounts = Decimal(1)
+    max_entropy_accounts = Decimal(1000000)
+    num_entropy_accounts = Decimal(1)
     referral_surcharge_centibps = Decimal(7)
     referral_share_centibps = Decimal(8)
     referral_mngo_required = Decimal(9)
 
-    return mango.Group(
+    return entropy.Group(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         name,
         meta_data,
         quote_info,
@@ -429,29 +439,31 @@ def fake_group(address: typing.Optional[PublicKey] = None) -> mango.Group:
         srm_vault,
         msrm_vault,
         fees_vault,
-        max_mango_accounts,
-        num_mango_accounts,
+        max_entropy_accounts,
+        num_entropy_accounts,
         referral_surcharge_centibps,
         referral_share_centibps,
         referral_mngo_required,
     )
 
 
-def fake_prices(prices: typing.Sequence[str]) -> typing.Sequence[mango.InstrumentValue]:
+def fake_prices(
+    prices: typing.Sequence[str],
+) -> typing.Sequence[entropy.InstrumentValue]:
     instrument_lookup = fake_context().instrument_lookup
-    ETH = mango.Token.ensure(instrument_lookup.find_by_symbol_or_raise("ETH"))
-    BTC = mango.Token.ensure(instrument_lookup.find_by_symbol_or_raise("BTC"))
-    SOL = mango.Token.ensure(instrument_lookup.find_by_symbol_or_raise("SOL"))
-    SRM = mango.Token.ensure(instrument_lookup.find_by_symbol_or_raise("SRM"))
-    USDC = mango.Token.ensure(instrument_lookup.find_by_symbol_or_raise("USDC"))
+    ETH = entropy.Token.ensure(instrument_lookup.find_by_symbol_or_raise("ETH"))
+    BTC = entropy.Token.ensure(instrument_lookup.find_by_symbol_or_raise("BTC"))
+    SOL = entropy.Token.ensure(instrument_lookup.find_by_symbol_or_raise("SOL"))
+    SRM = entropy.Token.ensure(instrument_lookup.find_by_symbol_or_raise("SRM"))
+    USDC = entropy.Token.ensure(instrument_lookup.find_by_symbol_or_raise("USDC"))
     eth, btc, sol, srm, usdc = prices
 
     return [
-        mango.InstrumentValue(ETH, Decimal(eth)),
-        mango.InstrumentValue(BTC, Decimal(btc)),
-        mango.InstrumentValue(SOL, Decimal(sol)),
-        mango.InstrumentValue(SRM, Decimal(srm)),
-        mango.InstrumentValue(USDC, Decimal(usdc)),
+        entropy.InstrumentValue(ETH, Decimal(eth)),
+        entropy.InstrumentValue(BTC, Decimal(btc)),
+        entropy.InstrumentValue(SOL, Decimal(sol)),
+        entropy.InstrumentValue(SRM, Decimal(srm)),
+        entropy.InstrumentValue(USDC, Decimal(usdc)),
     ]
 
 
@@ -461,7 +473,7 @@ def fake_open_orders(
     quote_token_free: Decimal = Decimal(0),
     quote_token_total: Decimal = Decimal(0),
     referrer_rebate_accrued: Decimal = Decimal(0),
-) -> mango.OpenOrders:
+) -> entropy.OpenOrders:
     account_info = fake_account_info()
     program_address = fake_seeded_public_key("program address")
     market = fake_seeded_public_key("market")
@@ -469,12 +481,12 @@ def fake_open_orders(
 
     base = fake_token("FAKEBASE")
     quote = fake_token("FAKEQUOTE")
-    flags = mango.AccountFlags(
-        mango.Version.V1, True, False, True, False, False, False, False, False
+    flags = entropy.AccountFlags(
+        entropy.Version.V1, True, False, True, False, False, False, False, False
     )
-    return mango.OpenOrders(
+    return entropy.OpenOrders(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         program_address,
         flags,
         market,
@@ -492,15 +504,15 @@ def fake_open_orders(
 
 def fake_model_state(
     order_owner: typing.Optional[PublicKey] = None,
-    market: typing.Optional[mango.Market] = None,
-    group: typing.Optional[mango.Group] = None,
-    account: typing.Optional[mango.Account] = None,
-    price: typing.Optional[mango.Price] = None,
-    placed_orders_container: typing.Optional[mango.PlacedOrdersContainer] = None,
-    inventory: typing.Optional[mango.Inventory] = None,
-    orderbook: typing.Optional[mango.OrderBook] = None,
-    event_queue: typing.Optional[mango.EventQueue] = None,
-) -> mango.ModelState:
+    market: typing.Optional[entropy.Market] = None,
+    group: typing.Optional[entropy.Group] = None,
+    account: typing.Optional[entropy.Account] = None,
+    price: typing.Optional[entropy.Price] = None,
+    placed_orders_container: typing.Optional[entropy.PlacedOrdersContainer] = None,
+    inventory: typing.Optional[entropy.Inventory] = None,
+    orderbook: typing.Optional[entropy.OrderBook] = None,
+    event_queue: typing.Optional[entropy.EventQueue] = None,
+) -> entropy.ModelState:
     order_owner = order_owner or fake_seeded_public_key("order owner")
     market = market or fake_loaded_market()
     group = group or fake_group()
@@ -508,33 +520,33 @@ def fake_model_state(
     price = price or fake_price()
     placed_orders_container = placed_orders_container or fake_placed_orders_container()
     inventory = inventory or fake_inventory()
-    orderbook = orderbook or mango.OrderBook(
-        "FAKE", mango.NullLotSizeConverter(), fake_bids(), fake_asks()
+    orderbook = orderbook or entropy.OrderBook(
+        "FAKE", entropy.NullLotSizeConverter(), fake_bids(), fake_asks()
     )
-    event_queue = event_queue or mango.NullEventQueue()
-    group_watcher: mango.ManualUpdateWatcher[mango.Group] = mango.ManualUpdateWatcher(
-        group
-    )
-    account_watcher: mango.ManualUpdateWatcher[
-        mango.Account
-    ] = mango.ManualUpdateWatcher(account)
-    price_watcher: mango.ManualUpdateWatcher[mango.Price] = mango.ManualUpdateWatcher(
-        price
-    )
-    placed_orders_container_watcher: mango.ManualUpdateWatcher[
-        mango.PlacedOrdersContainer
-    ] = mango.ManualUpdateWatcher(placed_orders_container)
-    inventory_watcher: mango.ManualUpdateWatcher[
-        mango.Inventory
-    ] = mango.ManualUpdateWatcher(inventory)
-    orderbook_watcher: mango.ManualUpdateWatcher[
-        mango.OrderBook
-    ] = mango.ManualUpdateWatcher(orderbook)
-    event_queue_watcher: mango.ManualUpdateWatcher[
-        mango.EventQueue
-    ] = mango.ManualUpdateWatcher(event_queue)
+    event_queue = event_queue or entropy.NullEventQueue()
+    group_watcher: entropy.ManualUpdateWatcher[
+        entropy.Group
+    ] = entropy.ManualUpdateWatcher(group)
+    account_watcher: entropy.ManualUpdateWatcher[
+        entropy.Account
+    ] = entropy.ManualUpdateWatcher(account)
+    price_watcher: entropy.ManualUpdateWatcher[
+        entropy.Price
+    ] = entropy.ManualUpdateWatcher(price)
+    placed_orders_container_watcher: entropy.ManualUpdateWatcher[
+        entropy.PlacedOrdersContainer
+    ] = entropy.ManualUpdateWatcher(placed_orders_container)
+    inventory_watcher: entropy.ManualUpdateWatcher[
+        entropy.Inventory
+    ] = entropy.ManualUpdateWatcher(inventory)
+    orderbook_watcher: entropy.ManualUpdateWatcher[
+        entropy.OrderBook
+    ] = entropy.ManualUpdateWatcher(orderbook)
+    event_queue_watcher: entropy.ManualUpdateWatcher[
+        entropy.EventQueue
+    ] = entropy.ManualUpdateWatcher(event_queue)
 
-    return mango.ModelState(
+    return entropy.ModelState(
         order_owner,
         market,
         group_watcher,
@@ -547,10 +559,10 @@ def fake_model_state(
     )
 
 
-def fake_mango_instruction() -> mango.MangoInstruction:
-    return mango.MangoInstruction(
+def fake_entropy_instruction() -> entropy.EntropyInstruction:
+    return entropy.EntropyInstruction(
         fake_seeded_public_key("program id"),
-        mango.InstructionType.PlacePerpOrder,
+        entropy.InstructionType.PlacePerpOrder,
         bytes(),
         "",
         [fake_seeded_public_key("account")],

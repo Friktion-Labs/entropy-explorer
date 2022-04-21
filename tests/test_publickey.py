@@ -1,4 +1,4 @@
-from .context import mango
+from .context import entropy
 
 from solana.publickey import PublicKey
 
@@ -235,7 +235,7 @@ def test_publickey_sorting() -> None:
         PublicKey("Fh5B29PTD674my1BKmRNeZC7J5FwB8YpodwQGTZpfMUk"),
     ]
 
-    test_keys.sort(key=mango.encode_public_key_for_sorting)
+    test_keys.sort(key=entropy.encode_public_key_for_sorting)
 
     for counter in range(len(test_keys)):
         assert (
@@ -280,7 +280,7 @@ def test_publickey_shorter_sorting() -> None:
         PublicKey("CpFj2d5uYjeh34FKh6iYRTE2dL3N9NaSrZtyZVZ7eQwa"),
     ]
 
-    test_keys.sort(key=mango.encode_public_key_for_sorting)
+    test_keys.sort(key=entropy.encode_public_key_for_sorting)
 
     for counter in range(len(test_keys)):
         assert (

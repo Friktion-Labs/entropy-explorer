@@ -6,12 +6,12 @@ import os.path
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
 parser = argparse.ArgumentParser(
     description="Displays the price from the Pyth Network."
 )
-mango.ContextBuilder.add_command_line_parameters(parser)
+entropy.ContextBuilder.add_command_line_parameters(parser)
 parser.add_argument(
     "--provider",
     type=str,
@@ -27,28 +27,28 @@ parser.add_argument(
     default=False,
     help="stream the prices until stopped",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    oracle_provider: mango.OracleProvider = mango.create_oracle_provider(
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    oracle_provider: entropy.OracleProvider = entropy.create_oracle_provider(
         context, args.provider
     )
 
-    market = mango.market(context, args.market)
+    market = entropy.market(context, args.market)
     oracle = oracle_provider.oracle_for_market(context, market)
     if oracle is None:
-        mango.output(
+        entropy.output(
             f"Could not find oracle for market {market.fully_qualified_symbol} from provider {args.provider}."
         )
     else:
         if not args.stream:
             price = oracle.fetch_price(context)
-            mango.output(price)
+            entropy.output(price)
         else:
-            mango.output("Press <ENTER> to quit.")
+            entropy.output("Press <ENTER> to quit.")
             price_subscription = oracle.to_streaming_observable(context)
             disposable = price_subscription.subscribe(
-                mango.PrintingObserverSubscriber(False)
+                entropy.PrintingObserverSubscriber(False)
             )
 
             # Wait - don't exit

@@ -1,17 +1,17 @@
 import typing
 
-from .context import mango
+from .context import entropy
 from .fakes import fake_account_info
 
 
 def test_constructor() -> None:
-    class __derived(mango.AddressableAccount):
+    class __derived(entropy.AddressableAccount):
         def subscribe(
             self,
-            context: mango.Context,
-            websocketmanager: mango.WebSocketSubscriptionManager,
-            callback: typing.Callable[[mango.AddressableAccount], None],
-        ) -> mango.Disposable:
+            context: entropy.Context,
+            websocketmanager: entropy.WebSocketSubscriptionManager,
+            callback: typing.Callable[[entropy.AddressableAccount], None],
+        ) -> entropy.Disposable:
             raise NotImplementedError(
                 "AddressableAccount.subscribe is not implemented on this test class."
             )

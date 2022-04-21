@@ -1,11 +1,11 @@
 import argparse
 
-from ...context import mango
+from ...context import entropy
 from ...fakes import fake_context, fake_model_state, fake_order, fake_price
 
 from decimal import Decimal
 
-from mango.marketmaking.orderchain.biasquoteelement import BiasQuoteElement
+from entropy.marketmaking.orderchain.biasquoteelement import BiasQuoteElement
 
 
 def test_from_args() -> None:
@@ -18,7 +18,7 @@ def test_no_factor_results_in_no_change() -> None:
     context = fake_context()
     model_state = fake_model_state(price=fake_price(price=Decimal(100)))
     actual: BiasQuoteElement = BiasQuoteElement([Decimal(1)])
-    order: mango.Order = fake_order(price=Decimal(78), side=mango.Side.BUY)
+    order: entropy.Order = fake_order(price=Decimal(78), side=entropy.Side.BUY)
 
     result = actual.process(context, model_state, [order])
 
@@ -29,8 +29,8 @@ def test_single_factor_much_greater_than_one() -> None:
     context = fake_context()
     model_state = fake_model_state(price=fake_price(price=Decimal(100)))
     actual: BiasQuoteElement = BiasQuoteElement([Decimal("1.2")])  # Huge bias!
-    buy: mango.Order = fake_order(price=Decimal(90), side=mango.Side.BUY)
-    sell: mango.Order = fake_order(price=Decimal(110), side=mango.Side.SELL)
+    buy: entropy.Order = fake_order(price=Decimal(90), side=entropy.Side.BUY)
+    sell: entropy.Order = fake_order(price=Decimal(110), side=entropy.Side.SELL)
 
     result = actual.process(context, model_state, [buy, sell])
 
@@ -42,8 +42,8 @@ def test_single_factor_much_less_than_one() -> None:
     context = fake_context()
     model_state = fake_model_state(price=fake_price(price=Decimal(100)))
     actual: BiasQuoteElement = BiasQuoteElement([Decimal("0.8")])  # Huge bias!
-    buy: mango.Order = fake_order(price=Decimal(90), side=mango.Side.BUY)
-    sell: mango.Order = fake_order(price=Decimal(110), side=mango.Side.SELL)
+    buy: entropy.Order = fake_order(price=Decimal(90), side=entropy.Side.BUY)
+    sell: entropy.Order = fake_order(price=Decimal(110), side=entropy.Side.SELL)
 
     result = actual.process(context, model_state, [buy, sell])
 
@@ -55,8 +55,8 @@ def test_single_factor_greater_than_one() -> None:
     context = fake_context()
     model_state = fake_model_state(price=fake_price(price=Decimal(100)))
     actual: BiasQuoteElement = BiasQuoteElement([Decimal("1.001")])  # shift 10 bips up
-    buy: mango.Order = fake_order(price=Decimal(90), side=mango.Side.BUY)
-    sell: mango.Order = fake_order(price=Decimal(110), side=mango.Side.SELL)
+    buy: entropy.Order = fake_order(price=Decimal(90), side=entropy.Side.BUY)
+    sell: entropy.Order = fake_order(price=Decimal(110), side=entropy.Side.SELL)
 
     result = actual.process(context, model_state, [buy, sell])
 
@@ -70,8 +70,8 @@ def test_single_factor_less_than_one() -> None:
     actual: BiasQuoteElement = BiasQuoteElement(
         [Decimal("0.999")]
     )  # shift 10 bips down
-    buy: mango.Order = fake_order(price=Decimal(90), side=mango.Side.BUY)
-    sell: mango.Order = fake_order(price=Decimal(110), side=mango.Side.SELL)
+    buy: entropy.Order = fake_order(price=Decimal(90), side=entropy.Side.BUY)
+    sell: entropy.Order = fake_order(price=Decimal(110), side=entropy.Side.SELL)
 
     result = actual.process(context, model_state, [buy, sell])
 
@@ -85,10 +85,10 @@ def test_single_factor_two_order_pairs() -> None:
     actual: BiasQuoteElement = BiasQuoteElement(
         [Decimal("0.999")]
     )  # shift 10 bips down
-    buy1: mango.Order = fake_order(price=Decimal(80), side=mango.Side.BUY)
-    buy2: mango.Order = fake_order(price=Decimal(90), side=mango.Side.BUY)
-    sell1: mango.Order = fake_order(price=Decimal(110), side=mango.Side.SELL)
-    sell2: mango.Order = fake_order(price=Decimal(120), side=mango.Side.SELL)
+    buy1: entropy.Order = fake_order(price=Decimal(80), side=entropy.Side.BUY)
+    buy2: entropy.Order = fake_order(price=Decimal(90), side=entropy.Side.BUY)
+    sell1: entropy.Order = fake_order(price=Decimal(110), side=entropy.Side.SELL)
+    sell2: entropy.Order = fake_order(price=Decimal(120), side=entropy.Side.SELL)
 
     result = actual.process(context, model_state, [buy1, buy2, sell1, sell2])
 
@@ -105,10 +105,10 @@ def test_two_factors_two_order_pairs() -> None:
     actual: BiasQuoteElement = BiasQuoteElement(
         [Decimal("0.999"), Decimal("0.9")]
     )  # shift 10 bips down
-    buy1: mango.Order = fake_order(price=Decimal(80), side=mango.Side.BUY)
-    buy2: mango.Order = fake_order(price=Decimal(90), side=mango.Side.BUY)
-    sell1: mango.Order = fake_order(price=Decimal(110), side=mango.Side.SELL)
-    sell2: mango.Order = fake_order(price=Decimal(120), side=mango.Side.SELL)
+    buy1: entropy.Order = fake_order(price=Decimal(80), side=entropy.Side.BUY)
+    buy2: entropy.Order = fake_order(price=Decimal(90), side=entropy.Side.BUY)
+    sell1: entropy.Order = fake_order(price=Decimal(110), side=entropy.Side.SELL)
+    sell2: entropy.Order = fake_order(price=Decimal(120), side=entropy.Side.SELL)
 
     result = actual.process(context, model_state, [buy1, buy2, sell1, sell2])
 
@@ -125,12 +125,12 @@ def test_three_factors_three_order_pairs() -> None:
     actual: BiasQuoteElement = BiasQuoteElement(
         [Decimal("0.9"), Decimal("0.8"), Decimal("0.7")]
     )  # shift 10 bips down
-    buy1: mango.Order = fake_order(price=Decimal(70), side=mango.Side.BUY)
-    buy2: mango.Order = fake_order(price=Decimal(80), side=mango.Side.BUY)
-    buy3: mango.Order = fake_order(price=Decimal(90), side=mango.Side.BUY)
-    sell1: mango.Order = fake_order(price=Decimal(110), side=mango.Side.SELL)
-    sell2: mango.Order = fake_order(price=Decimal(120), side=mango.Side.SELL)
-    sell3: mango.Order = fake_order(price=Decimal(130), side=mango.Side.SELL)
+    buy1: entropy.Order = fake_order(price=Decimal(70), side=entropy.Side.BUY)
+    buy2: entropy.Order = fake_order(price=Decimal(80), side=entropy.Side.BUY)
+    buy3: entropy.Order = fake_order(price=Decimal(90), side=entropy.Side.BUY)
+    sell1: entropy.Order = fake_order(price=Decimal(110), side=entropy.Side.SELL)
+    sell2: entropy.Order = fake_order(price=Decimal(120), side=entropy.Side.SELL)
+    sell3: entropy.Order = fake_order(price=Decimal(130), side=entropy.Side.SELL)
 
     result = actual.process(
         context, model_state, [buy1, buy2, buy3, sell1, sell2, sell3]

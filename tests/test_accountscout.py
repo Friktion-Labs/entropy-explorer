@@ -1,11 +1,11 @@
-from .context import mango
+from .context import entropy
 
 from solana.publickey import PublicKey
 
 
 def test_scout_report_constructor() -> None:
     address: PublicKey = PublicKey("11111111111111111111111111111112")
-    actual = mango.ScoutReport(address)
+    actual = entropy.ScoutReport(address)
     assert actual is not None
     assert actual.address == address
     assert actual.errors == []
@@ -14,5 +14,5 @@ def test_scout_report_constructor() -> None:
 
 
 def test_account_scout_constructor() -> None:
-    actual = mango.AccountScout()
+    actual = entropy.AccountScout()
     assert actual is not None

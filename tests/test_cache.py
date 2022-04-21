@@ -1,6 +1,6 @@
 import typing
 
-from .context import mango
+from .context import entropy
 from .fakes import fake_account_info, fake_seeded_public_key
 from .data import load_cache
 
@@ -9,20 +9,20 @@ from decimal import Decimal
 
 def test_cache_constructor() -> None:
     account_info = fake_account_info(fake_seeded_public_key("cache"))
-    meta_data = mango.Metadata(
-        mango.layouts.DATA_TYPE.parse(bytearray(b"\x07")), mango.Version.V1, True
+    meta_data = entropy.Metadata(
+        entropy.layouts.DATA_TYPE.parse(bytearray(b"\x07")), entropy.Version.V1, True
     )
-    timestamp = mango.utc_now()
-    price_cache = [mango.PriceCache(Decimal(26), timestamp)]
+    timestamp = entropy.utc_now()
+    price_cache = [entropy.PriceCache(Decimal(26), timestamp)]
     root_bank_cache = [
-        mango.RootBankCache(Decimal("0.00001"), Decimal("0.00001"), timestamp)
+        entropy.RootBankCache(Decimal("0.00001"), Decimal("0.00001"), timestamp)
     ]
     perp_market_cache = [
-        mango.PerpMarketCache(Decimal("0.00002"), Decimal("0.00002"), timestamp)
+        entropy.PerpMarketCache(Decimal("0.00002"), Decimal("0.00002"), timestamp)
     ]
-    actual = mango.Cache(
+    actual = entropy.Cache(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         meta_data,
         price_cache,
         root_bank_cache,
@@ -33,7 +33,7 @@ def test_cache_constructor() -> None:
     assert actual.account_info == account_info
     assert actual.address == fake_seeded_public_key("cache")
     assert actual.meta_data == meta_data
-    assert actual.meta_data.data_type == mango.layouts.DATA_TYPE.Cache
+    assert actual.meta_data.data_type == entropy.layouts.DATA_TYPE.Cache
     assert actual.price_cache == price_cache
     assert actual.root_bank_cache == root_bank_cache
     assert actual.perp_market_cache == perp_market_cache
@@ -46,7 +46,7 @@ def test_load_cache() -> None:
     # These values are all verified with the same file loaded in the TypeScript client.
     #
 
-    actual_pc: typing.Sequence[typing.Optional[mango.PriceCache]] = cache.price_cache
+    actual_pc: typing.Sequence[typing.Optional[entropy.PriceCache]] = cache.price_cache
     assert actual_pc[0] is not None and actual_pc[0].price == Decimal(
         "0.33642499999999841975"
     )
@@ -76,7 +76,7 @@ def test_load_cache() -> None:
     assert actual_pc[14] is None
 
     actual_rbc: typing.Sequence[
-        typing.Optional[mango.RootBankCache]
+        typing.Optional[entropy.RootBankCache]
     ] = cache.root_bank_cache
     assert actual_rbc[0] is not None and actual_rbc[0].deposit_index == Decimal(
         "1001923.86460821722014813417"
@@ -144,7 +144,7 @@ def test_load_cache() -> None:
     )
 
     actual_pmc: typing.Sequence[
-        typing.Optional[mango.PerpMarketCache]
+        typing.Optional[entropy.PerpMarketCache]
     ] = cache.perp_market_cache
     assert actual_pmc[0] is None
     assert actual_pmc[1] is not None and actual_pmc[1].long_funding == Decimal(

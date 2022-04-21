@@ -13,11 +13,11 @@ from solana.system_program import TransferParams, transfer
 from solana.transaction import Transaction
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
 parser = argparse.ArgumentParser(description="Sends SOL to a different address.")
-mango.ContextBuilder.add_command_line_parameters(parser)
-mango.Wallet.add_command_line_parameters(parser)
+entropy.ContextBuilder.add_command_line_parameters(parser)
+entropy.Wallet.add_command_line_parameters(parser)
 parser.add_argument(
     "--address",
     type=PublicKey,
@@ -44,13 +44,13 @@ parser.add_argument(
     default=False,
     help="wait until the transactions are confirmed",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
 
 def __quantity_from_wallet_target(
-    context: mango.Context,
-    signers: mango.CombinableInstructions,
-    token: mango.Token,
+    context: entropy.Context,
+    signers: entropy.CombinableInstructions,
+    token: entropy.Token,
     balance: Decimal,
     to_keep: typing.Optional[Decimal],
 ) -> typing.Optional[Decimal]:
@@ -68,11 +68,11 @@ def __quantity_from_wallet_target(
     # (Using SYSTEM_PROGRAM_ADDRESS and zero shouldn't affect the calculations but that may
     # change when getFeeForMessage() is used.)
     params = TransferParams(
-        from_pubkey=mango.SYSTEM_PROGRAM_ADDRESS,
-        to_pubkey=mango.SYSTEM_PROGRAM_ADDRESS,
+        from_pubkey=entropy.SYSTEM_PROGRAM_ADDRESS,
+        to_pubkey=entropy.SYSTEM_PROGRAM_ADDRESS,
         lamports=0,
     )
-    fake_instruction = mango.CombinableInstructions.from_instruction(transfer(params))
+    fake_instruction = entropy.CombinableInstructions.from_instruction(transfer(params))
     cost = (signers + fake_instruction).cost_to_execute(context)
 
     to_send = balance - to_keep - cost
@@ -81,20 +81,20 @@ def __quantity_from_wallet_target(
             f"Cannot achieve wallet balance target of {to_keep:,.8f} {token.symbol} by depositing - wallet only has balance of {balance:,.8f} {token.symbol}"
         )
 
-    return token.round(to_send, mango.RoundDirection.DOWN)
+    return token.round(to_send, entropy.RoundDirection.DOWN)
 
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    wallet = mango.Wallet.from_command_line_parameters_or_raise(args)
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    wallet = entropy.Wallet.from_command_line_parameters_or_raise(args)
 
     logging.info(f"Wallet address: {wallet.address}")
 
-    token = mango.SolToken
+    token = entropy.SolToken
     sol_balance = context.client.get_balance(wallet.address)
-    mango.output(f"Balance: {sol_balance} SOL")
+    entropy.output(f"Balance: {sol_balance} SOL")
 
-    signers: mango.CombinableInstructions = mango.CombinableInstructions.from_wallet(
-        wallet
+    signers: entropy.CombinableInstructions = (
+        entropy.CombinableInstructions.from_wallet(wallet)
     )
     quantity: typing.Optional[Decimal] = args.quantity or __quantity_from_wallet_target(
         context, signers, token, sol_balance, args.wallet_target
@@ -108,17 +108,17 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
         raise Exception(f"Cannot send negative quantity {quantity:,.8f} {token.symbol}")
 
     # "A lamport has a value of 0.000000001 SOL." from https://docs.solana.com/introduction
-    lamports = int(quantity * mango.SOL_DECIMAL_DIVISOR)
+    lamports = int(quantity * entropy.SOL_DECIMAL_DIVISOR)
     source = wallet.address
     destination = args.address
 
     text_amount = f"{lamports} lamports (SOL @ 9 decimal places)"
-    mango.output(f"Sending {text_amount}")
-    mango.output(f"    From: {source}")
-    mango.output(f"      To: {destination}")
+    entropy.output(f"Sending {text_amount}")
+    entropy.output(f"    From: {source}")
+    entropy.output(f"      To: {destination}")
 
     if args.dry_run:
-        mango.output("Skipping actual transfer - dry run.")
+        entropy.output("Skipping actual transfer - dry run.")
     else:
         transaction = Transaction()
         params = TransferParams(
@@ -129,16 +129,16 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
         signatures = [context.client.send_transaction(transaction, wallet.keypair)]
 
         if args.wait:
-            mango.output("Waiting on transaction signatures:")
-            mango.output(mango.indent_collection_as_str(signatures, 1))
-            results = mango.WebSocketTransactionMonitor.wait_for_all(
+            entropy.output("Waiting on transaction signatures:")
+            entropy.output(entropy.indent_collection_as_str(signatures, 1))
+            results = entropy.WebSocketTransactionMonitor.wait_for_all(
                 context.client.cluster_ws_url, signatures
             )
-            mango.output("Transaction results:")
-            mango.output(mango.indent_collection_as_str(results, 1))
+            entropy.output("Transaction results:")
+            entropy.output(entropy.indent_collection_as_str(results, 1))
         else:
-            mango.output("Transaction signatures:")
-            mango.output(mango.indent_collection_as_str(signatures, 1))
+            entropy.output("Transaction signatures:")
+            entropy.output(entropy.indent_collection_as_str(signatures, 1))
 
     updated_balance = context.client.get_balance(wallet.address)
-    mango.output(f"{text_amount} sent. Balance now: {updated_balance} SOL")
+    entropy.output(f"{text_amount} sent. Balance now: {updated_balance} SOL")

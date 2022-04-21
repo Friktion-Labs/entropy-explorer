@@ -1,18 +1,18 @@
-from .context import mango
+from .context import entropy
 
 
 def test_no_messages_to_expand() -> None:
     # https://explorer.solana.com/tx/5pJMY9JFbFDMGU4EUhR3oqxDfyGqEpj9hcrMmux5QLQKysdhy1F2qfpckqm2Sg9hLxnkwpRsL2K6z2bSq2Wpn5mZ?cluster=devnet
     logs = [
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA invoke [1]",
-        "Program log: Mango: PlaceSpotOrder2",
+        "Program log: Entropy: PlaceSpotOrder2",
         "Program DESVgJVGajEgKGXhb6XmqDHGz3VjdgP7rEVESBgxmroY invoke [2]",
         "Program DESVgJVGajEgKGXhb6XmqDHGz3VjdgP7rEVESBgxmroY consumed 8858 of 171625 compute units",
         "Program DESVgJVGajEgKGXhb6XmqDHGz3VjdgP7rEVESBgxmroY failed: custom program error: 0x2a",
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA consumed 200000 of 200000 compute units",
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA failed: custom program error: 0x2a",
     ]
-    actual = mango.expand_log_messages(logs)
+    actual = entropy.expand_log_messages(logs)
     assert len(actual) == 7
     assert actual == logs  # Should be no change to messages
 
@@ -21,21 +21,21 @@ def test_expand_liquidate_perp_market() -> None:
     # https://explorer.solana.com/tx/5QXc2ssJASwwtd3THxo2d8sYMArR485oGB3k2B8QgDK1haP6W5Vii74JkC9GoEJv2aMNh7GmoQ2yHA4EZWGxAUWr?cluster=devnet
     logs = [
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA invoke [1]",
-        "Program log: Mango: LiquidatePerpMarket",
-        "Program log: mango-log",
+        "Program log: Entropy: LiquidatePerpMarket",
+        "Program log: entropy-log",
         "Program log: xL0/TYaKkmo9V1sXbGlWtx7PorbATlnhud1k4TouaelSIuWjq6DS+naor4jdUZPAHrtSr/wNa5D+q2Ybbpli42dDOOeJCluKHCjgTI66neHYoNpbISs2BljP2rJh/YYyevMmtXuMZigBAAAAAAAAAAAAAAAAAJg6AAAAAAAAAAAKAAAAAAAAAMDGLQAAAPCPJv////////8A",
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA consumed 24022 of 200000 compute units",
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA success",
     ]
 
-    actual = mango.expand_log_messages(logs)
+    actual = entropy.expand_log_messages(logs)
     assert len(actual) == 5
     assert actual[0] == logs[0]
     assert actual[1] == logs[1]
     assert (
         actual[2]
-        == """Mango LiquidatePerpMarketLog Container: 
-    mangoGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
+        == """Entropy LiquidatePerpMarketLog Container:
+    entropyGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
     liqee = 8zCJ6jdHExdnNb17cxFhFtavZ7uaRHXj1nbT3VJ8E2i5
     liqor = 2tvZs8riWYKDWsGMoNxVy1YDc7qtJb4EurcfpB2PBfKm
     marketIndex = 1
@@ -52,43 +52,43 @@ def test_expand_liquidate_token_and_perp() -> None:
     # https://explorer.solana.com/tx/5TmXHZbwYhXE2pN868cH72ak8GrZtVyxJPRYXY2h4jTRzhmNbAtoZrq24TSUxZBX8Bf3xMYMGLWgyuV79P5QMMxs?cluster=devnet
     logs = [
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA invoke [1]",
-        "Program log: Mango: LiquidateTokenAndPerp",
-        "Program log: mango-log",
+        "Program log: Entropy: LiquidateTokenAndPerp",
+        "Program log: entropy-log",
         "Program log: F5qwwQsqqPQ9V1sXbGlWtx7PorbATlnhud1k4TouaelSIuWjq6DS+hwo4EyOup3h2KDaWyErNgZYz9qyYf2GMnrzJrV7jGYoDwAAAAAAAAAAAAAAAADyAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-        "Program log: mango-log",
+        "Program log: entropy-log",
         "Program log: F5qwwQsqqPQ9V1sXbGlWtx7PorbATlnhud1k4TouaelSIuWjq6DS+naor4jdUZPAHrtSr/wNa5D+q2Ybbpli42dDOOeJCluKDwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-        "Program log: mango-log",
+        "Program log: entropy-log",
         "Program log: EmyboIQCGyA9V1sXbGlWtx7PorbATlnhud1k4TouaelSIuWjq6DS+naor4jdUZPAHrtSr/wNa5D+q2Ybbpli42dDOOeJCluKHCjgTI66neHYoNpbISs2BljP2rJh/YYyevMmtXuMZigPAAAAAAAAAAEAAAAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAICWmAAAAAAAAAAAAAAAAACAlpgAAAAAAAAAAQ==",
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA consumed 34000 of 200000 compute units",
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA success",
     ]
 
-    actual = mango.expand_log_messages(logs)
+    actual = entropy.expand_log_messages(logs)
     assert len(actual) == 7
     assert actual[0] == logs[0]
     assert actual[1] == logs[1]
     assert (
         actual[2]
-        == """Mango TokenBalanceLog Container: 
-    mangoGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
-    mangoAccount = 2tvZs8riWYKDWsGMoNxVy1YDc7qtJb4EurcfpB2PBfKm
+        == """Entropy TokenBalanceLog Container:
+    entropyGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
+    entropyAccount = 2tvZs8riWYKDWsGMoNxVy1YDc7qtJb4EurcfpB2PBfKm
     tokenIndex = 15
     deposit = 284289726477762560
     borrow = 0"""
     )
     assert (
         actual[3]
-        == """Mango TokenBalanceLog Container: 
-    mangoGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
-    mangoAccount = 8zCJ6jdHExdnNb17cxFhFtavZ7uaRHXj1nbT3VJ8E2i5
+        == """Entropy TokenBalanceLog Container:
+    entropyGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
+    entropyAccount = 8zCJ6jdHExdnNb17cxFhFtavZ7uaRHXj1nbT3VJ8E2i5
     tokenIndex = 15
     deposit = 0
     borrow = 0"""
     )
     assert (
         actual[4]
-        == """Mango LiquidateTokenAndPerpLog Container: 
-    mangoGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
+        == """Entropy LiquidateTokenAndPerpLog Container:
+    entropyGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
     liqee = 8zCJ6jdHExdnNb17cxFhFtavZ7uaRHXj1nbT3VJ8E2i5
     liqor = 2tvZs8riWYKDWsGMoNxVy1YDc7qtJb4EurcfpB2PBfKm
     assetIndex = 15
@@ -109,21 +109,21 @@ def test_expand_resolve_perp_bankruptcy() -> None:
     # https://explorer.solana.com/tx/64AhTnzhQDwmJKsXcDukjSRV9Te7uDaZB586dLFPNAr8KLf9DmvKhY2WvG95nVXQbTae3MqoPB14MQXhmEPYhmtY?cluster=devnet
     logs = [
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA invoke [1]",
-        "Program log: Mango: ResolvePerpBankruptcy",
-        "Program log: mango-log",
+        "Program log: Entropy: ResolvePerpBankruptcy",
+        "Program log: entropy-log",
         "Program log: ZS+iIbP3D4M9V1sXbGlWtx7PorbATlnhud1k4TouaelSIuWjq6DS+naor4jdUZPAHrtSr/wNa5D+q2Ybbpli42dDOOeJCluKHCjgTI66neHYoNpbISs2BljP2rJh/YYyevMmtXuMZigBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANkZCAAAkOj////////////ZGQgAAJDo////////////",
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA consumed 11097 of 200000 compute units",
         "Program 4skJ85cdxQAFVKbcGgfun8iZPL7BadVYXG3kGEGkufqA success",
     ]
 
-    actual = mango.expand_log_messages(logs)
+    actual = entropy.expand_log_messages(logs)
     assert len(actual) == 5
     assert actual[0] == logs[0]
     assert actual[1] == logs[1]
     assert (
         actual[2]
-        == """Mango PerpBankruptcyLog Container: 
-    mangoGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
+        == """Entropy PerpBankruptcyLog Container:
+    entropyGroup = 58T8PuaCBa6FqFqcoTB2Ay6snLp2gAUxU8hnDWcLFqyB
     liqee = 8zCJ6jdHExdnNb17cxFhFtavZ7uaRHXj1nbT3VJ8E2i5
     liqor = 2tvZs8riWYKDWsGMoNxVy1YDc7qtJb4EurcfpB2PBfKm
     liabIndex = 1
@@ -140,35 +140,35 @@ def test_expand_caches() -> None:
     # https://explorer.solana.com/tx/5qyQkpiHX1CmuHw1GeoMq5vfq6usAt53st83dcF4SjKDJG9Agjogf8ADnv1TYohYL6vggbLuFdbfUM9mC2mQd1js
     logs = [
         "Program mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68 invoke [1]",
-        "Program log: Mango: CacheRootBanks",
-        "Program log: mango-log",
+        "Program log: Entropy: CacheRootBanks",
+        "Program log: entropy-log",
         "Program log: IVXYca/Gfeh43ogDQe0xql0u2Ff66cc9XSGzkyyZdqoGDHUXDByC3QgAAAAAAAAAAAAAAAEAAAAAAAAAAgAAAAAAAAADAAAAAAAAAAQAAAAAAAAABQAAAAAAAAAGAAAAAAAAAAcAAAAAAAAACAAAAELaJcNAa+xJDwAAAAAAAACC1na5PCm5Rg8AAAAAAAAAjztXoMULkEIPAAAAAAAAAJVVDNpkE0JCDwAAAAAAAABA2c9fQYiKYg8AAAAAAAAAo++LymCkJWMPAAAAAAAAACBsPdGraDNqDwAAAAAAAADqLFzyVtE8RA8AAAAAAAAACAAAAHtzSBeucE1TDwAAAAAAAACG0Js41HnRSA8AAAAAAAAAUk/yUs80G0QPAAAAAAAAANE/cZNML5lCDwAAAAAAAADJ9E7vZyvebg8AAAAAAAAAIsKHpCisxnQPAAAAAAAAABnd0Ei+/7x5DwAAAAAAAAC3LEjaicpSSA8AAAAAAAAA",
         "Program mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68 consumed 13538 of 200000 compute units",
         "Program mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68 success",
         "Program mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68 invoke [1]",
-        "Program log: Mango: CachePrices",
-        "Program log: mango-log",
+        "Program log: Entropy: CachePrices",
+        "Program log: entropy-log",
         "Program log: ux0uSxX5tBt43ogDQe0xql0u2Ff66cc9XSGzkyyZdqoGDHUXDByC3QgAAAAAAAAAAAAAAAEAAAAAAAAAAgAAAAAAAAADAAAAAAAAAAQAAAAAAAAABQAAAAAAAAAGAAAAAAAAAAcAAAAAAAAACAAAAMBbIEHxQwAAAAAAAAAAAAChRbbz/dSu4AAAAAAAAAAA/Bhz1xLivg4AAAAAAAAAAMU9HHhDJgAAAAAAAAAAAABWx9imBAABAAAAAAAAAAAAgpSOKKOYBwAAAAAAAAAAANEzYgvm4gkAAAAAAAAAAABUSvhzRFoBAAAAAAAAAAAA",
         "Program mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68 consumed 59177 of 200000 compute units",
         "Program mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68 success",
         "Program mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68 invoke [1]",
-        "Program log: Mango: CachePerpMarkets",
-        "Program log: mango-log",
+        "Program log: Entropy: CachePerpMarkets",
+        "Program log: entropy-log",
         "Program log: 9lt9JxCzqw543ogDQe0xql0u2Ff66cc9XSGzkyyZdqoGDHUXDByC3QIAAAABAAAAAAAAAAMAAAAAAAAAAgAAAMqkWEieuOP5BAAAAAAAAAAMaEaZks1h/QAAAAAAAAAAAgAAAFDep7S5sr/zBAAAAAAAAAAMaEaZks1h/QAAAAAAAAAA",
         "Program mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68 consumed 5723 of 200000 compute units",
         "Program mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68 success",
     ]
 
-    actual = mango.expand_log_messages(logs)
+    actual = entropy.expand_log_messages(logs)
     assert len(actual) == 15
     assert actual[0] == logs[0]
     assert actual[1] == logs[1]
     assert (
         actual[2]
-        == """Mango CacheRootBanksLog Container: 
-    mangoGroup = 98pjRuQjK3qA6gXts96PqZT4Ze5QmnCmt3QYjhbUSPue
+        == """Entropy CacheRootBanksLog Container:
+    entropyGroup = 98pjRuQjK3qA6gXts96PqZT4Ze5QmnCmt3QYjhbUSPue
     tokenIndexes_count = 8
-    tokenIndexes = ListContainer: 
+    tokenIndexes = ListContainer:
         0
         1
         2
@@ -178,7 +178,7 @@ def test_expand_caches() -> None:
         6
         7
     depositIndexes_count = 8
-    depositIndexes = ListContainer: 
+    depositIndexes = ListContainer:
         282027911490811845186
         281797310899776050818
         281497507652219386767
@@ -188,7 +188,7 @@ def test_expand_caches() -> None:
         284353736384635038752
         281618196170188532970
     borrowIndexes_count = 8
-    borrowIndexes = ListContainer: 
+    borrowIndexes = ListContainer:
         282703738877015257979
         281948270098896375942
         281608735389648047954
@@ -204,10 +204,10 @@ def test_expand_caches() -> None:
     assert actual[6] == logs[7]
     assert (
         actual[7]
-        == """Mango CachePricesLog Container: 
-    mangoGroup = 98pjRuQjK3qA6gXts96PqZT4Ze5QmnCmt3QYjhbUSPue
+        == """Entropy CachePricesLog Container:
+    entropyGroup = 98pjRuQjK3qA6gXts96PqZT4Ze5QmnCmt3QYjhbUSPue
     oracleIndexes_count = 8
-    oracleIndexes = ListContainer: 
+    oracleIndexes = ListContainer:
         0
         1
         2
@@ -217,7 +217,7 @@ def test_expand_caches() -> None:
         6
         7
     oraclePrices_count = 8
-    oraclePrices = ListContainer: 
+    oraclePrices = ListContainer:
         74703458819008
         16190111897624135073
         1062535132657948924
@@ -233,18 +233,18 @@ def test_expand_caches() -> None:
     assert actual[11] == logs[13]
     assert (
         actual[12]
-        == """Mango CachePerpMarketsLog Container: 
-    mangoGroup = 98pjRuQjK3qA6gXts96PqZT4Ze5QmnCmt3QYjhbUSPue
+        == """Entropy CachePerpMarketsLog Container:
+    entropyGroup = 98pjRuQjK3qA6gXts96PqZT4Ze5QmnCmt3QYjhbUSPue
     marketIndexes_count = 2
-    marketIndexes = ListContainer: 
+    marketIndexes = ListContainer:
         1
         3
     longFundings_count = 2
-    longFundings = ListContainer: 
+    longFundings = ListContainer:
         91793415019953693898
         18258100393857148940
     shortFundings_count = 2
-    shortFundings = ListContainer: 
+    shortFundings = ListContainer:
         91350929877276024400
         18258100393857148940"""
     )

@@ -1,11 +1,11 @@
 import argparse
 
-from ...context import mango
+from ...context import entropy
 from ...fakes import fake_context, fake_model_state, fake_order, fake_price
 
 from decimal import Decimal
 
-from mango.marketmaking.orderchain.fixedpositionsizeelement import (
+from entropy.marketmaking.orderchain.fixedpositionsizeelement import (
     FixedPositionSizeElement,
 )
 
@@ -23,7 +23,7 @@ def test_from_args() -> None:
 
 def test_single_bid_quantity_updated() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(quantity=Decimal(10), side=mango.Side.BUY)
+    order: entropy.Order = fake_order(quantity=Decimal(10), side=entropy.Side.BUY)
 
     actual: FixedPositionSizeElement = FixedPositionSizeElement([Decimal(20)])
     result = actual.process(context, model_state, [order])
@@ -33,7 +33,7 @@ def test_single_bid_quantity_updated() -> None:
 
 def test_single_ask_quantity_updated() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(quantity=Decimal(11), side=mango.Side.SELL)
+    order: entropy.Order = fake_order(quantity=Decimal(11), side=entropy.Side.SELL)
 
     actual: FixedPositionSizeElement = FixedPositionSizeElement([Decimal(21)])
     result = actual.process(context, model_state, [order])
@@ -43,10 +43,10 @@ def test_single_ask_quantity_updated() -> None:
 
 def test_single_quantity_multiple_orders_updated() -> None:
     context = fake_context()
-    order1: mango.Order = fake_order(quantity=Decimal(9), side=mango.Side.BUY)
-    order2: mango.Order = fake_order(quantity=Decimal(10), side=mango.Side.BUY)
-    order3: mango.Order = fake_order(quantity=Decimal(11), side=mango.Side.SELL)
-    order4: mango.Order = fake_order(quantity=Decimal(12), side=mango.Side.SELL)
+    order1: entropy.Order = fake_order(quantity=Decimal(9), side=entropy.Side.BUY)
+    order2: entropy.Order = fake_order(quantity=Decimal(10), side=entropy.Side.BUY)
+    order3: entropy.Order = fake_order(quantity=Decimal(11), side=entropy.Side.SELL)
+    order4: entropy.Order = fake_order(quantity=Decimal(12), side=entropy.Side.SELL)
 
     actual: FixedPositionSizeElement = FixedPositionSizeElement([Decimal(20)])
     result = actual.process(context, model_state, [order1, order2, order3, order4])
@@ -59,12 +59,12 @@ def test_single_quantity_multiple_orders_updated() -> None:
 
 def test_three_quantities_six_paired_orders_different_order_updated() -> None:
     context = fake_context()
-    order1: mango.Order = fake_order(quantity=Decimal(8), side=mango.Side.BUY)
-    order2: mango.Order = fake_order(quantity=Decimal(9), side=mango.Side.BUY)
-    order3: mango.Order = fake_order(quantity=Decimal(10), side=mango.Side.BUY)
-    order4: mango.Order = fake_order(quantity=Decimal(11), side=mango.Side.SELL)
-    order5: mango.Order = fake_order(quantity=Decimal(12), side=mango.Side.SELL)
-    order6: mango.Order = fake_order(quantity=Decimal(13), side=mango.Side.SELL)
+    order1: entropy.Order = fake_order(quantity=Decimal(8), side=entropy.Side.BUY)
+    order2: entropy.Order = fake_order(quantity=Decimal(9), side=entropy.Side.BUY)
+    order3: entropy.Order = fake_order(quantity=Decimal(10), side=entropy.Side.BUY)
+    order4: entropy.Order = fake_order(quantity=Decimal(11), side=entropy.Side.SELL)
+    order5: entropy.Order = fake_order(quantity=Decimal(12), side=entropy.Side.SELL)
+    order6: entropy.Order = fake_order(quantity=Decimal(13), side=entropy.Side.SELL)
 
     actual: FixedPositionSizeElement = FixedPositionSizeElement(
         [Decimal(22), Decimal(33), Decimal(44)]
@@ -86,12 +86,12 @@ def test_three_quantities_six_paired_orders_different_order_updated() -> None:
 
 def test_two_quantities_six_paired_orders_different_order_updated() -> None:
     context = fake_context()
-    order1: mango.Order = fake_order(quantity=Decimal(8), side=mango.Side.BUY)
-    order2: mango.Order = fake_order(quantity=Decimal(9), side=mango.Side.BUY)
-    order3: mango.Order = fake_order(quantity=Decimal(10), side=mango.Side.BUY)
-    order4: mango.Order = fake_order(quantity=Decimal(11), side=mango.Side.SELL)
-    order5: mango.Order = fake_order(quantity=Decimal(12), side=mango.Side.SELL)
-    order6: mango.Order = fake_order(quantity=Decimal(13), side=mango.Side.SELL)
+    order1: entropy.Order = fake_order(quantity=Decimal(8), side=entropy.Side.BUY)
+    order2: entropy.Order = fake_order(quantity=Decimal(9), side=entropy.Side.BUY)
+    order3: entropy.Order = fake_order(quantity=Decimal(10), side=entropy.Side.BUY)
+    order4: entropy.Order = fake_order(quantity=Decimal(11), side=entropy.Side.SELL)
+    order5: entropy.Order = fake_order(quantity=Decimal(12), side=entropy.Side.SELL)
+    order6: entropy.Order = fake_order(quantity=Decimal(13), side=entropy.Side.SELL)
 
     actual: FixedPositionSizeElement = FixedPositionSizeElement(
         [Decimal(22), Decimal(33)]

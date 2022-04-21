@@ -1,9 +1,9 @@
-from .context import mango
+from .context import entropy
 
 
 def test_equality() -> None:
-    assert mango.Version.V1.value == mango.Version.V1.value
+    assert entropy.Version.V1.value == entropy.Version.V1.value
 
 
 def test_inequality() -> None:
-    assert mango.Version.V1.value != mango.Version.V2.value
+    assert entropy.Version.V1.value != entropy.Version.V2.value

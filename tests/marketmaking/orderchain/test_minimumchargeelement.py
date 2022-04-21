@@ -1,11 +1,11 @@
 import argparse
 
-from ...context import mango
+from ...context import entropy
 from ...fakes import fake_context, fake_model_state, fake_order, fake_price
 
 from decimal import Decimal
 
-from mango.marketmaking.orderchain.minimumchargeelement import MinimumChargeElement
+from entropy.marketmaking.orderchain.minimumchargeelement import MinimumChargeElement
 
 
 model_state = fake_model_state(
@@ -26,7 +26,7 @@ def test_from_args() -> None:
 
 def test_bid_price_not_updated() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(71), side=mango.Side.BUY)
+    order: entropy.Order = fake_order(price=Decimal(71), side=entropy.Side.BUY)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], False)
     result = actual.process(context, model_state, [order])
@@ -36,7 +36,7 @@ def test_bid_price_not_updated() -> None:
 
 def test_bid_price_not_updated_from_bid_ask() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(66), side=mango.Side.BUY)
+    order: entropy.Order = fake_order(price=Decimal(66), side=entropy.Side.BUY)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], True)
     result = actual.process(context, model_state, [order])
@@ -46,7 +46,7 @@ def test_bid_price_not_updated_from_bid_ask() -> None:
 
 def test_bid_price_updated() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(73), side=mango.Side.BUY)
+    order: entropy.Order = fake_order(price=Decimal(73), side=entropy.Side.BUY)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], False)
     result = actual.process(context, model_state, [order])
@@ -56,7 +56,7 @@ def test_bid_price_updated() -> None:
 
 def test_bid_price_updated_from_bid_ask() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(73), side=mango.Side.BUY)
+    order: entropy.Order = fake_order(price=Decimal(73), side=entropy.Side.BUY)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], True)
     result = actual.process(context, model_state, [order])
@@ -66,7 +66,7 @@ def test_bid_price_updated_from_bid_ask() -> None:
 
 def test_ask_price_not_updated() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(89), side=mango.Side.SELL)
+    order: entropy.Order = fake_order(price=Decimal(89), side=entropy.Side.SELL)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], False)
     result = actual.process(context, model_state, [order])
@@ -76,7 +76,7 @@ def test_ask_price_not_updated() -> None:
 
 def test_ask_price_not_updated_from_bid_ask() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(95), side=mango.Side.SELL)
+    order: entropy.Order = fake_order(price=Decimal(95), side=entropy.Side.SELL)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], True)
     result = actual.process(context, model_state, [order])
@@ -86,7 +86,7 @@ def test_ask_price_not_updated_from_bid_ask() -> None:
 
 def test_ask_price_updated() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(87), side=mango.Side.SELL)
+    order: entropy.Order = fake_order(price=Decimal(87), side=entropy.Side.SELL)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], False)
     result = actual.process(context, model_state, [order])
@@ -96,7 +96,7 @@ def test_ask_price_updated() -> None:
 
 def test_ask_price_updated_from_bid_ask() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(87), side=mango.Side.SELL)
+    order: entropy.Order = fake_order(price=Decimal(87), side=entropy.Side.SELL)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], True)
     result = actual.process(context, model_state, [order])
@@ -106,7 +106,7 @@ def test_ask_price_updated_from_bid_ask() -> None:
 
 def test_bid_price_higher_than_mid() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(89), side=mango.Side.BUY)
+    order: entropy.Order = fake_order(price=Decimal(89), side=entropy.Side.BUY)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], False)
     result = actual.process(context, model_state, [order])
@@ -116,7 +116,7 @@ def test_bid_price_higher_than_mid() -> None:
 
 def test_ask_price_lower_than_mid() -> None:
     context = fake_context()
-    order: mango.Order = fake_order(price=Decimal(71), side=mango.Side.SELL)
+    order: entropy.Order = fake_order(price=Decimal(71), side=entropy.Side.SELL)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], False)
     result = actual.process(context, model_state, [order])
@@ -129,7 +129,7 @@ def test_sol_bid_price_updated() -> None:
     model_state = fake_model_state(
         price=fake_price(bid=Decimal(181.9), price=Decimal(182), ask=Decimal(182.1))
     )
-    order: mango.Order = fake_order(price=Decimal("181.91"), side=mango.Side.BUY)
+    order: entropy.Order = fake_order(price=Decimal("181.91"), side=entropy.Side.BUY)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.0005")], False)
     result = actual.process(context, model_state, [order])
@@ -142,7 +142,7 @@ def test_sol_ask_price_updated() -> None:
     model_state = fake_model_state(
         price=fake_price(bid=Decimal(181.9), price=Decimal(182), ask=Decimal(182.1))
     )
-    order: mango.Order = fake_order(price=Decimal("182.09"), side=mango.Side.SELL)
+    order: entropy.Order = fake_order(price=Decimal("182.09"), side=entropy.Side.SELL)
 
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.0005")], False)
     result = actual.process(context, model_state, [order])
@@ -156,10 +156,10 @@ def test_two_minimum_charges_two_order_pairs() -> None:
     actual: MinimumChargeElement = MinimumChargeElement(
         [Decimal("0.1"), Decimal("0.2")], False
     )
-    buy1: mango.Order = fake_order(price=Decimal(98), side=mango.Side.BUY)
-    buy2: mango.Order = fake_order(price=Decimal(99), side=mango.Side.BUY)
-    sell1: mango.Order = fake_order(price=Decimal(101), side=mango.Side.SELL)
-    sell2: mango.Order = fake_order(price=Decimal(102), side=mango.Side.SELL)
+    buy1: entropy.Order = fake_order(price=Decimal(98), side=entropy.Side.BUY)
+    buy2: entropy.Order = fake_order(price=Decimal(99), side=entropy.Side.BUY)
+    sell1: entropy.Order = fake_order(price=Decimal(101), side=entropy.Side.SELL)
+    sell2: entropy.Order = fake_order(price=Decimal(102), side=entropy.Side.SELL)
 
     result = actual.process(context, model_state, [buy1, buy2, sell1, sell2])
 
@@ -176,12 +176,12 @@ def test_three_minimum_charges_three_order_pairs() -> None:
     actual: MinimumChargeElement = MinimumChargeElement(
         [Decimal("0.1"), Decimal("0.2"), Decimal("0.3")], False
     )
-    buy1: mango.Order = fake_order(price=Decimal(97), side=mango.Side.BUY)
-    buy2: mango.Order = fake_order(price=Decimal(98), side=mango.Side.BUY)
-    buy3: mango.Order = fake_order(price=Decimal(99), side=mango.Side.BUY)
-    sell1: mango.Order = fake_order(price=Decimal(101), side=mango.Side.SELL)
-    sell2: mango.Order = fake_order(price=Decimal(102), side=mango.Side.SELL)
-    sell3: mango.Order = fake_order(price=Decimal(103), side=mango.Side.SELL)
+    buy1: entropy.Order = fake_order(price=Decimal(97), side=entropy.Side.BUY)
+    buy2: entropy.Order = fake_order(price=Decimal(98), side=entropy.Side.BUY)
+    buy3: entropy.Order = fake_order(price=Decimal(99), side=entropy.Side.BUY)
+    sell1: entropy.Order = fake_order(price=Decimal(101), side=entropy.Side.SELL)
+    sell2: entropy.Order = fake_order(price=Decimal(102), side=entropy.Side.SELL)
+    sell3: entropy.Order = fake_order(price=Decimal(103), side=entropy.Side.SELL)
 
     result = actual.process(
         context, model_state, [buy1, buy2, buy3, sell1, sell2, sell3]
@@ -200,12 +200,12 @@ def test_single_minimum_charge_three_order_pairs() -> None:
     context = fake_context()
     model_state = fake_model_state(price=fake_price(price=Decimal(100)))
     actual: MinimumChargeElement = MinimumChargeElement([Decimal("0.1")], False)
-    buy1: mango.Order = fake_order(price=Decimal(97), side=mango.Side.BUY)
-    buy2: mango.Order = fake_order(price=Decimal(98), side=mango.Side.BUY)
-    buy3: mango.Order = fake_order(price=Decimal(99), side=mango.Side.BUY)
-    sell1: mango.Order = fake_order(price=Decimal(101), side=mango.Side.SELL)
-    sell2: mango.Order = fake_order(price=Decimal(102), side=mango.Side.SELL)
-    sell3: mango.Order = fake_order(price=Decimal(103), side=mango.Side.SELL)
+    buy1: entropy.Order = fake_order(price=Decimal(97), side=entropy.Side.BUY)
+    buy2: entropy.Order = fake_order(price=Decimal(98), side=entropy.Side.BUY)
+    buy3: entropy.Order = fake_order(price=Decimal(99), side=entropy.Side.BUY)
+    sell1: entropy.Order = fake_order(price=Decimal(101), side=entropy.Side.SELL)
+    sell2: entropy.Order = fake_order(price=Decimal(102), side=entropy.Side.SELL)
+    sell3: entropy.Order = fake_order(price=Decimal(103), side=entropy.Side.SELL)
 
     result = actual.process(
         context, model_state, [buy1, buy2, buy3, sell1, sell2, sell3]

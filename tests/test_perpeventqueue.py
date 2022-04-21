@@ -2,7 +2,7 @@ import typing
 
 from solana.publickey import PublicKey
 
-from .context import mango
+from .context import entropy
 from .fakes import fake_account_info, fake_seeded_public_key
 
 from decimal import Decimal
@@ -10,21 +10,21 @@ from decimal import Decimal
 
 def test_constructor() -> None:
     address = fake_seeded_public_key("perp event queue address")
-    account_info: mango.AccountInfo = fake_account_info(address)
-    meta_data: mango.Metadata = mango.Metadata(
-        mango.layouts.DATA_TYPE.EventQueue, mango.Version.V1, True
+    account_info: entropy.AccountInfo = fake_account_info(address)
+    meta_data: entropy.Metadata = entropy.Metadata(
+        entropy.layouts.DATA_TYPE.EventQueue, entropy.Version.V1, True
     )
     head: Decimal = Decimal(0)
     count: Decimal = Decimal(0)
     sequence_number: Decimal = Decimal(0)
-    unprocessed_events: typing.Sequence[mango.PerpEvent] = []
-    processed_events: typing.Sequence[mango.PerpEvent] = []
+    unprocessed_events: typing.Sequence[entropy.PerpEvent] = []
+    processed_events: typing.Sequence[entropy.PerpEvent] = []
 
-    actual = mango.PerpEventQueue(
+    actual = entropy.PerpEventQueue(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         meta_data,
-        mango.NullLotSizeConverter(),
+        entropy.NullLotSizeConverter(),
         head,
         count,
         sequence_number,
@@ -46,19 +46,19 @@ def _fake_pev(
     head: Decimal,
     count: Decimal,
     sequence_number: Decimal,
-    unprocessed: typing.Sequence[mango.PerpEvent],
-    processed: typing.Sequence[mango.PerpEvent],
-) -> mango.PerpEventQueue:
+    unprocessed: typing.Sequence[entropy.PerpEvent],
+    processed: typing.Sequence[entropy.PerpEvent],
+) -> entropy.PerpEventQueue:
     address = fake_seeded_public_key("perp event queue address")
-    account_info: mango.AccountInfo = fake_account_info(address)
-    meta_data: mango.Metadata = mango.Metadata(
-        mango.layouts.DATA_TYPE.EventQueue, mango.Version.V1, True
+    account_info: entropy.AccountInfo = fake_account_info(address)
+    meta_data: entropy.Metadata = entropy.Metadata(
+        entropy.layouts.DATA_TYPE.EventQueue, entropy.Version.V1, True
     )
-    return mango.PerpEventQueue(
+    return entropy.PerpEventQueue(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         meta_data,
-        mango.NullLotSizeConverter(),
+        entropy.NullLotSizeConverter(),
         head,
         count,
         sequence_number,
@@ -67,7 +67,7 @@ def _fake_pev(
     )
 
 
-class TstPE(mango.PerpEvent):
+class TstPE(entropy.PerpEvent):
     def __init__(self, event_type: int = 25, original_index: Decimal = Decimal(0)):
         super().__init__(event_type, original_index)
 
@@ -79,15 +79,15 @@ class TstPE(mango.PerpEvent):
         return f"« TstPE [{self.event_type}] »"
 
 
-class TstFillPE(mango.PerpFillEvent):
+class TstFillPE(entropy.PerpFillEvent):
     def __init__(
         self, maker: PublicKey, maker_id: int, taker: PublicKey, taker_id: int
     ):
         super().__init__(
             0,
             Decimal(0),
-            mango.utc_now(),
-            mango.Side.BUY,
+            entropy.utc_now(),
+            entropy.Side.BUY,
             Decimal(1),
             Decimal(1),
             Decimal(1),
@@ -113,8 +113,8 @@ def test_unseen_with_no_changes() -> None:
         [],
         [TstPE(), TstPE(), TstPE(), TstPE(), TstPE()],
     )
-    actual: mango.UnseenPerpEventChangesTracker = mango.UnseenPerpEventChangesTracker(
-        initial
+    actual: entropy.UnseenPerpEventChangesTracker = (
+        entropy.UnseenPerpEventChangesTracker(initial)
     )
     assert actual.last_sequence_number == Decimal(7)
 
@@ -138,8 +138,8 @@ def test_unseen_with_one_unprocessed_change() -> None:
         [TstPE()],
         [TstPE(), TstPE(), TstPE(), TstPE()],
     )
-    actual: mango.UnseenPerpEventChangesTracker = mango.UnseenPerpEventChangesTracker(
-        initial
+    actual: entropy.UnseenPerpEventChangesTracker = (
+        entropy.UnseenPerpEventChangesTracker(initial)
     )
     assert actual.last_sequence_number == Decimal(1)
 
@@ -161,8 +161,8 @@ def test_unseen_with_two_unprocessed_changes() -> None:
     initial = _fake_pev(
         Decimal(1), Decimal(0), Decimal(1), [], [TstPE(), TstPE(), TstPE()]
     )
-    actual: mango.UnseenPerpEventChangesTracker = mango.UnseenPerpEventChangesTracker(
-        initial
+    actual: entropy.UnseenPerpEventChangesTracker = (
+        entropy.UnseenPerpEventChangesTracker(initial)
     )
     assert actual.last_sequence_number == Decimal(1)
 
@@ -188,8 +188,8 @@ def test_unseen_with_two_processed_changes() -> None:
     initial = _fake_pev(
         Decimal(1), Decimal(0), Decimal(1), [], [TstPE(), TstPE(), TstPE()]
     )
-    actual: mango.UnseenPerpEventChangesTracker = mango.UnseenPerpEventChangesTracker(
-        initial
+    actual: entropy.UnseenPerpEventChangesTracker = (
+        entropy.UnseenPerpEventChangesTracker(initial)
     )
     assert actual.last_sequence_number == Decimal(1)
 
@@ -217,8 +217,8 @@ def test_unseen_with_two_unprocessed_changes_wrapping_around() -> None:
     initial = _fake_pev(
         Decimal(4), Decimal(0), Decimal(7), [], [TstPE(), TstPE(), TstPE()]
     )
-    actual: mango.UnseenPerpEventChangesTracker = mango.UnseenPerpEventChangesTracker(
-        initial
+    actual: entropy.UnseenPerpEventChangesTracker = (
+        entropy.UnseenPerpEventChangesTracker(initial)
     )
     assert actual.last_sequence_number == Decimal(7)
 
@@ -276,7 +276,7 @@ def test_unseen_fills_for_account() -> None:
     order3 = TstFillPE(user3, 13, user1, 23)
     pev1 = _fake_pev(Decimal(4), Decimal(0), Decimal(7), [], [order1, order2, order3])
 
-    actual = mango.UnseenAccountFillEventTracker(pev1, user1)
+    actual = entropy.UnseenAccountFillEventTracker(pev1, user1)
 
     order4 = TstFillPE(user3, 14, user2, 24)
     order5 = TstFillPE(user1, 15, user3, 25)
@@ -306,7 +306,7 @@ def test_no_unseen_fills_for_account() -> None:
     order3 = TstFillPE(user3, 13, user1, 23)
     pev1 = _fake_pev(Decimal(4), Decimal(0), Decimal(7), [], [order1, order2, order3])
 
-    actual = mango.UnseenAccountFillEventTracker(pev1, user4)
+    actual = entropy.UnseenAccountFillEventTracker(pev1, user4)
 
     order4 = TstFillPE(user3, 14, user2, 24)
     order5 = TstFillPE(user1, 15, user3, 25)
@@ -333,7 +333,7 @@ def test_no_changes_in_unseen_fills_for_account() -> None:
     order3 = TstFillPE(user3, 13, user1, 23)
     pev1 = _fake_pev(Decimal(4), Decimal(0), Decimal(7), [], [order1, order2, order3])
 
-    actual = mango.UnseenAccountFillEventTracker(pev1, user1)
+    actual = entropy.UnseenAccountFillEventTracker(pev1, user1)
 
     order4 = TstFillPE(user3, 14, user2, 24)
     order5 = TstFillPE(user4, 15, user3, 25)

@@ -1,4 +1,4 @@
-from .context import mango
+from .context import entropy
 from .data import load_root_bank, load_node_bank
 from .fakes import fake_account_info, fake_context, fake_seeded_public_key, fake_token
 
@@ -9,20 +9,22 @@ from solana.publickey import PublicKey
 
 def test_node_bank_constructor() -> None:
     account_info = fake_account_info(fake_seeded_public_key("node bank"))
-    meta_data = mango.Metadata(
-        mango.layouts.DATA_TYPE.parse(bytearray(b"\x03")), mango.Version.V1, True
+    meta_data = entropy.Metadata(
+        entropy.layouts.DATA_TYPE.parse(bytearray(b"\x03")), entropy.Version.V1, True
     )
     deposits = Decimal(1000)
     borrows = Decimal(100)
-    balances = mango.BankBalances(deposits=deposits, borrows=borrows)
+    balances = entropy.BankBalances(deposits=deposits, borrows=borrows)
     vault = fake_seeded_public_key("vault")
 
-    actual = mango.NodeBank(account_info, mango.Version.V1, meta_data, vault, balances)
+    actual = entropy.NodeBank(
+        account_info, entropy.Version.V1, meta_data, vault, balances
+    )
     assert actual is not None
     assert actual.account_info == account_info
     assert actual.address == fake_seeded_public_key("node bank")
     assert actual.meta_data == meta_data
-    assert actual.meta_data.data_type == mango.layouts.DATA_TYPE.NodeBank
+    assert actual.meta_data.data_type == entropy.layouts.DATA_TYPE.NodeBank
     assert actual.balances.deposits == deposits
     assert actual.balances.borrows == borrows
     assert actual.vault == fake_seeded_public_key("vault")
@@ -30,8 +32,8 @@ def test_node_bank_constructor() -> None:
 
 def test_root_bank_constructor() -> None:
     account_info = fake_account_info(fake_seeded_public_key("root bank"))
-    meta_data = mango.Metadata(
-        mango.layouts.DATA_TYPE.parse(bytearray(b"\x02")), mango.Version.V1, True
+    meta_data = entropy.Metadata(
+        entropy.layouts.DATA_TYPE.parse(bytearray(b"\x02")), entropy.Version.V1, True
     )
     optimal_util = Decimal("0.7")
     optimal_rate = Decimal("0.06")
@@ -39,11 +41,11 @@ def test_root_bank_constructor() -> None:
     node_bank = fake_seeded_public_key("node bank")
     deposit_index = Decimal(98765)
     borrow_index = Decimal(12345)
-    timestamp = mango.utc_now()
+    timestamp = entropy.utc_now()
 
-    actual = mango.RootBank(
+    actual = entropy.RootBank(
         account_info,
-        mango.Version.V1,
+        entropy.Version.V1,
         meta_data,
         optimal_util,
         optimal_rate,
@@ -57,7 +59,7 @@ def test_root_bank_constructor() -> None:
     assert actual.account_info == account_info
     assert actual.address == fake_seeded_public_key("root bank")
     assert actual.meta_data == meta_data
-    assert actual.meta_data.data_type == mango.layouts.DATA_TYPE.RootBank
+    assert actual.meta_data.data_type == entropy.layouts.DATA_TYPE.RootBank
     assert actual.optimal_util == optimal_util
     assert actual.optimal_rate == optimal_rate
     assert actual.max_rate == max_rate
@@ -70,7 +72,7 @@ def test_root_bank_constructor() -> None:
 def test_token_bank_constructor() -> None:
     token = fake_token()
     root_bank_address = fake_seeded_public_key("root bank address")
-    actual = mango.TokenBank(token, root_bank_address)
+    actual = entropy.TokenBank(token, root_bank_address)
 
     assert actual is not None
     assert actual.token == token
@@ -82,8 +84,8 @@ def test_load_root_bank() -> None:
 
     assert actual is not None
     assert actual.address == PublicKey("HUBX4iwWEUK5VrXXXcB7uhuKrfT4fpu2T9iZbg712JrN")
-    assert actual.meta_data.version == mango.Version.V1
-    assert actual.meta_data.data_type == mango.layouts.DATA_TYPE.RootBank
+    assert actual.meta_data.version == entropy.Version.V1
+    assert actual.meta_data.data_type == entropy.layouts.DATA_TYPE.RootBank
     assert actual.meta_data.is_initialized
     assert actual.optimal_util == Decimal("0.69999999999999928946")
     assert actual.optimal_rate == Decimal("0.05999999999999872102")
@@ -97,7 +99,7 @@ def test_load_root_bank() -> None:
 
 
 def test_btc_token_bank() -> None:
-    btc = mango.Token(
+    btc = entropy.Token(
         "BTC",
         "Wrapped Bitcoin (Sollet)",
         Decimal(6),
@@ -107,7 +109,7 @@ def test_btc_token_bank() -> None:
     root_bank = load_root_bank("tests/testdata/tokenbank/btc_root_bank.json")
     node_bank = load_node_bank("tests/testdata/tokenbank/btc_node_bank.json")
 
-    actual = mango.TokenBank(btc, root_bank.address)
+    actual = entropy.TokenBank(btc, root_bank.address)
     actual.loaded_root_bank = root_bank
     root_bank.loaded_node_banks = [node_bank]
 
@@ -124,7 +126,7 @@ def test_btc_token_bank() -> None:
 
 
 def test_usdc_token_bank() -> None:
-    usdc = mango.Token(
+    usdc = entropy.Token(
         "USDC",
         "USD Coin",
         Decimal(6),
@@ -134,7 +136,7 @@ def test_usdc_token_bank() -> None:
     root_bank = load_root_bank("tests/testdata/tokenbank/usdc_root_bank.json")
     node_bank = load_node_bank("tests/testdata/tokenbank/usdc_node_bank.json")
 
-    actual = mango.TokenBank(usdc, root_bank.address)
+    actual = entropy.TokenBank(usdc, root_bank.address)
     actual.loaded_root_bank = root_bank
     root_bank.loaded_node_banks = [node_bank]
 

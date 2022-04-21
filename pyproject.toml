@@ -1,5 +1,5 @@
 [tool.poetry]
-version = "1.0.0"
+version = "1.0.2"
 name = "entropy-explorer"
 homepage = "https://entropy.trade"
 repository = "https://github.com/friktion-labs/entropy-explorer"
@@ -10,14 +10,14 @@ readme = "README.md"
 documentation = ""
 include = ["bin/*", "data/*", "data/.version"]
 packages = [
-    { include = "src" }
+    { include = "entropy" }
 ]
 
 [tool.poetry.dependencies]
 jsons = "^1.6.1"
 numpy = "^1.22.1"
 pandas = "^1.4.1"
-python = ">=3.9,<3.11"
+python = ">=3.6,<3.11"
 pyserum = "^0.5.0a0"
 python-dateutil = "^2.8.2"
 requests = "^2.27.1"

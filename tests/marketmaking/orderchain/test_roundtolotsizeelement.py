@@ -1,11 +1,11 @@
 import argparse
 
-from ...context import mango
+from ...context import entropy
 from ...fakes import fake_context, fake_model_state, fake_order
 
 from decimal import Decimal
 
-from mango.marketmaking.orderchain.roundtolotsizeelement import RoundToLotSizeElement
+from entropy.marketmaking.orderchain.roundtolotsizeelement import RoundToLotSizeElement
 
 
 def test_from_args() -> None:
@@ -20,7 +20,7 @@ def test_from_args() -> None:
 def test_rounds_price() -> None:
     context = fake_context()
     model_state = fake_model_state()
-    order: mango.Order = fake_order(price=Decimal("1.23456789"))
+    order: entropy.Order = fake_order(price=Decimal("1.23456789"))
 
     actual: RoundToLotSizeElement = RoundToLotSizeElement()
     result = actual.process(context, model_state, [order])
@@ -32,7 +32,7 @@ def test_rounds_price() -> None:
 def test_rounds_quantity() -> None:
     context = fake_context()
     model_state = fake_model_state()
-    order: mango.Order = fake_order(quantity=Decimal("1.23456789"))
+    order: entropy.Order = fake_order(quantity=Decimal("1.23456789"))
 
     actual: RoundToLotSizeElement = RoundToLotSizeElement()
     result = actual.process(context, model_state, [order])
@@ -44,7 +44,7 @@ def test_rounds_quantity() -> None:
 def test_rounds_price_and_quantity() -> None:
     context = fake_context()
     model_state = fake_model_state()
-    order: mango.Order = fake_order(
+    order: entropy.Order = fake_order(
         price=Decimal("1.23456789"), quantity=Decimal("1.23456789")
     )
 
@@ -58,7 +58,7 @@ def test_rounds_price_and_quantity() -> None:
 def test_removes_when_price_rounds_to_zero() -> None:
     context = fake_context()
     model_state = fake_model_state()
-    order: mango.Order = fake_order(price=Decimal("0.0000001"))
+    order: entropy.Order = fake_order(price=Decimal("0.0000001"))
 
     actual: RoundToLotSizeElement = RoundToLotSizeElement()
     result = actual.process(context, model_state, [order])
@@ -69,7 +69,7 @@ def test_removes_when_price_rounds_to_zero() -> None:
 def test_removes_when_quantity_rounds_to_zero() -> None:
     context = fake_context()
     model_state = fake_model_state()
-    order: mango.Order = fake_order(quantity=Decimal("0.0000001"))
+    order: entropy.Order = fake_order(quantity=Decimal("0.0000001"))
 
     actual: RoundToLotSizeElement = RoundToLotSizeElement()
     result = actual.process(context, model_state, [order])
@@ -80,7 +80,7 @@ def test_removes_when_quantity_rounds_to_zero() -> None:
 def test_removes_when_price_and_quantity_round_to_zero() -> None:
     context = fake_context()
     model_state = fake_model_state()
-    order: mango.Order = fake_order(
+    order: entropy.Order = fake_order(
         price=Decimal("0.0000001"), quantity=Decimal("0.0000001")
     )
 

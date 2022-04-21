@@ -11,30 +11,30 @@ from decimal import Decimal
 from solana.publickey import PublicKey
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import mango  # nopep8
+import entropy  # nopep8
 
 
 def resolve_quantity(
-    token: mango.Token,
+    token: entropy.Token,
     current_quantity: Decimal,
-    target_quantity: mango.TargetBalance,
+    target_quantity: entropy.TargetBalance,
     price: Decimal,
-) -> mango.InstrumentValue:
+) -> entropy.InstrumentValue:
     current_value: Decimal = current_quantity * price
-    resolved_value_to_keep: mango.InstrumentValue = target_quantity.resolve(
+    resolved_value_to_keep: entropy.InstrumentValue = target_quantity.resolve(
         token, price, current_value
     )
     return resolved_value_to_keep
 
 
 parser = argparse.ArgumentParser(
-    description="Balance the value of tokens in a Mango Markets account to specific values or percentages."
+    description="Balance the value of tokens in a Entropy Markets account to specific values or percentages."
 )
-mango.ContextBuilder.add_command_line_parameters(parser)
-mango.Wallet.add_command_line_parameters(parser)
+entropy.ContextBuilder.add_command_line_parameters(parser)
+entropy.Wallet.add_command_line_parameters(parser)
 parser.add_argument(
     "--target",
-    type=mango.parse_target_balance,
+    type=entropy.parse_target_balance,
     action="append",
     required=True,
     help="token symbol plus target value or percentage, separated by a colon (e.g. 'ETH:2.5')",
@@ -62,25 +62,25 @@ parser.add_argument(
     default=False,
     help="runs as read-only and does not perform any transactions",
 )
-args: argparse.Namespace = mango.parse_args(parser)
+args: argparse.Namespace = entropy.parse_args(parser)
 
-with mango.ContextBuilder.from_command_line_parameters(args) as context:
-    wallet = mango.Wallet.from_command_line_parameters_or_raise(args)
+with entropy.ContextBuilder.from_command_line_parameters(args) as context:
+    wallet = entropy.Wallet.from_command_line_parameters_or_raise(args)
     action_threshold = args.action_threshold
     max_slippage = args.max_slippage
-    group = mango.Group.load(context, context.group_address)
-    account = mango.Account.load_for_owner_by_address(
+    group = entropy.Group.load(context, context.group_address)
+    account = entropy.Account.load_for_owner_by_address(
         context, wallet.address, group, args.account_address
     )
 
-    targets: typing.Sequence[mango.TargetBalance] = args.target
+    targets: typing.Sequence[entropy.TargetBalance] = args.target
     logging.info(f"Targets: {targets}")
 
-    prices: typing.List[mango.InstrumentValue] = []
+    prices: typing.List[entropy.InstrumentValue] = []
     for basket_token in account.slots:
         if basket_token is not None:
             market_symbol: str = f"{basket_token.base_instrument.symbol}/{group.shared_quote_token.symbol}"
-            ops = mango.operations(
+            ops = entropy.operations(
                 context, wallet, account, market_symbol, args.dry_run
             )
             orderbook = ops.load_orderbook()
@@ -89,10 +89,10 @@ with mango.ContextBuilder.from_command_line_parameters(args) as context:
                 raise Exception(
                     f"Could not determine mid-price on market {market_symbol}."
                 )
-            prices += [mango.InstrumentValue(basket_token.base_instrument, price)]
-    prices += [mango.InstrumentValue(group.shared_quote_token, Decimal(1))]
+            prices += [entropy.InstrumentValue(basket_token.base_instrument, price)]
+    prices += [entropy.InstrumentValue(group.shared_quote_token, Decimal(1))]
 
-    account_balancer = mango.LiveAccountBalancer(
+    account_balancer = entropy.LiveAccountBalancer(
         context,
         wallet,
         account,

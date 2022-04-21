@@ -9,10 +9,10 @@ upgrade: ## Upgrade all the build and lint dependencies
 	poetry upgrade --no-interaction
 
 test: ## Run all the tests and calculate code coverage
-	SOLENV_NAME= SOLENV_ADDRESS= CLUSTER_NAME= CLUSTER_URL= KEYPAIR= PYTEST_ADDOPTS="-p no:cacheprovider" poetry run pytest -rP tests/ --cov=mango
+	SOLENV_NAME= SOLENV_ADDRESS= CLUSTER_NAME= CLUSTER_URL= KEYPAIR= PYTEST_ADDOPTS="-p no:cacheprovider" poetry run pytest -rP tests/ --cov=entropy
 
 black:
-	poetry run black --check mango tests bin/*
+	poetry run black --check entropy tests bin/*
 
 flake8:
 	poetry run flake8 --extend-ignore E402,E501,E722,W291,W391 . bin/*
@@ -28,7 +28,7 @@ mypy-internal:
 	for file in bin/* ; do \
 		cp $${file} .tmplintdir/$${file##*/}.py ; \
 	done
-	poetry run mypy --strict --install-types --non-interactive mango tests .tmplintdir
+	poetry run mypy --strict --install-types --non-interactive entropy tests .tmplintdir
 	rm -rf .tmplintdir .mypy_cache
 
 lint: black flake8 mypy
@@ -42,18 +42,18 @@ publish-package:
 	poetry publish
 
 docker-build:
-	docker build --build-arg=LAST_COMMIT="`git log -1 --format='%h [%ad] - %s'`" --platform linux/amd64 . -t opinionatedgeek/mango-explorer-v3:latest
+	docker build --build-arg=LAST_COMMIT="`git log -1 --format='%h [%ad] - %s'`" --platform linux/amd64 . -t opinionatedgeek/entropy-explorer-v3:latest
 
 docker-push:
-	docker push opinionatedgeek/mango-explorer-v3:latest
+	docker push opinionatedgeek/entropy-explorer-v3:latest
 
 docker: docker-build docker-push
 
 docker-experimental-build:
-	docker build --build-arg=LAST_COMMIT="`git log -1 --format='%h [%ad] - %s'`" --platform linux/amd64 . -t opinionatedgeek/mango-explorer-v3:experimental
+	docker build --build-arg=LAST_COMMIT="`git log -1 --format='%h [%ad] - %s'`" --platform linux/amd64 . -t opinionatedgeek/entropy-explorer-v3:experimental
 
 docker-experimental-push:
-	docker push opinionatedgeek/mango-explorer-v3:experimental
+	docker push opinionatedgeek/entropy-explorer-v3:experimental
 
 docker-experimental: docker-experimental-build docker-experimental-push
 
