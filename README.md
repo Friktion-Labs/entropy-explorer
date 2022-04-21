@@ -1,1 +1,1 @@
-Python API for Entropy Markets (pyentropy)
+Python API for Entropy Markets (entropy-explorer)

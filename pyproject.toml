@@ -1,10 +1,10 @@
 [tool.poetry]
 version = "1.0.0"
-name = "pyentropy"
+name = "entropy-explorer"
 homepage = "https://entropy.trade"
-repository = "https://github.com/friktion-labs/pyentropy"
+repository = "https://github.com/friktion-labs/entropy-explorer"
 description = "Python integration for https://entropy.trade"
-authors = ["Thiccythot"]
+authors = ["thiccythot"]
 license = "MIT"
 readme = "README.md"
 documentation = ""
