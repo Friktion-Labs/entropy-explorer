@@ -1,5 +1,5 @@
 [tool.poetry]
-version = "1.0.2"
+version = "1.0.6"
 name = "entropy-explorer"
 homepage = "https://entropy.trade"
 repository = "https://github.com/friktion-labs/entropy-explorer"

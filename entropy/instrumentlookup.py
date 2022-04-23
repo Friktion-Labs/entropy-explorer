@@ -100,7 +100,7 @@ class CompoundInstrumentLookup(InstrumentLookup):
 
     def find_by_symbol(self, symbol: str) -> typing.Optional[Instrument]:
         for lookup in self.lookups:
-        #     print(lookup)
+            #     print(lookup)
             result = lookup.find_by_symbol(symbol)
             if result is not None:
                 # print("found something", lookup)
