@@ -6,8 +6,8 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-# [🥭 Entropy Markets](https://entropy.markets/) support is available at:
-#   [Docs](https://docs.entropy.markets/)
+# [🥭 Entropy Markets](https://entropy.trade/) support is available at:
+#   [Docs](https://docs.entropy.trade/)
 #   [Discord](https://discord.gg/67jySBhxrg)
 #   [Twitter](https://twitter.com/entropymarkets)
 #   [Github](https://github.com/blockworks-foundation)
@@ -59,12 +59,12 @@ class Instrument:
         return value.quantize(places, rounding=direction.to_decimal_direction())
 
     def shift_to_decimals(self, value: Decimal) -> Decimal:
-        divisor = Decimal(10 ** self.decimals)
+        divisor = Decimal(10**self.decimals)
         shifted = value / divisor
         return shifted
 
     def shift_to_native(self, value: Decimal) -> Decimal:
-        multiplier = Decimal(10 ** self.decimals)
+        multiplier = Decimal(10**self.decimals)
         shifted = value * multiplier
         return round(shifted, 0)
 

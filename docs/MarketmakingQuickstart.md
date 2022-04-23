@@ -2,9 +2,9 @@
 
 # 🏃‍ Marketmaking Quickstart
 
-This Quickstart will guide you through setting up and running [entropy-explorer](https://github.com/blockworks-foundation/entropy-explorer/) to run a marketmaker on [Entropy Markets](https://entropy.markets/) perps on devnet.
+This Quickstart will guide you through setting up and running [entropy-explorer](https://github.com/Friktion-Labs/entropy-explorer/) to run a marketmaker on [Entropy Markets](https://entropy.trade/) perps on devnet.
 
-Devnet and [Entropy’s Devnet Site](https://devnet.entropy.markets) are test/development environments where it is safe to try things out without risking ‘live’ tokens. Tokens on devnet are purely for development and testing and have no value.
+Devnet and [Entropy’s Devnet Site](https://devnet.entropy.trade) are test/development environments where it is safe to try things out without risking ‘live’ tokens. Tokens on devnet are purely for development and testing and have no value.
 
 Throughout this guide you’ll see the private key, accounts and transaction IDs as well as the commands and parameters that are used. (This is a devnet account so no actual funds are required. And remember - sharing your private key is usually a Very Bad Idea!)
 
@@ -140,7 +140,7 @@ Next, we’ll set up an `alias` to make running the container easier. There are 
 ```
 # alias entropy-explorer="docker run --rm -it --name=entropy-explorer \
     -v $HOME/entropy-explorer/id.json:/app/id.json \
-    opinionatedgeek/entropy-explorer-v3:latest"
+    entropy-explorer/entropy-explorer:latest"
 ```
 
 It’s probably a good idea to put this alias in your `.profile` or `.bashrc` (or use whatever mechanism your shell uses for such things).
@@ -228,11 +228,11 @@ When the transfer completes (it’s very fast!) it appears in the wallet and you
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.tr
+    📄 Documentation: https://org-docs.friktion.fi/entropy/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
-    🚧 Github: https://github.com/blockworks-foundation
+    🚧 Github: https://github.com/Friktion-Labs
     📧 Email: mailto:hello@blockworks.foundation
 
 2021-08-27 19:16:34 ⓘ root         Context: « 𝙲𝚘𝚗𝚝𝚎𝚡𝚝 'Entropy Explorer':
@@ -264,11 +264,11 @@ To create and initialise your Entropy Account, run:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://org-docs.friktion.fi/entropy/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
-    🚧 Github: https://github.com/blockworks-foundation
+    🚧 Github: https://github.com/Friktion-Labs
     📧 Email: mailto:hello@blockworks.foundation
 
 Created account.
@@ -367,11 +367,11 @@ You should see output like:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://org-docs.friktion.fi/entropy/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
-    🚧 Github: https://github.com/blockworks-foundation
+    🚧 Github: https://github.com/Friktion-Labs
     📧 Email: mailto:hello@blockworks.foundation
 
 2021-08-30 11:03:09 ⓘ BetterClient Waiting up to 60 seconds for ['2pHzmyPVT1UaU13zyigjQRr1xLz8jExpbiAsFpxxMzjoTEbyxAbhvtfYmQ2oiqfLF5Y6U637EBbJh3Wi1i561z5A'].
@@ -395,11 +395,11 @@ Before doing this, your token balances should look like this:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://org-docs.friktion.fi/entropy/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
-    🚧 Github: https://github.com/blockworks-foundation
+    🚧 Github: https://github.com/Friktion-Labs
     📧 Email: mailto:hello@blockworks.foundation
 
 2021-08-27 19:23:54 ⓘ root         Context: « 𝙲𝚘𝚗𝚝𝚎𝚡𝚝 'Entropy Explorer':
@@ -429,11 +429,11 @@ Deposit your USDC with the following command:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://org-docs.friktion.fi/entropy/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
-    🚧 Github: https://github.com/blockworks-foundation
+    🚧 Github: https://github.com/Friktion-Labs
     📧 Email: mailto:hello@blockworks.foundation
 
 Transaction IDs: ['3mgPnxsTudgN4FN5h7v5PhguHRESaWfs7d9XWiGNBATnWDtCdm34v8qh3ue5yjygRWcGAJ3W7vzKSJJMNVUvqxzk']
@@ -448,11 +448,11 @@ Now your token balances should look like this:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://org-docs.friktion.fi/entropy/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
-    🚧 Github: https://github.com/blockworks-foundation
+    🚧 Github: https://github.com/Friktion-Labs
     📧 Email: mailto:hello@blockworks.foundation
 
 2021-08-27 19:25:21 ⓘ root         Context: « 𝙲𝚘𝚗𝚝𝚎𝚡𝚝 'Entropy Explorer':
@@ -544,11 +544,11 @@ Here goes:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://org-docs.friktion.fi/entropy/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
-    🚧 Github: https://github.com/blockworks-foundation
+    🚧 Github: https://github.com/Friktion-Labs
     📧 Email: mailto:hello@blockworks.foundation
 
 2021-08-27 19:26:09 ⓘ root         « 𝙲𝚘𝚗𝚝𝚎𝚡𝚝 'BTC-PERP Marketmaker':
@@ -649,6 +649,6 @@ Some important things to note from the simulated run:
 
 If you’ve got this far and you’re happy with the results, you can run the same command with the `--dry-run` parameter removed. That will start the marketmaker and have it place orders. This is all still on devnet, so no real funds are at stake.
 
-Output should be broadly the same as the output for a ‘dry run’, but you’ll be able to see the orders appear on [Entropy Devnet](https://devnet.entropy.markets) and you’ll sometimes see errors from the chain or more detail from some of the transactions.
+Output should be broadly the same as the output for a ‘dry run’, but you’ll be able to see the orders appear on [Entropy Devnet](https://devnet.entropy.trade) and you’ll sometimes see errors from the chain or more detail from some of the transactions.
 
 Now, it’s over to you. Happy marketmaking!

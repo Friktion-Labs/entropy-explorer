@@ -161,8 +161,8 @@ The bulk of the code is the same, but spot markets use different mechanisms to l
 
 # Support
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation

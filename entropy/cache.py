@@ -6,8 +6,8 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-# [🥭 Entropy Markets](https://entropy.markets/) support is available at:
-#   [Docs](https://docs.entropy.markets/)
+# [🥭 Entropy Markets](https://entropy.trade/) support is available at:
+#   [Docs](https://docs.entropy.trade/)
 #   [Discord](https://discord.gg/67jySBhxrg)
 #   [Twitter](https://twitter.com/entropymarkets)
 #   [Github](https://github.com/blockworks-foundation)
@@ -138,7 +138,7 @@ class MarketCache:
         price: Decimal = self.price.price
         decimals_difference = token.decimals - quote_token.decimals
         if decimals_difference != 0:
-            adjustment = 10 ** decimals_difference
+            adjustment = 10**decimals_difference
             price = price * adjustment
 
         return InstrumentValue(quote_token, price)

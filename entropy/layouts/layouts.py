@@ -6,8 +6,8 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-# [🥭 Entropy Markets](https://entropy.markets/) support is available at:
-#   [Docs](https://docs.entropy.markets/)
+# [🥭 Entropy Markets](https://entropy.trade/) support is available at:
+#   [Docs](https://docs.entropy.trade/)
 #   [Discord](https://discord.gg/67jySBhxrg)
 #   [Twitter](https://twitter.com/entropymarkets)
 #   [Github](https://github.com/blockworks-foundation)
@@ -109,7 +109,7 @@ else:
             fixed_point = bit_size / 2
 
             # So our divisor is 2 to the power of the fixed point
-            self.divisor = Decimal(2 ** fixed_point)
+            self.divisor = Decimal(2**fixed_point)
 
         def _decode(self, obj: int, context: typing.Any, path: typing.Any) -> Decimal:
             return Decimal(obj) / self.divisor
@@ -222,7 +222,7 @@ else:
             fixed_point_in_bits = 8 * 6
 
             # So our divisor is 2 to the power of the fixed point
-            self.divisor = Decimal(2 ** fixed_point_in_bits)
+            self.divisor = Decimal(2**fixed_point_in_bits)
 
         def _decode(self, obj: int, context: typing.Any, path: typing.Any) -> Decimal:
             # How many decimal places precision should we allow for an I80F48? TypeScript seems to have

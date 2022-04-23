@@ -6,8 +6,8 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-# [🥭 Entropy Markets](https://entropy.markets/) support is available at:
-#   [Docs](https://docs.entropy.markets/)
+# [🥭 Entropy Markets](https://entropy.trade/) support is available at:
+#   [Docs](https://docs.entropy.trade/)
 #   [Discord](https://discord.gg/67jySBhxrg)
 #   [Twitter](https://twitter.com/entropymarkets)
 #   [Github](https://github.com/blockworks-foundation)
@@ -54,7 +54,7 @@ SOL_DECIMALS = decimal.Decimal(9)
 #
 # The divisor to use to turn an integer value of SOLs from an account's `balance` into a value with the correct number of decimal places.
 #
-SOL_DECIMAL_DIVISOR = decimal.Decimal(10 ** SOL_DECIMALS)
+SOL_DECIMAL_DIVISOR = decimal.Decimal(10**SOL_DECIMALS)
 
 
 # ## I64_MAX
@@ -73,8 +73,8 @@ WARNING_DISCLAIMER_TEXT = """
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation

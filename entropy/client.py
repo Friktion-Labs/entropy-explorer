@@ -6,8 +6,8 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-# [🥭 Entropy Markets](https://entropy.markets/) support is available at:
-#   [Docs](https://docs.entropy.markets/)
+# [🥭 Entropy Markets](https://entropy.trade/) support is available at:
+#   [Docs](https://docs.entropy.trade/)
 #   [Discord](https://discord.gg/67jySBhxrg)
 #   [Twitter](https://twitter.com/entropymarkets)
 #   [Github](https://github.com/blockworks-foundation)
@@ -1001,7 +1001,7 @@ class BetterClient:
         )
         value = Decimal(response["result"]["value"]["amount"])
         decimal_places = response["result"]["value"]["decimals"]
-        divisor = Decimal(10 ** decimal_places)
+        divisor = Decimal(10**decimal_places)
         return value / divisor
 
     def get_token_accounts_by_owner(

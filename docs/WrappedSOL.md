@@ -2,7 +2,7 @@
 
 # ◎ Wrapped SOL
 
-SOL is the native token of the Solana network. [Entropy Markets](https://entropy.markets/) (and [Serum](https://projectserum.com/)) trade Solana's ['SPL' tokens](https://spl.solana.com/) and can't directly trade SOL.
+SOL is the native token of the Solana network. [Entropy Markets](https://entropy.trade/) (and [Serum](https://projectserum.com/)) trade Solana's ['SPL' tokens](https://spl.solana.com/) and can't directly trade SOL.
 
 In order to allow trading of SOL, it must first be 'wrapped' in an SPL-compatible account.
 
@@ -12,7 +12,7 @@ This page will show you the commands to create wrapped SOL accounts, wrap SOL, u
 
 # 1. ❓ What's The Problem?
 
-'Pure' SOL can't be traded directly on [Entropy Markets](https://entropy.markets/) or [Serum](https://projectserum.com/). It must first be 'wrapped' in an SPL-compatible account.
+'Pure' SOL can't be traded directly on [Entropy Markets](https://entropy.trade/) or [Serum](https://projectserum.com/). It must first be 'wrapped' in an SPL-compatible account.
 
 Wallets can have different views on how to handle Wrapped SOL - some hide it, some transparently convert it and you never see the transient accounts, and some convert it but leave a Wrapped SOL account with a zero balance around for next time.
 
@@ -25,8 +25,8 @@ The liquidator keeps SOL and Wrapped SOL separate. This allows you to allocate a
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -54,8 +54,8 @@ You can see what Wrapped SOL accounts you have by using the `show-wrapped-sol` c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -74,8 +74,8 @@ If you have no wrapped SOL accounts, you'll see something like:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -95,8 +95,8 @@ Creating a Wrapped SOL account is cheap and easy, as long as you have SOL in you
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -122,8 +122,8 @@ Let's create a Wrapped SOL sub-account and 'wrap' 1 SOL from this account, using
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -147,8 +147,8 @@ Now the Group balances are:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -178,8 +178,8 @@ For example, for an account with 1.0 Wrapped SOL:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -198,8 +198,8 @@ An additional `wrap-sol` command will just add Wrapped SOL to that same account:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -222,8 +222,8 @@ You can verify this with the `show-wrapped-sol` command again:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -242,8 +242,8 @@ And the group balances will also reflect this:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -273,8 +273,8 @@ For example:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -297,8 +297,8 @@ show-wrapped-sol
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -317,8 +317,8 @@ Or with `group-balances`:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -346,8 +346,8 @@ Whatever the reason, you can see all the Wrapped SOL sub-accounts for your accou
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -373,8 +373,8 @@ For example, to close the above '4dqnZ8MgT1AZksAixHha117DVPEBUJZ89V5MAgoYmzh9' w
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -394,8 +394,8 @@ And you can verify this result with `show-wrapped-sol`:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation

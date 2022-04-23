@@ -1,7 +1,7 @@
 {
   "name": "Entropy Overrides Token List",
   "description": "This file contains token details for specific tokens where we can't use the main SPL token registry. This is often the result of the SPL token registry changing symbols (e.g. ETH -> soETH) which will confuse lookups.",
-  "logoURI": "https://trade.entropy.markets/assets/icons/logo.svg",
+  "logoURI": "https://trade.entropy.trade/assets/icons/logo.svg",
   "keywords": ["entropy", "solana", "spl"],
   "tags": {
     "symbol-change": {

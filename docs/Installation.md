@@ -2,7 +2,7 @@
 
 # 📦 Installation
 
-`entropy-explorer` is a [regular Python library](https://pypi.org/project/entropy-explorer/), available to install however you usually install Python libraries. It also contains some useful command-line tools to make using [Entropy](https://www.entropy.markets/) easier.
+`entropy-explorer` is a [regular Python library](https://pypi.org/project/entropy-explorer/), available to install however you usually install Python libraries. It also contains some useful command-line tools to make using [Entropy](https://www.entropy.trade/) easier.
 
 This walkthrough shows one way of installing `entropy-explorer`. If you're not familiar with some aspects of Python this guide aims to get you up and running quickly.
 

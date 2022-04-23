@@ -6,8 +6,8 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-# [🥭 Entropy Markets](https://entropy.markets/) support is available at:
-#   [Docs](https://docs.entropy.markets/)
+# [🥭 Entropy Markets](https://entropy.trade/) support is available at:
+#   [Docs](https://docs.entropy.trade/)
 #   [Discord](https://discord.gg/67jySBhxrg)
 #   [Twitter](https://twitter.com/entropymarkets)
 #   [Github](https://github.com/blockworks-foundation)
@@ -95,8 +95,8 @@ class OpenOrders(AddressableAccount):
         account_flags = AccountFlags.from_layout(layout.account_flags)
         program_address = account_info.owner
 
-        base_divisor = 10 ** base.decimals
-        quote_divisor = 10 ** quote.decimals
+        base_divisor = 10**base.decimals
+        quote_divisor = 10**quote.decimals
         base_token_free: Decimal = layout.base_token_free / base_divisor
         base_token_total: Decimal = layout.base_token_total / base_divisor
         quote_token_free: Decimal = layout.quote_token_free / quote_divisor

@@ -2,7 +2,7 @@
 
 # 🏃‍ Liquidator Quickstart
 
-Let’s assume you have a server set up already, with [docker](https://www.docker.com/) installed. This Quickstart will guide you through setting up and running [entropy-explorer](https://gitlab.com/OpinionatedGeek/entropy-explorer) to run a liquidator on [Entropy Markets](https://entropy.markets/). (You’ll need to provide your own funds for the liquidator though!)
+Let’s assume you have a server set up already, with [docker](https://www.docker.com/) installed. This Quickstart will guide you through setting up and running [entropy-explorer](https://gitlab.com/OpinionatedGeek/entropy-explorer) to run a liquidator on [Entropy Markets](https://entropy.trade/). (You’ll need to provide your own funds for the liquidator though!)
 
 Throughout this guide you’ll see the private key, accounts and transaction IDs as well as the commands and parameters that are used. (Funds will be removed from this account before this is published. Remember - sharing your private key is usually a Very Bad Idea!)
 
@@ -20,9 +20,9 @@ To run this quickstart you’ll need:
 
 # 1. ❓ Why Run A Liquidator?
 
-Liquidation is the process that provides security to [Entropy Markets](https://entropy.markets/). Any accounts that borrow funds create the risk that they may not be able to pay those borrowed funds back. Accounts must provide collateral before they borrow funds, but the value of that collateral can vary with the price of the collateral tokens and the borrowed tokens.
+Liquidation is the process that provides security to [Entropy Markets](https://entropy.trade/). Any accounts that borrow funds create the risk that they may not be able to pay those borrowed funds back. Accounts must provide collateral before they borrow funds, but the value of that collateral can vary with the price of the collateral tokens and the borrowed tokens.
 
-If the value of the borrowed funds were to exceed the value of the provided collateral, all [Entropy Markets](https://entropy.markets/) users would have to cover those losses.
+If the value of the borrowed funds were to exceed the value of the provided collateral, all [Entropy Markets](https://entropy.trade/) users would have to cover those losses.
 
 To prevent this, accounts have to provide collateral worth more than they borrow. Values are allowed to vary a little, but if the value of the collateral falls to lower than a specified threshold of what the account borrowed, that account can be 'liquidated'. (Current values for these thresholds are: you must provide collateral worth over 120% of your borrowings, and if the value of your collateral falls below 110% you can be liquidated.)
 
@@ -126,8 +126,8 @@ I used [sollet](https://sollet.io) to transfer 1 SOL to **48z8UzFTYYbmFGgryA3muJ
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -159,8 +159,8 @@ If you run it without parameters it will check the current wallet address, but y
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -203,8 +203,8 @@ When you've transferred the USDC, a re-run of the `group-balances` should show s
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -246,8 +246,8 @@ To set this up, we can use the `group-balance-wallet` command. We tell it we wan
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -268,8 +268,8 @@ Let's run it again without the `--dry-run` flag, so that it actually performs th
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -363,8 +363,8 @@ Now if we check the balances we can see we have roughly a fifth in each of the f
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -392,8 +392,8 @@ Now would be a good time to run the `Account Scout` tool again, to make sure thi
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation
@@ -494,8 +494,8 @@ Here goes:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    🥭 Entropy Markets: https://entropy.markets
-    📄 Documentation: https://docs.entropy.markets/
+    🥭 Entropy Markets: https://entropy.trade
+    📄 Documentation: https://docs.entropy.trade/
     💬 Discord: https://discord.gg/67jySBhxrg
     🐦 Twitter: https://twitter.com/entropymarkets
     🚧 Github: https://github.com/blockworks-foundation

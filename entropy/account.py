@@ -6,8 +6,8 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-# [🥭 Entropy Markets](https://entropy.markets/) support is available at:
-#   [Docs](https://docs.entropy.markets/)
+# [🥭 Entropy Markets](https://entropy.trade/) support is available at:
+#   [Docs](https://docs.entropy.trade/)
 #   [Discord](https://discord.gg/67jySBhxrg)
 #   [Twitter](https://twitter.com/entropymarkets)
 #   [Github](https://github.com/blockworks-foundation)
@@ -1156,7 +1156,7 @@ class Account(AddressableAccount):
                 perp_asks_base_net: Decimal = perp_position - asks_quantity
 
                 quote_pos = slot.perp_account.quote_position / (
-                    10 ** self.shared_quote_token.decimals
+                    10**self.shared_quote_token.decimals
                 )
                 if perp_bids_base_net.copy_abs() > perp_asks_base_net.copy_abs():
                     perp_health_base = perp_bids_base_net
