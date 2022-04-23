@@ -1,4 +1,4 @@
-name: mango-explorer-examples-environment
+name: entropy-explorer-examples-environment
 channels:
   - conda-forge
 dependencies:
@@ -8,4 +8,4 @@ dependencies:
   - pandas
   - pip
   - pip:
-    - -r requirements.txt
+      - -r requirements.txt
