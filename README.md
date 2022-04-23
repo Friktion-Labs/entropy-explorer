@@ -1,1 +1,9 @@
-Python API for Entropy Markets (entropy-explorer)
+Python API for Entropy Market
+
+Get Started
+
+```
+pip3 install poetry
+```
+
+
