@@ -4,8 +4,6 @@
 
 This Quickstart will guide you through setting up and running [entropy-explorer](https://github.com/Friktion-Labs/entropy-explorer/) to run a marketmaker on [Entropy Markets](https://entropy.trade/) perps on devnet.
 
-Devnet and [Entropy’s Devnet Site](https://devnet.entropy.trade) are test/development environments where it is safe to try things out without risking ‘live’ tokens. Tokens on devnet are purely for development and testing and have no value.
-
 Throughout this guide you’ll see the private key, accounts and transaction IDs as well as the commands and parameters that are used. (This is a devnet account so no actual funds are required. And remember - sharing your private key is usually a Very Bad Idea!)
 
 And all you need is a unix-type server (Unix, Linux or OS X etc.) with [docker](https://www.docker.com/) installed and configured. By the end of the guide you should have a marketmaker running against Entropy’s BTC-PERP market on devnet.
@@ -644,11 +642,3 @@ Some important things to note from the simulated run:
 - It prints out some summary information about the current assets in the account.
 - It pulses every 30 seconds, deciding which orders to place and which to cancel
 - It sleeps between runs
-
-# 12. ⚡ Really Start The Marketmaker
-
-If you’ve got this far and you’re happy with the results, you can run the same command with the `--dry-run` parameter removed. That will start the marketmaker and have it place orders. This is all still on devnet, so no real funds are at stake.
-
-Output should be broadly the same as the output for a ‘dry run’, but you’ll be able to see the orders appear on [Entropy Devnet](https://devnet.entropy.trade) and you’ll sometimes see errors from the chain or more detail from some of the transactions.
-
-Now, it’s over to you. Happy marketmaking!
