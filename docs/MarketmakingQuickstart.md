@@ -12,7 +12,7 @@ This Quickstart was completed on a $5-per-month VPS on Vultr, so it doesn’t ne
 
 ## 0.1 ☠️ Risks
 
-Now is the time to question if you should really do this. No-one here is going to take any responsibility for your actions. It’s all on you. Are you certain you want to do this? Are you sure you want to run this code? Have you even checked it to make sure it’s not going to steal your money? Are you aware of the risks from markets in general, plus bugs, developer incompetence, malfeasance and lots of other bad stuff? This guide is for devnet-only but you’re still running software you didn’t create and that always involves risk.
+Now is the time to question if you should really do this. No-one here is going to take any responsibility for your actions. It’s all on you. Are you certain you want to do this? Are you sure you want to ? Have you even checked it to make sure it’s not going to steal your money? Are you aware of the risks from markets in general, plus bugs, developer incompetence, malfeasance and lots of other bad stuff? This guide is for devnet-only but you’re still running software you didn’t create and that always involves risk.
 
 This marketmaker has a very basic strategy that will likely lose money on trades over the long term. Liquidity incentives may make up for this to some extent, or they may not. Proceding is all at your own risk.
 

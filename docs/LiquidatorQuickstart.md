@@ -8,7 +8,7 @@ Throughout this guide you’ll see the private key, accounts and transaction IDs
 
 ## 0.1 ☠️ Risks
 
-OK, now is the time to question if you should really do this. No-one here is going to take any responsibility for your actions. It’s all on you. Are you certain you want to do this? Are you sure you want to run this code? Have you even checked it to make sure it’s not going to steal your money? Are you aware of the risks from markets in general, plus bugs, developer incompetence, malfeasance and lots of other bad stuff?
+OK, now is the time to question if you should really do this. No-one here is going to take any responsibility for your actions. It’s all on you. Are you certain you want to do this? Are you sure you want to ? Have you even checked it to make sure it’s not going to steal your money? Are you aware of the risks from markets in general, plus bugs, developer incompetence, malfeasance and lots of other bad stuff?
 
 ## 0.2 🦺 Prerequisites
 
