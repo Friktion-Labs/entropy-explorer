@@ -1,0 +1,5 @@
+ipython
+jupyter
+jupyterlab
+nblint
+mango-explorer >= 3.4.6
