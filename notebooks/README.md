@@ -14,20 +14,20 @@ These examples are all in Jupyter Notebooks and can be [run in your browser (no 
 
 ## Devnet
 
-All these examples run on Solana devnet, so no real tokens are used and no tokens have any value.
+All these examples run on Solana mainnet, so no real tokens are used and no tokens have any value.
 
 The private key for the account is shown below, and in many samples. It's hard-coded to simplify the examples as well as make it obvious how keys are used.
 
 > Account: DeekipCw5jz7UgQbtUbHQckTYGKXWaPQV4xY93DaiM6h
 >
-> Key: [67,218,68,118,140,171,228,222,8,29,48,61,255,114,49,226,239,89,151,110,29,136,149,118,97,189,163,8,23,88,246,35,187,241,107,226,47,155,40,162,3,222,98,203,176,230,34,49,45,8,253,77,136,241,34,4,80,227,234,174,103,11,124,146]
+> Key: [181,213,227,47,41,229,109,138,15,82,26,7,230,184,88,102,197,215,238,155,136,196,138,92,98,154,67,68,47,140,90,40,248,149,223,193,241,51,4,196,126,32,211,66,90,137,249,160,132,246,38,29,88,16,252,116,12,83,117,158,40,98,178,54]
 
 Please don't drain tokens from this account. Devnet tokens are already freely available and it just makes things more difficult for beginners.
 
-If you find that the examples don't work because there's no SOL in the devnet account, you can 'airdrop' 1 SOL into it with the Solana CLI command:
+If you find that the examples don't work because there's no SOL in the mainnet account, you can 'airdrop' 1 SOL into it with the Solana CLI command:
 
 ```
-solana airdrop 10 DeekipCw5jz7UgQbtUbHQckTYGKXWaPQV4xY93DaiM6h --url devnet
+solana airdrop 10 DeekipCw5jz7UgQbtUbHQckTYGKXWaPQV4xY93DaiM6h --url mainnet
 ```
 
 ## Python3
@@ -41,7 +41,7 @@ All the code here and in [entropy-explorer](https://github.com/blockworks-founda
 The `Context` is heavily used to provide access to Solana, Entropy Groups and Accounts. [This example](ShowContext.ipynb) shows you how to create a `Context` object. `Context` objects are `Disposable` and so should should have the `dispose()` method called on the object when it is no longer used. This can be done manually but the easiest way is usually to use it in a `with` statement like:
 
 ```
-with entropy.ContextBuilder.build(cluster_name="devnet") as context:
+with entropy.ContextBuilder.build(cluster_name="mainnet") as context:
     ...
 ```
 
