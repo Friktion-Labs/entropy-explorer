@@ -19,3 +19,9 @@ Run a simple marketmaker
 cd entropy
 python simplemarketmaker.py
 ```
+
+Install via pip
+
+```
+pip install entropy-explorer
+```
