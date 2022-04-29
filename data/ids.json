@@ -2,7 +2,7 @@
   "cluster_urls": {
     "devnet": "https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899",
     "localnet": "http://127.0.0.1:8899",
-    "mainnet": "https://friktion.rpcpool.com/132d5fccfadee1fd0c2fce38aa14",
+    "mainnet": "https://friktion.rpcpool.com/8236ce58a8cc909af597734efe5f",
     "testnet": "https://testnet.solana.com"
   },
   "groups": [
